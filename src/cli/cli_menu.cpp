@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "cli_menu.h"
+#include "control_sequences.h"
 
 CLIMenu::CLIMenu() : IMenu()
 {
@@ -11,40 +12,49 @@ void CLIMenu::redraw()
 	#define MENU_BORDER_PADDING 1
 	#define MENU_HEIGHT 25
 	#define MENU_WIDTH 100
-	const char borderChar = '*';
-	std::string title = "CLI Menu";
+	std::string borderChar("*");
+	std::string title("CLI Menu");
+	ColorSettings baseColors(TerminalColor(0, 0, 0), TerminalColor(255, 255, 255));
+	ControlSequences::sendRestoreColorSettings(baseColors);
 	for (int y = MENU_BORDER_PADDING+1; y < MENU_HEIGHT+MENU_BORDER_PADDING+1; y++)
 	{
-		if (y <= MENU_BORDER_PADDING || y >= MENU_HEIGHT+1)
+		if (y <= MENU_BORDER_PADDING || y >= MENU_HEIGHT+2)
 			continue;
-		if (y == MENU_BORDER_PADDING+1 || y == MENU_HEIGHT+1-MENU_BORDER_PADDING)
+		if (y == MENU_BORDER_PADDING+1 || y == MENU_HEIGHT+1)
 		{
 			for (int x = MENU_BORDER_PADDING+1; x < MENU_WIDTH+1; x++)
 			{
 				if (x <= MENU_BORDER_PADDING || x >= MENU_WIDTH-MENU_BORDER_PADDING)
 					continue;
-				std::cout << "\x1b[" << y << ";" << x << "H";
-				std::cout << borderChar;
+				ControlSequences::sendSetCursorPostion(y, x);
+				ControlSequences::sendText(borderChar);
 			}
 			continue;
 		}
 		if (y == MENU_BORDER_PADDING+2)
 		{
-			std::cout << "\x1b[" << y << ";" << (MENU_WIDTH/2)-8/2 << "H";
-			std::cout << title;
+			ControlSequences::sendSetCursorPostion(y, (MENU_WIDTH/2)-title.size()/2);
+			ControlSequences::sendText(title, TextProperties::TEXT_BOLD | TextProperties::TEXT_UNDERLINED | TextProperties::TEXT_OVERLINED);
 		}
-		std::cout << "\x1b[" << y << ";" << MENU_BORDER_PADDING+1 << "H";
-		std::cout << borderChar;
-		std::cout << "\x1b[" << y << ";" << MENU_WIDTH-(MENU_BORDER_PADDING+1) << "H";
-		std::cout << borderChar;
+		if (y > MENU_BORDER_PADDING+9 && y < MENU_BORDER_PADDING+14)
+		{
+			string option = "Menu Option(";
+			option += to_string(y);
+			option += ")";
+			ControlSequences::sendSetCursorPostion(y, (MENU_WIDTH/2)-option.size()/2);
+			ControlSequences::sendText(option, y == MENU_BORDER_PADDING+12?TextProperties::TEXT_BLINK:0);
+		}
+		ControlSequences::sendSetCursorPostion(y, MENU_BORDER_PADDING+1);
+		ControlSequences::sendText(borderChar);
+		ControlSequences::sendSetCursorPostion(y, MENU_WIDTH-(MENU_BORDER_PADDING+1));
+		ControlSequences::sendText(borderChar);
 	}
-	std::flush(std::cout);
+	ControlSequences::flush();
 }
 
 void CLIMenu::clear()
 {
-	std::cout << "\x1b[2J";
-	std::cout << "\x1b[3J";
-	std::cout << "\x1b[0;0H";
-	std::flush(std::cout);
+	ControlSequences::sendClearDisplay();
+	ControlSequences::sendSetCursorPostion(1,1);
+	ControlSequences::flush();
 }
