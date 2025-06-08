@@ -2,6 +2,7 @@
 #define MENU_SYSTEM_H
 
 #include "display_factory.h"
+#include "menu_tree.h"
 
 namespace RetroCrypto
 {
@@ -9,6 +10,10 @@ namespace RetroCrypto
 	{
 	private:
 		bool quitRequested;
+
+		std::shared_ptr<MenuTree> menuTree;
+		
+		std::shared_ptr<MenuTreeObject> currentMenuPosition;
 
 		IDisplayFactory* displayFactory;
 

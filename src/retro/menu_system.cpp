@@ -5,6 +5,8 @@ using namespace RetroCrypto;
 MenuSystem::MenuSystem()
 {
 	quitRequested = false;
+	menuTree = nullptr;
+	currentMenuPosition = nullptr;
 	displayFactory = nullptr;
 	display = nullptr;
 }
@@ -38,6 +40,11 @@ void MenuSystem::setDisplayFactory(IDisplayFactory& factory)
 
 void MenuSystem::init()
 {
+	if (menuTree == nullptr)
+		menuTree = make_shared<MenuTree>();
+	menuTree->init();
+	currentMenuPosition = menuTree->getRoot();
+
 	if (displayFactory != nullptr && display == nullptr)
 	{
 		display = displayFactory->constructDisplay();
