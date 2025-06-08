@@ -15,6 +15,8 @@ namespace RetroCrypto
 		
 		std::shared_ptr<MenuTreeObject> currentMenuPosition;
 
+		int optionIndex;
+
 		IDisplayFactory* displayFactory;
 
 		IDisplay* display;

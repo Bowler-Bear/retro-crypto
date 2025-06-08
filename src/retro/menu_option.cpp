@@ -14,3 +14,8 @@ void MenuOption::add(std::shared_ptr<MenuTreeObject> destination)
 {
 	this->destination = destination;
 }
+
+string MenuOption::getLabel()
+{
+	return label;
+}

@@ -21,3 +21,36 @@ void Menu::add(std::shared_ptr<MenuOption> option)
 {
 	options.push_back(option);
 }
+
+void Menu::draw(IDisplay* display, int optionIndex)
+{
+	Box border;
+	border.xPosition = 0;
+	border.yPosition = 0;
+	border.width = 100;
+	border.height = 25;
+	display->drawBox(border);
+	TextBox titleBox(title);
+	titleBox.yPosition = 3;
+	titleBox.xPosition = (border.width-titleBox.text.size())/2;
+	titleBox.width = titleBox.text.size()+2;
+	titleBox.height = 1+2;
+	titleBox.setUnderlined();
+	display->drawTextBox(titleBox);
+	for(int i = 0; i < options.size(); i++)
+	{
+		const shared_ptr<MenuOption> option = options[i];
+		TextBox optionBox(option->getLabel());
+		optionBox.yPosition = (titleBox.yPosition+4)+2*i;
+		optionBox.xPosition = (border.width-optionBox.text.size())/2;
+		optionBox.width = optionBox.text.size()+3;
+		optionBox.height = 3;
+		if (i == optionIndex)
+		{
+			optionBox.setBordered();
+			optionBox.setBold();
+			optionBox.setBlinking();
+		}
+		display->drawTextBox(optionBox);
+	}
+}

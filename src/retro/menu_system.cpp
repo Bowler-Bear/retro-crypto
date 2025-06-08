@@ -7,6 +7,7 @@ MenuSystem::MenuSystem()
 	quitRequested = false;
 	menuTree = nullptr;
 	currentMenuPosition = nullptr;
+	optionIndex = 0;
 	displayFactory = nullptr;
 	display = nullptr;
 }
@@ -56,6 +57,6 @@ void MenuSystem::redraw()
 	if (display != nullptr)
 	{
 		display->clear();
-		display->redraw();
+		currentMenuPosition->draw(display, 1);
 	}
 }
