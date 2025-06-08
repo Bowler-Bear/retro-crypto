@@ -5,15 +5,6 @@
 
 using namespace std;
 
-namespace TextProperties
-{
-	static uint8_t TEXT_BOLD = 0x01;
-	static uint8_t TEXT_ITALIC = 0x01 << 1;
-	static uint8_t TEXT_UNDERLINED = 0x01 << 2;
-	static uint8_t TEXT_OVERLINED = 0x01 << 3;
-	static uint8_t TEXT_BLINK = 0x01 << 4;
-}
-
 struct TerminalColor
 {
 	uint8_t red;
@@ -298,6 +289,31 @@ public:
 		if (textProperties & TextProperties::TEXT_OVERLINED)
 			sendUnsetOverlined();
 		if (textProperties & TextProperties::TEXT_BLINK)
+			sendUnsetSlowBlink();
+	}
+
+	static void sendText(TextBox textBox)
+	{
+		if (textBox.isBold())
+			sendSetBold();
+		if (textBox.isItalic())
+			sendSetItalic();
+		if (textBox.isUnderlined())
+			sendSetUnderlined();
+		if (textBox.isOverlined())
+			sendSetOverlined();
+		if (textBox.isBlinking())
+			sendSetSlowBlink();
+		cout << textBox.text;
+		if (textBox.isBold())
+			sendUnsetBold();
+		if (textBox.isItalic())
+			sendUnsetItalic();
+		if (textBox.isUnderlined())
+			sendUnsetUnderlined();
+		if (textBox.isOverlined())
+			sendUnsetOverlined();
+		if (textBox.isBlinking())
 			sendUnsetSlowBlink();
 	}
 };

@@ -11,7 +11,7 @@ public:
 	CLIDisplay();
 	virtual void redraw() override;
 	virtual void clear() override;
-	virtual void drawBox(const Box& box) override{}
-	virtual void drawTextBox(const TextBox& textBox) override{}
+	virtual void drawBox(const Box& box) override;
+	virtual void drawTextBox(const TextBox& textBox) override;
 };
 #endif

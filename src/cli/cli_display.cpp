@@ -58,3 +58,36 @@ void CLIDisplay::clear()
 	ControlSequences::sendSetCursorPostion(1,1);
 	ControlSequences::flush();
 }
+
+void CLIDisplay::drawBox(const Box& box)
+{
+	std::string borderChar("*");
+	for (int y = box.yPosition+1; y < box.yPosition+box.height+1; y++)
+	{
+		if (y == box.yPosition+1 || y == box.yPosition+box.height)
+		{
+			for (int x = box.xPosition; x < box.xPosition+box.width+1; x++)
+			{
+				ControlSequences::sendSetCursorPostion(y, x);
+				ControlSequences::sendText(borderChar);
+			}
+			continue;
+		}
+		ControlSequences::sendSetCursorPostion(y, box.xPosition);
+		ControlSequences::sendText(borderChar);
+		ControlSequences::sendSetCursorPostion(y, box.xPosition+box.width);
+		ControlSequences::sendText(borderChar);
+	}
+	ControlSequences::flush();
+}
+
+void CLIDisplay::drawTextBox(const TextBox& textBox)
+{
+	if (textBox.isBlinking())
+		ControlSequences::sendSetSlowBlink();
+	if (textBox.isBordered())
+		drawBox(textBox);
+	ControlSequences::sendSetCursorPostion(textBox.yPosition+1+textBox.height/2, textBox.xPosition+1+(textBox.width-textBox.text.size())/2);
+	ControlSequences::sendText(textBox);
+	ControlSequences::flush();
+}
