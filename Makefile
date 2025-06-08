@@ -35,7 +35,7 @@ $(BUILD_DIR)$(CLI_DIR)%.o: $(CLI_SRC)%.cpp
 
 build-retro-lib: $(LIB_OBJECTS)
 
-linux-cli: clean $(LIB_OBJECTS) $(CLI_OBJECTS)
+cli: clean $(LIB_OBJECTS) $(CLI_OBJECTS)
 	@mkdir -p "$(BINARY_DIR)"
 	$(CXX) $(CXXFLAGS) $(LIB_OBJECTS) $(CLI_OBJECTS) -o $(BINARY_DIR)$(LIB_NAME)
 
