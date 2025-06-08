@@ -1,15 +1,15 @@
-#ifndef MENU_H
-#define MENU_H
+#ifndef DISPLAY_H
+#define DISPLAY_H
 
 #include "drawable.h"
 
 namespace RetroCrypto
 {
 
-	class IMenu: public IDrawable
+	class IDisplay: public IDrawable
 	{
 	public:
-		IMenu()
+		IDisplay()
 		{
 		}
 		virtual void redraw() override = 0;

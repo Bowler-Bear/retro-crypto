@@ -1,7 +1,7 @@
 #ifndef MENU_SYSTEM_H
 #define MENU_SYSTEM_H
 
-#include "menu_factory.h"
+#include "display_factory.h"
 
 namespace RetroCrypto
 {
@@ -10,9 +10,9 @@ namespace RetroCrypto
 	private:
 		bool quitRequested;
 
-		IMenuFactory* menuFactory;
+		IDisplayFactory* displayFactory;
 
-		IMenu* menu;
+		IDisplay* display;
 
 		MenuSystem();
 
@@ -28,7 +28,7 @@ namespace RetroCrypto
 
 		void setQuitRequested(bool newValue);
 
-		void setMenuFactory(IMenuFactory& factory);
+		void setDisplayFactory(IDisplayFactory& factory);
 
 		void init();
 

@@ -1,13 +1,13 @@
 #include <iostream>
 
-#include "cli_menu.h"
+#include "cli_display.h"
 #include "control_sequences.h"
 
-CLIMenu::CLIMenu() : IMenu()
+CLIDisplay::CLIDisplay() : IDisplay()
 {
 }
 
-void CLIMenu::redraw()
+void CLIDisplay::redraw()
 {
 	#define MENU_BORDER_PADDING 1
 	#define MENU_HEIGHT 25
@@ -52,7 +52,7 @@ void CLIMenu::redraw()
 	ControlSequences::flush();
 }
 
-void CLIMenu::clear()
+void CLIDisplay::clear()
 {
 	ControlSequences::sendClearDisplay();
 	ControlSequences::sendSetCursorPostion(1,1);

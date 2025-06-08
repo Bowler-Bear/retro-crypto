@@ -5,14 +5,14 @@ using namespace RetroCrypto;
 MenuSystem::MenuSystem()
 {
 	quitRequested = false;
-	menuFactory = nullptr;
-	menu = nullptr;
+	displayFactory = nullptr;
+	display = nullptr;
 }
 
 MenuSystem::~MenuSystem()
 {
-	if (menu != nullptr)
-		delete menu;
+	if (display != nullptr)
+		delete display;
 }
 
 MenuSystem* MenuSystem::getMenuSystem()
@@ -31,24 +31,24 @@ void MenuSystem::setQuitRequested(bool newValue)
 	quitRequested = newValue;
 }
 
-void MenuSystem::setMenuFactory(IMenuFactory& factory)
+void MenuSystem::setDisplayFactory(IDisplayFactory& factory)
 {
-	menuFactory = &factory;
+	displayFactory = &factory;
 }
 
 void MenuSystem::init()
 {
-	if (menuFactory != nullptr && menu == nullptr)
+	if (displayFactory != nullptr && display == nullptr)
 	{
-		menu = menuFactory->constructMenu();
+		display = displayFactory->constructDisplay();
 	}
 }
 
 void MenuSystem::redraw()
 {
-	if (menu != nullptr)
+	if (display != nullptr)
 	{
-		menu->clear();
-		menu->redraw();
+		display->clear();
+		display->redraw();
 	}
 }

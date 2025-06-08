@@ -1,14 +1,14 @@
-#ifndef CLI_MENU_H
-#define CLI_MENU_H
+#ifndef CLI_DISPLAY_H
+#define CLI_DISPLAY_H
 
-#include "menu.h"
+#include "display.h"
 
 using namespace RetroCrypto;
 
-class CLIMenu: public IMenu
+class CLIDisplay: public IDisplay
 {
 public:
-	CLIMenu();
+	CLIDisplay();
 	virtual void redraw() override;
 	virtual void clear() override;
 };
