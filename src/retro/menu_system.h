@@ -1,16 +1,15 @@
 #ifndef MENU_SYSTEM_H
 #define MENU_SYSTEM_H
 
+#include "system.h"
 #include "display_factory.h"
 #include "menu_tree.h"
 
 namespace RetroCrypto
 {
-	class MenuSystem
+	class MenuSystem : public ISystem
 	{
 	private:
-		bool quitRequested;
-
 		std::shared_ptr<MenuTree> menuTree;
 		
 		std::shared_ptr<MenuTreeObject> currentMenuPosition;
@@ -31,13 +30,11 @@ namespace RetroCrypto
 	public:
 		static MenuSystem* getMenuSystem();
 
-		bool getQuitRequested();
-
-		void setQuitRequested(bool newValue);
-
 		void setDisplayFactory(IDisplayFactory& factory);
 
-		void init();
+		virtual bool init() override;
+
+		virtual void tick() override;
 
 		void redraw();
 	};

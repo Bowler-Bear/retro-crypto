@@ -24,39 +24,39 @@ MenuSystem* MenuSystem::getMenuSystem()
 	return &instance;
 }
 
-bool MenuSystem::getQuitRequested()
-{
-	return quitRequested;
-}
-
-void MenuSystem::setQuitRequested(bool newValue)
-{
-	quitRequested = newValue;
-}
-
 void MenuSystem::setDisplayFactory(IDisplayFactory& factory)
 {
 	displayFactory = &factory;
 }
 
-void MenuSystem::init()
+bool MenuSystem::init()
 {
+	if (getInitialized() == true)
+		return getInitialized();
 	if (menuTree == nullptr)
 		menuTree = make_shared<MenuTree>();
 	menuTree->init();
 	currentMenuPosition = menuTree->getRoot();
 
-	if (displayFactory != nullptr && display == nullptr)
-	{
+	if (displayFactory == nullptr)
+		throw std::string("No IDisplayFactcor passed to MenuSystem.");
+	if (display == nullptr)
 		display = displayFactory->constructDisplay();
-	}
+	setInitialized(true);
+	return getInitialized();
+}
+
+void MenuSystem::tick()
+{
+	if (getInitialized() == false)
+		throw std::string("MenuSystem must be initialized before running.");
+	redraw();
 }
 
 void MenuSystem::redraw()
 {
-	if (display != nullptr)
-	{
-		display->clear();
-		currentMenuPosition->draw(display, 1);
-	}
+	if (display == nullptr)
+		throw std::string("MenuSystem has no display to draw to.");
+	display->clear();
+	currentMenuPosition->draw(display, 1);
 }
