@@ -4,6 +4,7 @@ using namespace RetroCrypto;
 
 MenuSystem::MenuSystem()
 {
+	initialized = false;
 	quitRequested = false;
 	menuTree = nullptr;
 	currentMenuPosition = nullptr;
