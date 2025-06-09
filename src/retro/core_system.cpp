@@ -26,6 +26,13 @@ void CoreSystem::setDisplayFactory(IDisplayFactory& factory)
 	menuSystem->setDisplayFactory(factory);
 }
 
+void CoreSystem::setInputCapturer(std::shared_ptr<IInputCapturer> capturer)
+{
+	if (inputSystem->getInitialized() == true)
+		std::string("The input capturer has to be set before initialization.");
+	inputSystem->setInputCapturer(capturer);
+}
+
 void CoreSystem::tick()
 {
 	if (getInitialized() == false)
@@ -37,6 +44,8 @@ void CoreSystem::tick()
 	if (menuSystem->getQuitRequested() != getQuitRequested())
 		setQuitRequested(menuSystem->getQuitRequested());
 	inputSystem->tick();
+	InputType newestInput = inputSystem->getNextInput();
+	menuSystem->processInput(newestInput);
 	menuSystem->tick();
 }
 

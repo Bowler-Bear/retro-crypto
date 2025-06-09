@@ -26,6 +26,8 @@ namespace RetroCrypto
 
 		void setDisplayFactory(IDisplayFactory& factory);
 
+		void setInputCapturer(std::shared_ptr<IInputCapturer> capturer);
+
 		void tick();
 
 		virtual bool init() override;
