@@ -1,9 +1,6 @@
 #ifndef MENU_H
 #define MENU_H
 
-#include <memory>
-#include <vector>
-
 #include "menu_tree_object.h"
 #include "menu_option.h"
 
@@ -15,8 +12,6 @@ namespace RetroCrypto
 	{
 	private:
 		string title;
-
-		vector<shared_ptr<MenuOption>> options;
 	public:
 		void setTitle(string title);
 

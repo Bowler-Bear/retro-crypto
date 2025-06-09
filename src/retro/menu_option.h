@@ -2,14 +2,14 @@
 #define MENU_OPTION_H
 
 #include <memory>
-
-#include "menu_tree_object.h"
+#include <string>
 
 using namespace std;
 
 namespace RetroCrypto
 {
 	class Menu;
+	class MenuTreeObject;
 	class MenuOption
 	{
 	private:
