@@ -21,6 +21,14 @@ namespace RetroCrypto
 		{
 			return options;
 		}
+		virtual std::shared_ptr<MenuTreeObject> getParent()
+		{
+			return parent;
+		}
+		virtual void setParent(std::shared_ptr<MenuTreeObject> newParent)
+		{
+			parent = newParent;
+		}
 	};
 }
 #endif

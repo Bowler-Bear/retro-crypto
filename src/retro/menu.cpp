@@ -32,11 +32,6 @@ void Menu::add(std::shared_ptr<MenuOption> option)
 	options.push_back(option);
 }
 
-void Menu::setParent(shared_ptr<MenuTreeObject> newParent)
-{
-	parent = newParent;
-}
-
 void Menu::draw(std::shared_ptr<IDisplay> display, int optionIndex)
 {
 	Box border;

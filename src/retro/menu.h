@@ -24,8 +24,6 @@ namespace RetroCrypto
 		virtual void draw(shared_ptr<IDisplay> display, int optionIndex) override;
 
 		void add(shared_ptr<MenuOption> option);
-
-		void setParent(shared_ptr<MenuTreeObject> newParent);
 	};
 }
 #endif
