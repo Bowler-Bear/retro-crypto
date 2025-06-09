@@ -1,10 +1,18 @@
 #include <iostream>
+#include <termios.h>
 
 #include "cli_display.h"
 #include "control_sequences.h"
 
 CLIDisplay::CLIDisplay() : IDisplay()
 {
+	termios attributes = {0};
+	tcgetattr(0, &attributes);
+	attributes.c_lflag &= ~ICANON;
+	attributes.c_lflag &= ~ECHO;
+	attributes.c_cc[VMIN] = 0;
+	attributes.c_cc[VTIME] = 0;
+	tcsetattr(0, TCSANOW, &attributes);
 }
 
 void CLIDisplay::redraw()

@@ -19,6 +19,11 @@ INCLUDE += -I$(LIB_SRC)interfaces
 
 CXXFLAGS = $(INCLUDE)
 
+CLI_TARGET = $(findstring $(MAKECMDGOALS), cli)
+ifeq ($(CLI_TARGET), cli)
+	CXXFLAGS += -std=c++11 -pthread
+endif
+
 LIB_SOURCES = $(shell find $(LIB_SRC) -type f -iname '*.cpp')
 LIB_OBJECTS = $(foreach x, $(basename $(LIB_SOURCES)), $(BUILD_DIR)$(patsubst $(SOURCE_DIR)%,%,$(x).o))
 
