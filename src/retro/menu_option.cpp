@@ -15,6 +15,11 @@ void MenuOption::add(std::shared_ptr<MenuTreeObject> destination)
 	this->destination = destination;
 }
 
+shared_ptr<MenuTreeObject> MenuOption::getDestination()
+{
+	return destination;
+}
+
 string MenuOption::getLabel()
 {
 	return label;
