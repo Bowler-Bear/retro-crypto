@@ -9,6 +9,7 @@ class CLIDisplay: public IDisplay
 {
 public:
 	CLIDisplay();
+	~CLIDisplay();
 	virtual void redraw() override;
 	virtual void clear() override;
 	virtual void drawBox(const Box& box) override;
