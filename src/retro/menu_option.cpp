@@ -19,3 +19,13 @@ string MenuOption::getLabel()
 {
 	return label;
 }
+
+bool MenuOption::getDisabled()
+{
+	return disabled;
+}
+
+void MenuOption::setDisabled(bool newValue)
+{
+	disabled = newValue;
+}

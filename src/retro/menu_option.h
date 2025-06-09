@@ -17,13 +17,20 @@ namespace RetroCrypto
 
 		string description;
 
+		bool disabled;
+
 		shared_ptr<MenuTreeObject> parent;
 
 		shared_ptr<MenuTreeObject> destination;
 	public:
 		MenuOption(const shared_ptr<Menu> menu, const string& label, const string& description);
 		void add(shared_ptr<MenuTreeObject> destination);
+
 		string getLabel();
+
+		bool getDisabled();
+
+		void setDisabled(bool newValue);
 	};
 }
 #endif
