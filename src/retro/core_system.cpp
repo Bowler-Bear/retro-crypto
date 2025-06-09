@@ -6,6 +6,7 @@ CoreSystem::CoreSystem()
 {
 	initialized = false;
 	menuSystem = MenuSystem::getMenuSystem();
+	inputSystem = InputSystem::getInputSystem();
 }
 
 CoreSystem::~CoreSystem()
@@ -31,8 +32,11 @@ void CoreSystem::tick()
 		throw std::string("CoreSystem must be initialized before running.");
 	if (getQuitRequested() == true)
 		return;
+	if (inputSystem->getQuitRequested() != getQuitRequested())
+		setQuitRequested(inputSystem->getQuitRequested());
 	if (menuSystem->getQuitRequested() != getQuitRequested())
 		setQuitRequested(menuSystem->getQuitRequested());
+	inputSystem->tick();
 	menuSystem->tick();
 }
 
@@ -42,6 +46,8 @@ bool CoreSystem::init()
 		return getInitialized();
 	if (!menuSystem->init())
 		throw std::string("MenuSystem failed to be initialized.");
+	if (!inputSystem->init())
+		throw std::string("InputSystem failed to be initialized.");
 	setInitialized(true);
 	return getInitialized();
 }

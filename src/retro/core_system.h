@@ -1,8 +1,9 @@
 #ifndef CORE_SYSTEM_H
 #define CORE_SYSTEM_H
 
-#include "menu_system.h"
 #include "system.h"
+#include "menu_system.h"
+#include "input_system.h"
 
 namespace RetroCrypto
 {
@@ -10,6 +11,8 @@ namespace RetroCrypto
 	{
 	private:
 		MenuSystem* menuSystem;
+
+		InputSystem* inputSystem;
 
 		CoreSystem();
 
