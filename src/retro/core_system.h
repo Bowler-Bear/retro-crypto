@@ -24,7 +24,7 @@ namespace RetroCrypto
 	public:
 		static CoreSystem& getCoreSystem();
 
-		void setDisplayFactory(IDisplayFactory& factory);
+		void setDisplay(std::shared_ptr<IDisplay> inDisplay);
 
 		void setInputCapturer(std::shared_ptr<IInputCapturer> capturer);
 

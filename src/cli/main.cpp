@@ -1,4 +1,4 @@
-#include "cli_display_factory.h"
+#include "cli_display.h"
 #include "cli_capturer.h"
 #include "core_system.h"
 #include <unistd.h>
@@ -6,9 +6,9 @@
 int main()
 {
 	RetroCrypto::CoreSystem& coreSystem = RetroCrypto::CoreSystem::getCoreSystem();
-	CLIDisplayFactory CLIDisplayFactory;
+	std::shared_ptr<CLIDisplay> display = std::make_shared<CLIDisplay>();
 	std::shared_ptr<CLICapturer> capturer = std::make_shared<CLICapturer>();
-	coreSystem.setDisplayFactory(CLIDisplayFactory);
+	coreSystem.setDisplay(display);
 	coreSystem.setInputCapturer(capturer);
 	coreSystem.init();
 	while (!coreSystem.getQuitRequested())

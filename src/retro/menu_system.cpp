@@ -9,14 +9,11 @@ MenuSystem::MenuSystem()
 	menuTree = nullptr;
 	currentMenuPosition = nullptr;
 	optionIndex = 0;
-	displayFactory = nullptr;
 	display = nullptr;
 }
 
 MenuSystem::~MenuSystem()
 {
-	if (display != nullptr)
-		delete display;
 }
 
 MenuSystem* MenuSystem::getMenuSystem()
@@ -25,9 +22,9 @@ MenuSystem* MenuSystem::getMenuSystem()
 	return &instance;
 }
 
-void MenuSystem::setDisplayFactory(IDisplayFactory& factory)
+void MenuSystem::setDisplay(std::shared_ptr<IDisplay> inDisplay)
 {
-	displayFactory = &factory;
+	display = inDisplay;
 }
 
 bool MenuSystem::init()
@@ -39,10 +36,8 @@ bool MenuSystem::init()
 	menuTree->init();
 	currentMenuPosition = menuTree->getRoot();
 
-	if (displayFactory == nullptr)
-		throw std::string("No IDisplayFactcor passed to MenuSystem.");
 	if (display == nullptr)
-		display = displayFactory->constructDisplay();
+		throw std::string("No IDisplay passed to MenuSystem.");
 	setInitialized(true);
 	return getInitialized();
 }

@@ -2,7 +2,7 @@
 #define MENU_SYSTEM_H
 
 #include "system.h"
-#include "display_factory.h"
+#include "display.h"
 #include "menu_tree.h"
 #include "input_capturer.h"
 
@@ -17,9 +17,7 @@ namespace RetroCrypto
 
 		int optionIndex;
 
-		IDisplayFactory* displayFactory;
-
-		IDisplay* display;
+		std::shared_ptr<IDisplay> display;
 
 		MenuSystem();
 
@@ -31,7 +29,7 @@ namespace RetroCrypto
 	public:
 		static MenuSystem* getMenuSystem();
 
-		void setDisplayFactory(IDisplayFactory& factory);
+		void setDisplay(std::shared_ptr<IDisplay> inDisplay);
 
 		virtual bool init() override;
 

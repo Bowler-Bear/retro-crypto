@@ -22,7 +22,7 @@ void Menu::add(std::shared_ptr<MenuOption> option)
 	options.push_back(option);
 }
 
-void Menu::draw(IDisplay* display, int optionIndex)
+void Menu::draw(std::shared_ptr<IDisplay> display, int optionIndex)
 {
 	Box border;
 	border.xPosition = 0;

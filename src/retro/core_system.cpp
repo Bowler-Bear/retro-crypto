@@ -19,11 +19,11 @@ CoreSystem& CoreSystem::getCoreSystem()
 	return instance;
 }
 
-void CoreSystem::setDisplayFactory(IDisplayFactory& factory)
+void CoreSystem::setDisplay(std::shared_ptr<IDisplay> inDisplay)
 {
 	if (menuSystem->getInitialized() == true)
-		std::string("The display factory has to be set before initialization.");
-	menuSystem->setDisplayFactory(factory);
+		std::string("The display has to be set before initialization.");
+	menuSystem->setDisplay(inDisplay);
 }
 
 void CoreSystem::setInputCapturer(std::shared_ptr<IInputCapturer> capturer)
