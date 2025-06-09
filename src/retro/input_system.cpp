@@ -43,7 +43,7 @@ bool InputSystem::init()
 
 void InputSystem::setInputCapturer(std::shared_ptr<IInputCapturer> capturer)
 {
-	inputCapturer = inputCapturer;
+	inputCapturer = capturer;
 }
 
 InputType InputSystem::getNextInput()
