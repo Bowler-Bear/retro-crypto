@@ -64,4 +64,14 @@ void Menu::draw(std::shared_ptr<IDisplay> display, int optionIndex)
 		}
 		display->drawTextBox(optionBox);
 	}
+	if (optionIndex < options.size())
+	{
+		TextBox descriptionBox(options[optionIndex]->getDescription());
+		descriptionBox.yPosition = border.height-6;
+		descriptionBox.xPosition = 2;
+		descriptionBox.width = border.width-3;
+		descriptionBox.height = 5;
+		descriptionBox.setBordered();
+		display->drawTextBox(descriptionBox);
+	}
 }
