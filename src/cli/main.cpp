@@ -1,16 +1,16 @@
 #include "cli_display_factory.h"
-#include "menu_system.h"
+#include "core_system.h"
 #include <unistd.h>
 
 int main()
 {
-	RetroCrypto::MenuSystem* menuSystem = RetroCrypto::MenuSystem::getMenuSystem();
+	RetroCrypto::CoreSystem& coreSystem = RetroCrypto::CoreSystem::getCoreSystem();
 	CLIDisplayFactory CLIDisplayFactory;
-	menuSystem->setDisplayFactory(CLIDisplayFactory);
-	menuSystem->init();
-	while (!menuSystem->getQuitRequested())
+	coreSystem.setDisplayFactory(CLIDisplayFactory);
+	coreSystem.init();
+	while (!coreSystem.getQuitRequested())
 	{
-		menuSystem->redraw();
+		coreSystem.tick();
 		sleep(1);
 	}
 	return 0;
