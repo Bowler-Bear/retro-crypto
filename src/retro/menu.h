@@ -13,6 +13,8 @@ namespace RetroCrypto
 	private:
 		string title;
 	public:
+		Menu();
+		Menu(string inTitle);
 		void setTitle(string title);
 
 		string getTitle();

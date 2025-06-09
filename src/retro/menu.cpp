@@ -2,6 +2,16 @@
 
 using namespace RetroCrypto;
 
+Menu::Menu()
+{
+}
+
+Menu::Menu(std::string inTitle)
+: Menu()
+{
+	title = inTitle;
+}
+
 void Menu::setTitle(std::string title)
 {
 	this->title = title;
@@ -36,6 +46,7 @@ void Menu::draw(std::shared_ptr<IDisplay> display, int optionIndex)
 	titleBox.width = titleBox.text.size()+2;
 	titleBox.height = 1+2;
 	titleBox.setUnderlined();
+	titleBox.setBold();
 	display->drawTextBox(titleBox);
 	for(int i = 0; i < options.size(); i++)
 	{
