@@ -1,6 +1,7 @@
 #ifndef CONTROL_SEQUENCES_H
 #define CONTROL_SEQUENCES_H
 
+#include <iostream>
 #include <string>
 
 using namespace std;
@@ -315,6 +316,30 @@ public:
 			sendUnsetOverlined();
 		if (textBox.isBlinking())
 			sendUnsetSlowBlink();
+	}
+
+	static string hideCursor()
+	{
+		string sequence(sequenceIntroducer);
+		sequence += "?25l";
+		return sequence;
+	}
+
+	static void sendHideCursor()
+	{
+		sendSequence(hideCursor());
+	}
+
+	static string showCursor()
+	{
+		string sequence(sequenceIntroducer);
+		sequence += "?25h";
+		return sequence;
+	}
+
+	static void sendShowCursor()
+	{
+		sendSequence(showCursor());
 	}
 };
 
