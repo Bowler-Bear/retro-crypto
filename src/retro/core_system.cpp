@@ -44,8 +44,8 @@ void CoreSystem::tick()
 	if (menuSystem->getQuitRequested() != getQuitRequested())
 		setQuitRequested(menuSystem->getQuitRequested());
 	inputSystem->tick();
-	InputType newestInput = inputSystem->getNextInput();
-	menuSystem->processInput(newestInput);
+	InputType nextInput = inputSystem->getNextInput();
+	menuSystem->processInput(nextInput);
 	menuSystem->tick();
 }
 
