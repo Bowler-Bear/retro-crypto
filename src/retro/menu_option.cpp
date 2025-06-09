@@ -25,6 +25,11 @@ string MenuOption::getLabel()
 	return label;
 }
 
+string MenuOption::getDescription()
+{
+	return description;
+}
+
 bool MenuOption::getDisabled()
 {
 	return disabled;

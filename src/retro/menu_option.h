@@ -31,6 +31,8 @@ namespace RetroCrypto
 
 		string getLabel();
 
+		string getDescription();
+
 		bool getDisabled();
 
 		void setDisabled(bool newValue);
