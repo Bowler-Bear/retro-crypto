@@ -65,6 +65,8 @@ void MenuSystem::processInput(InputType input)
 	case InputType::DOWN:
 		{
 			std::vector<std::shared_ptr<MenuOption>>& options = currentMenuPosition->getOptions();
+			if (options.size() <= 0)
+				break;
 			int addition = input == InputType::UP ? -1 : 1;
 			int newOptionIndex = optionIndex + addition;
 			do
