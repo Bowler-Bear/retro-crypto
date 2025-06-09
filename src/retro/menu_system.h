@@ -4,6 +4,7 @@
 #include "system.h"
 #include "display_factory.h"
 #include "menu_tree.h"
+#include "input_capturer.h"
 
 namespace RetroCrypto
 {
@@ -37,6 +38,8 @@ namespace RetroCrypto
 		virtual void tick() override;
 
 		void redraw();
+
+		void processInput(InputType input);
 	};
 }
 #endif

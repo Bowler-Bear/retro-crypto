@@ -59,5 +59,40 @@ void MenuSystem::redraw()
 	if (display == nullptr)
 		throw std::string("MenuSystem has no display to draw to.");
 	display->clear();
-	currentMenuPosition->draw(display, 1);
+	currentMenuPosition->draw(display, optionIndex);
+}
+
+void MenuSystem::processInput(InputType input)
+{
+	switch (input)
+	{
+	case InputType::UP:
+	case InputType::DOWN:
+		{
+			std::vector<std::shared_ptr<MenuOption>>& options = currentMenuPosition->getOptions();
+			int addition = input == InputType::UP ? -1 : 1;
+			int newOptionIndex = optionIndex + addition;
+			do
+			{
+				if (newOptionIndex < 0)
+					newOptionIndex = options.size()-1;
+				if (newOptionIndex >= options.size())
+					newOptionIndex = 0;
+				if (!options[newOptionIndex]->getDisabled())
+				{
+					optionIndex = newOptionIndex;
+					break;
+				}
+				newOptionIndex += addition;
+			} while(newOptionIndex != optionIndex);
+		}
+		break;
+	case InputType::LEFT:
+	case InputType::RIGHT:
+	case InputType::FORWARD:
+	case InputType::BACK:
+	case InputType::NONE:
+	default:
+		break;
+	}
 }
