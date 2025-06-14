@@ -11,11 +11,8 @@ namespace RetroCrypto
 	{
 	private:
 		shared_ptr<MenuTreeObject> root;
-		bool initialized;
 	public:
 		MenuTree();
-
-		void init();
 
 		shared_ptr<MenuTreeObject> getRoot();
 	};

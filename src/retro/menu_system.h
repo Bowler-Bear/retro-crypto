@@ -11,7 +11,7 @@ namespace RetroCrypto
 	class MenuSystem : public ISystem
 	{
 	private:
-		std::shared_ptr<MenuTree> menuTree;
+		MenuTree menuTree;
 		
 		std::shared_ptr<MenuTreeObject> currentMenuPosition;
 

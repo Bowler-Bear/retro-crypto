@@ -5,14 +5,6 @@ using namespace RetroCrypto;
 
 MenuTree::MenuTree()
 {
-	root = nullptr;
-	initialized = false;
-}
-
-void MenuTree::init()
-{
-	if (initialized)
-		return;
 	shared_ptr<Menu> mainMenu = make_shared<Menu>("Main Menu");
 	root = static_pointer_cast<MenuTreeObject>(mainMenu);
 
@@ -23,7 +15,6 @@ void MenuTree::init()
 
 	shared_ptr<Menu> generateAddressMenu = make_shared<Menu>("Generate Address", mainMenu);
 	generateAddressOption->add(static_pointer_cast<MenuTreeObject>(generateAddressMenu));
-	initialized = true;
 }
 
 shared_ptr<MenuTreeObject> MenuTree::getRoot()

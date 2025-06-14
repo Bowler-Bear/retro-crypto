@@ -7,8 +7,8 @@ MenuSystem::MenuSystem()
 {
 	initialized = false;
 	quitRequested = false;
-	menuTree = nullptr;
-	currentMenuPosition = nullptr;
+	menuTree = MenuTree();
+	currentMenuPosition = menuTree.getRoot();
 	optionIndex = 0;
 	display = nullptr;
 }
@@ -32,11 +32,6 @@ bool MenuSystem::init()
 {
 	if (getInitialized() == true)
 		return getInitialized();
-	if (menuTree == nullptr)
-		menuTree = make_shared<MenuTree>();
-	menuTree->init();
-	currentMenuPosition = menuTree->getRoot();
-
 	if (display == nullptr)
 		throw std::string("No IDisplay passed to MenuSystem.");
 	setInitialized(true);
