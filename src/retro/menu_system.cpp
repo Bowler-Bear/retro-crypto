@@ -1,3 +1,4 @@
+#include "menu_option.h"
 #include "menu_system.h"
 
 using namespace RetroCrypto;

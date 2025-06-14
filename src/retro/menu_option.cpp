@@ -7,7 +7,6 @@ MenuOption::MenuOption(const std::shared_ptr<Menu> menu, const std::string& labe
 : label(label), description(description)
 {
 	parent = menu;
-	menu->add(make_shared<MenuOption>(*this));
 }
 
 void MenuOption::add(std::shared_ptr<MenuTreeObject> destination)
