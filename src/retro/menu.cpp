@@ -4,6 +4,8 @@ using namespace RetroCrypto;
 
 Menu::Menu()
 {
+	title = "";
+	setParent(nullptr);
 }
 
 Menu::Menu(std::string inTitle, std::shared_ptr<MenuTreeObject> inParent)
@@ -33,28 +35,32 @@ void Menu::add(std::shared_ptr<MenuOption> option)
 	options.push_back(option);
 }
 
-void Menu::draw(std::shared_ptr<IDisplay> display, int selectedOptionIndex)
+void Menu::drawTitle(std::shared_ptr<IDisplay> display)
 {
 	Box border;
-	border.xPosition = 0;
-	border.yPosition = 0;
-	border.width = 100;
-	border.height = 25;
+	border.xPosition = MENU_BOX_X_POSITION;
+	border.yPosition = MENU_BOX_Y_POSITION;
+	border.width = MENU_BOX_WIDTH;
+	border.height = MENU_BOX_HEIGHT;
 	display->drawBox(border);
 	TextBox titleBox(title);
-	titleBox.yPosition = 3;
+	titleBox.yPosition = MENU_TITLE_BOX_Y_POSITION;
 	titleBox.xPosition = (border.width-titleBox.text.size())/2;
 	titleBox.width = titleBox.text.size()+2;
-	titleBox.height = 1+2;
+	titleBox.height = MENU_TITLE_BOX_HEIGHT;
 	titleBox.setUnderlined();
 	titleBox.setBold();
 	display->drawTextBox(titleBox);
+}
+
+void Menu::drawOptions(std::shared_ptr<IDisplay> display, int selectedOptionIndex)
+{
 	for(int i = 0; i < options.size(); i++)
 	{
 		const shared_ptr<MenuOption> option = options[i];
 		TextBox optionBox(i == selectedOptionIndex?"-> "+option->getLabel()+" <-":option->getLabel());
-		optionBox.yPosition = (titleBox.yPosition+3)+2*i;
-		optionBox.xPosition = (border.width-optionBox.text.size())/2;
+		optionBox.yPosition = (MENU_TITLE_BOX_Y_POSITION+3)+2*i;
+		optionBox.xPosition = (MENU_BOX_WIDTH-optionBox.text.size())/2;
 		optionBox.width = optionBox.text.size()+3;
 		optionBox.height = 3;
 		if (i == selectedOptionIndex)
@@ -65,14 +71,25 @@ void Menu::draw(std::shared_ptr<IDisplay> display, int selectedOptionIndex)
 		}
 		display->drawTextBox(optionBox);
 	}
+}
+
+void Menu::drawDescription(std::shared_ptr<IDisplay> display, int selectedOptionIndex)
+{
 	if (selectedOptionIndex < options.size())
 	{
-		TextBox descriptionBox(options[optionIndex]->getDescription());
-		descriptionBox.yPosition = border.height-6;
+		TextBox descriptionBox(options[selectedOptionIndex]->getDescription());
+		descriptionBox.yPosition = MENU_BOX_HEIGHT-6;
 		descriptionBox.xPosition = 2;
-		descriptionBox.width = border.width-3;
+		descriptionBox.width = MENU_BOX_WIDTH-3;
 		descriptionBox.height = 5;
 		descriptionBox.setBordered();
 		display->drawTextBox(descriptionBox);
 	}
+}
+
+void Menu::draw(std::shared_ptr<IDisplay> display, int selectedOptionIndex)
+{
+	drawTitle(display);
+	drawOptions(display, selectedOptionIndex);
+	drawDescription(display, selectedOptionIndex);
 }
