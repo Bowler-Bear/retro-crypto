@@ -86,8 +86,28 @@ void MenuSystem::processInput(InputType input)
 		break;
 	case InputType::LEFT:
 	case InputType::RIGHT:
+		break;
 	case InputType::FORWARD:
+		{
+			std::vector<std::shared_ptr<MenuOption>>& options = currentMenuPosition->getOptions();
+			if (optionIndex < 0 || optionIndex >= options.size())
+				throw std::string("Error trying to navigate to invalid option index");
+			std::shared_ptr<MenuTreeObject> newDestination = options[optionIndex]->getDestination();
+			if (newDestination == nullptr)
+				throw std::string("Missing destination for menu option ")+options[optionIndex]->getLabel();
+			currentMenuPosition = newDestination;
+			optionIndex = 0;
+		}
+		break;
 	case InputType::BACK:
+		{
+			std::shared_ptr<MenuTreeObject> parent = currentMenuPosition->getParent();
+			if (parent == nullptr)
+				break;
+			currentMenuPosition = parent;
+			optionIndex = 0;
+		}
+		break;
 	case InputType::NONE:
 	default:
 		break;
