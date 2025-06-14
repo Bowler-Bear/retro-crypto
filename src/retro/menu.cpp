@@ -6,10 +6,11 @@ Menu::Menu()
 {
 }
 
-Menu::Menu(std::string inTitle)
+Menu::Menu(std::string inTitle, std::shared_ptr<MenuTreeObject> inParent)
 : Menu()
 {
 	title = inTitle;
+	setParent(inParent);
 }
 
 void Menu::setTitle(std::string title)

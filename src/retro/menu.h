@@ -14,7 +14,7 @@ namespace RetroCrypto
 		string title;
 	public:
 		Menu();
-		Menu(string inTitle);
+		Menu(string inTitle, std::shared_ptr<MenuTreeObject> inParent = nullptr);
 		void setTitle(string title);
 
 		string getTitle();
