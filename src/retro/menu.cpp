@@ -114,3 +114,13 @@ int Menu::getNewSelectedOption(int selectedOptionIndex, InputType input)
 	} while(newOptionIndex != selectedOptionIndex);
 	return newOptionIndex;
 }
+
+std::shared_ptr<MenuTreeObject> Menu::getDestination(int selectedOptionIndex)
+{
+	if (selectedOptionIndex < 0 || selectedOptionIndex >= options.size())
+		throw std::string("Error trying to navigate to invalid option index");
+	std::shared_ptr<MenuTreeObject> destination = options[selectedOptionIndex]->getDestination();
+	if (destination == nullptr)
+		throw std::string("Missing destination for menu option ")+options[selectedOptionIndex]->getLabel();
+	return destination;
+}
