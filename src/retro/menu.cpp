@@ -52,8 +52,8 @@ void Menu::draw(std::shared_ptr<IDisplay> display, int optionIndex)
 	for(int i = 0; i < options.size(); i++)
 	{
 		const shared_ptr<MenuOption> option = options[i];
-		TextBox optionBox(option->getLabel());
-		optionBox.yPosition = (titleBox.yPosition+4)+2*i;
+		TextBox optionBox(i == optionIndex?"-> "+option->getLabel()+" <-":option->getLabel());
+		optionBox.yPosition = (titleBox.yPosition+3)+2*i;
 		optionBox.xPosition = (border.width-optionBox.text.size())/2;
 		optionBox.width = optionBox.text.size()+3;
 		optionBox.height = 3;
