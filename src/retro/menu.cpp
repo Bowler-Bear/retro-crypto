@@ -93,3 +93,24 @@ void Menu::draw(std::shared_ptr<IDisplay> display, int selectedOptionIndex)
 	drawOptions(display, selectedOptionIndex);
 	drawDescription(display, selectedOptionIndex);
 }
+
+int Menu::getNewSelectedOption(int selectedOptionIndex, InputType input)
+{
+	if (options.size() <= 0)
+		return 0;
+	int addition = input == InputType::UP ? -1 : 1;
+	int newOptionIndex = selectedOptionIndex + addition;
+	do
+	{
+		if (newOptionIndex < 0)
+			newOptionIndex = options.size()-1;
+		if (newOptionIndex >= options.size())
+			newOptionIndex = 0;
+		if (!options[newOptionIndex]->getDisabled())
+		{
+			return newOptionIndex;
+		}
+		newOptionIndex += addition;
+	} while(newOptionIndex != selectedOptionIndex);
+	return newOptionIndex;
+}

@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "display.h"
+#include "input_capturer.h"
 
 namespace RetroCrypto
 {
@@ -17,6 +18,7 @@ namespace RetroCrypto
 	public:
 		virtual void add(std::shared_ptr<MenuTreeObject> child) = 0;
 		virtual void draw(std::shared_ptr<IDisplay> display, int selectedOptionIndex) = 0;
+		virtual int getNewSelectedOption(int selectedOptionIndex, InputType input) = 0;
 		virtual std::vector<std::shared_ptr<MenuOption>>& getOptions()
 		{
 			return options;

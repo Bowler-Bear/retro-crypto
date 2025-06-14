@@ -35,6 +35,7 @@ namespace RetroCrypto
 		virtual void drawDescription(shared_ptr<IDisplay> display, int selectedOptionIndex);
 
 		virtual void draw(shared_ptr<IDisplay> display, int selectedOptionIndex) override;
+		virtual int getNewSelectedOption(int selectedOptionIndex, InputType input) override;
 
 		void add(shared_ptr<MenuOption> option);
 	};

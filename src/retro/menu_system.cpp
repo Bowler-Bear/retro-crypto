@@ -59,29 +59,9 @@ void MenuSystem::processInput(InputType input)
 	{
 	case InputType::UP:
 	case InputType::DOWN:
-		{
-			std::vector<std::shared_ptr<MenuOption>>& options = currentMenuPosition->getOptions();
-			if (options.size() <= 0)
-				break;
-			int addition = input == InputType::UP ? -1 : 1;
-			int newOptionIndex = selectedOptionIndex + addition;
-			do
-			{
-				if (newOptionIndex < 0)
-					newOptionIndex = options.size()-1;
-				if (newOptionIndex >= options.size())
-					newOptionIndex = 0;
-				if (!options[newOptionIndex]->getDisabled())
-				{
-					selectedOptionIndex = newOptionIndex;
-					break;
-				}
-				newOptionIndex += addition;
-			} while(newOptionIndex != selectedOptionIndex);
-		}
-		break;
 	case InputType::LEFT:
 	case InputType::RIGHT:
+		selectedOptionIndex = currentMenuPosition->getNewSelectedOption(selectedOptionIndex, input);
 		break;
 	case InputType::FORWARD:
 		{
