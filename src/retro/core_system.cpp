@@ -60,3 +60,13 @@ bool CoreSystem::init()
 	setInitialized(true);
 	return getInitialized();
 }
+
+void CoreSystem::updateContextData(ContextUpdate update, ContextData dataContainer)
+{
+	context.updateData(update, dataContainer);
+}
+
+ContextData CoreSystem::getContextData()
+{
+	return context.getData();
+}

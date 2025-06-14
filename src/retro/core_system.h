@@ -4,6 +4,7 @@
 #include "system.h"
 #include "menu_system.h"
 #include "input_system.h"
+#include "core_context.h"
 
 namespace RetroCrypto
 {
@@ -13,6 +14,8 @@ namespace RetroCrypto
 		MenuSystem* menuSystem;
 
 		InputSystem* inputSystem;
+
+		Context context;
 
 		CoreSystem();
 
@@ -31,6 +34,10 @@ namespace RetroCrypto
 		void tick();
 
 		virtual bool init() override;
+
+		void updateContextData(ContextUpdate update, ContextData dataContainer);
+
+		ContextData getContextData();
 	};
 }
 #endif
