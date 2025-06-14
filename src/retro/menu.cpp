@@ -6,6 +6,8 @@ Menu::Menu()
 {
 	title = "";
 	setParent(nullptr);
+	setForwardAction(nullptr);
+	setBackwardAction(nullptr);
 }
 
 Menu::Menu(std::string inTitle, std::shared_ptr<MenuTreeObject> inParent)
@@ -123,4 +125,14 @@ std::shared_ptr<MenuTreeObject> Menu::getDestination(int selectedOptionIndex)
 	if (destination == nullptr)
 		throw std::string("Missing destination for menu option ")+options[selectedOptionIndex]->getLabel();
 	return destination;
+}
+
+void Menu::onForward(int selectedOptionIndex)
+{
+	MenuTreeObject::onForward(selectedOptionIndex);
+	if (selectedOptionIndex < 0 || selectedOptionIndex >= options.size())
+		return;
+	std::shared_ptr<MenuOption> selectedOption = options[selectedOptionIndex];
+	if (selectedOption != nullptr && !selectedOption->getDisabled())
+		selectedOption->onSelected();
 }

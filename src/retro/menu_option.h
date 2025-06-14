@@ -4,6 +4,8 @@
 #include <memory>
 #include <string>
 
+typedef void (*BlockingFunction)(void);
+
 using namespace std;
 
 namespace RetroCrypto
@@ -22,6 +24,8 @@ namespace RetroCrypto
 		shared_ptr<MenuTreeObject> parent;
 
 		shared_ptr<MenuTreeObject> destination;
+
+		BlockingFunction onSelectedFunction;
 	public:
 		MenuOption(const shared_ptr<Menu> menu, const string& label, const string& description);
 
@@ -36,6 +40,10 @@ namespace RetroCrypto
 		bool getDisabled();
 
 		void setDisabled(bool newValue);
+
+		void setOnSelectedFunction(BlockingFunction function);
+
+		void onSelected();
 	};
 }
 #endif

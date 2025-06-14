@@ -7,6 +7,7 @@ MenuOption::MenuOption(const std::shared_ptr<Menu> menu, const std::string& labe
 : label(label), description(description)
 {
 	parent = menu;
+	onSelectedFunction = nullptr;
 }
 
 void MenuOption::add(std::shared_ptr<MenuTreeObject> destination)
@@ -37,4 +38,15 @@ bool MenuOption::getDisabled()
 void MenuOption::setDisabled(bool newValue)
 {
 	disabled = newValue;
+}
+
+void MenuOption::setOnSelectedFunction(BlockingFunction function)
+{
+	onSelectedFunction = function;
+}
+
+void MenuOption::onSelected()
+{
+	if (onSelectedFunction != nullptr)
+		onSelectedFunction();
 }

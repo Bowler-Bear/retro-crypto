@@ -40,6 +40,8 @@ namespace RetroCrypto
 
 		virtual std::shared_ptr<MenuTreeObject> getDestination(int selectedOptionIndex) override;
 
+		virtual void onForward(int selectedOptionIndex) override;
+
 		void add(shared_ptr<MenuOption> option);
 	};
 }
