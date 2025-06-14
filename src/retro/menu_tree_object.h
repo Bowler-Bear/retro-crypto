@@ -7,6 +7,8 @@
 #include "display.h"
 #include "input_capturer.h"
 
+typedef void (*BlockingAction)(void);
+
 namespace RetroCrypto
 {
 	class MenuOption;
@@ -15,6 +17,8 @@ namespace RetroCrypto
 	protected:
 		std::shared_ptr<MenuTreeObject> parent;
 		std::vector<std::shared_ptr<MenuOption>> options;
+		BlockingAction forwardAction;
+		BlockingAction backwardAction;
 	public:
 		virtual void add(std::shared_ptr<MenuTreeObject> child) = 0;
 		virtual void draw(std::shared_ptr<IDisplay> display, int selectedOptionIndex) = 0;
@@ -31,6 +35,24 @@ namespace RetroCrypto
 		virtual void setParent(std::shared_ptr<MenuTreeObject> newParent)
 		{
 			parent = newParent;
+		}
+		virtual void setForwardAction(BlockingAction action)
+		{
+			forwardAction = action;
+		}
+		virtual void setBackwardAction(BlockingAction action)
+		{
+			backwardAction = action;
+		}
+		virtual void onForward(int selectedOptionIndex)
+		{
+			if (forwardAction != nullptr)
+				(*forwardAction)();
+		}
+		virtual void onBackward(int selectedOptionIndex)
+		{
+			if (backwardAction != nullptr)
+				(*backwardAction)();
 		}
 	};
 }

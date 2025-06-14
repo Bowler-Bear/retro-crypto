@@ -1,4 +1,3 @@
-#include "menu_option.h"
 #include "menu_system.h"
 
 using namespace RetroCrypto;
@@ -69,6 +68,7 @@ void MenuSystem::processInput(InputType input)
 			if (destination == nullptr)
 				throw std::string("Missing destination for menu option.");
 			destination->setParent(currentMenuPosition);
+			currentMenuPosition->onForward(selectedOptionIndex);
 			currentMenuPosition = destination;
 			selectedOptionIndex = 0;
 		}
@@ -78,6 +78,7 @@ void MenuSystem::processInput(InputType input)
 			std::shared_ptr<MenuTreeObject> parent = currentMenuPosition->getParent();
 			if (parent == nullptr)
 				break;
+			currentMenuPosition->onBackward(selectedOptionIndex);
 			currentMenuPosition = parent;
 			selectedOptionIndex = 0;
 		}
