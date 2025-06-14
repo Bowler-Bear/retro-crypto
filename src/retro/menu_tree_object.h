@@ -16,7 +16,7 @@ namespace RetroCrypto
 		std::vector<std::shared_ptr<MenuOption>> options;
 	public:
 		virtual void add(std::shared_ptr<MenuTreeObject> child) = 0;
-		virtual void draw(std::shared_ptr<IDisplay> display, int optionIndex) = 0;
+		virtual void draw(std::shared_ptr<IDisplay> display, int selectedOptionIndex) = 0;
 		virtual std::vector<std::shared_ptr<MenuOption>>& getOptions()
 		{
 			return options;

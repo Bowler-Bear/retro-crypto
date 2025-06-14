@@ -33,7 +33,7 @@ void Menu::add(std::shared_ptr<MenuOption> option)
 	options.push_back(option);
 }
 
-void Menu::draw(std::shared_ptr<IDisplay> display, int optionIndex)
+void Menu::draw(std::shared_ptr<IDisplay> display, int selectedOptionIndex)
 {
 	Box border;
 	border.xPosition = 0;
@@ -52,12 +52,12 @@ void Menu::draw(std::shared_ptr<IDisplay> display, int optionIndex)
 	for(int i = 0; i < options.size(); i++)
 	{
 		const shared_ptr<MenuOption> option = options[i];
-		TextBox optionBox(i == optionIndex?"-> "+option->getLabel()+" <-":option->getLabel());
+		TextBox optionBox(i == selectedOptionIndex?"-> "+option->getLabel()+" <-":option->getLabel());
 		optionBox.yPosition = (titleBox.yPosition+3)+2*i;
 		optionBox.xPosition = (border.width-optionBox.text.size())/2;
 		optionBox.width = optionBox.text.size()+3;
 		optionBox.height = 3;
-		if (i == optionIndex)
+		if (i == selectedOptionIndex)
 		{
 			optionBox.setBordered();
 			optionBox.setBold();
@@ -65,7 +65,7 @@ void Menu::draw(std::shared_ptr<IDisplay> display, int optionIndex)
 		}
 		display->drawTextBox(optionBox);
 	}
-	if (optionIndex < options.size())
+	if (selectedOptionIndex < options.size())
 	{
 		TextBox descriptionBox(options[optionIndex]->getDescription());
 		descriptionBox.yPosition = border.height-6;

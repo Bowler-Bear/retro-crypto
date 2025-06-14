@@ -9,7 +9,7 @@ MenuSystem::MenuSystem()
 	quitRequested = false;
 	menuTree = MenuTree();
 	currentMenuPosition = menuTree.getRoot();
-	optionIndex = 0;
+	selectedOptionIndex = 0;
 	display = nullptr;
 }
 
@@ -50,7 +50,7 @@ void MenuSystem::redraw()
 	if (display == nullptr)
 		throw std::string("MenuSystem has no display to draw to.");
 	display->clear();
-	currentMenuPosition->draw(display, optionIndex);
+	currentMenuPosition->draw(display, selectedOptionIndex);
 }
 
 void MenuSystem::processInput(InputType input)
@@ -64,7 +64,7 @@ void MenuSystem::processInput(InputType input)
 			if (options.size() <= 0)
 				break;
 			int addition = input == InputType::UP ? -1 : 1;
-			int newOptionIndex = optionIndex + addition;
+			int newOptionIndex = selectedOptionIndex + addition;
 			do
 			{
 				if (newOptionIndex < 0)
@@ -73,11 +73,11 @@ void MenuSystem::processInput(InputType input)
 					newOptionIndex = 0;
 				if (!options[newOptionIndex]->getDisabled())
 				{
-					optionIndex = newOptionIndex;
+					selectedOptionIndex = newOptionIndex;
 					break;
 				}
 				newOptionIndex += addition;
-			} while(newOptionIndex != optionIndex);
+			} while(newOptionIndex != selectedOptionIndex);
 		}
 		break;
 	case InputType::LEFT:
@@ -86,13 +86,13 @@ void MenuSystem::processInput(InputType input)
 	case InputType::FORWARD:
 		{
 			std::vector<std::shared_ptr<MenuOption>>& options = currentMenuPosition->getOptions();
-			if (optionIndex < 0 || optionIndex >= options.size())
+			if (selectedOptionIndex < 0 || selectedOptionIndex >= options.size())
 				throw std::string("Error trying to navigate to invalid option index");
-			std::shared_ptr<MenuTreeObject> newDestination = options[optionIndex]->getDestination();
+			std::shared_ptr<MenuTreeObject> newDestination = options[selectedOptionIndex]->getDestination();
 			if (newDestination == nullptr)
-				throw std::string("Missing destination for menu option ")+options[optionIndex]->getLabel();
+				throw std::string("Missing destination for menu option ")+options[selectedOptionIndex]->getLabel();
 			currentMenuPosition = newDestination;
-			optionIndex = 0;
+			selectedOptionIndex = 0;
 		}
 		break;
 	case InputType::BACK:
@@ -101,7 +101,7 @@ void MenuSystem::processInput(InputType input)
 			if (parent == nullptr)
 				break;
 			currentMenuPosition = parent;
-			optionIndex = 0;
+			selectedOptionIndex = 0;
 		}
 		break;
 	case InputType::NONE:
