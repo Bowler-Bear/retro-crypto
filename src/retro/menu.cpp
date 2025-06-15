@@ -101,18 +101,14 @@ int Menu::getNewSelectedOption(int selectedOptionIndex, InputType input)
 	if (options.size() <= 0)
 		return 0;
 	int addition = input == InputType::UP ? -1 : 1;
-	int newOptionIndex = selectedOptionIndex + addition;
+	uint32_t newOptionIndex = (selectedOptionIndex + addition + options.size()) % options.size();
 	do
 	{
-		if (newOptionIndex < 0)
-			newOptionIndex = options.size()-1;
-		if (newOptionIndex >= options.size())
-			newOptionIndex = 0;
 		if (!options[newOptionIndex]->getDisabled())
 		{
 			return newOptionIndex;
 		}
-		newOptionIndex += addition;
+		newOptionIndex = (selectedOptionIndex + addition + options.size()) % options.size();
 	} while(newOptionIndex != selectedOptionIndex);
 	return newOptionIndex;
 }
