@@ -3,6 +3,8 @@
 
 #include <string>
 
+#define MAXIMUM_SEED_SIZE 32
+
 namespace RetroCrypto
 {
 	enum class CryptoType
@@ -16,7 +18,7 @@ namespace RetroCrypto
 		XMR
 	};
 
-	enum class ContextUpdate : uint32_t
+	enum ContextUpdate : uint32_t
 	{
 		SEED = 0x00000001 << 0,
 		SEED_SIZE = 0x00000001 << 1,
@@ -25,27 +27,54 @@ namespace RetroCrypto
 		ALL = SEED | SEED_SIZE | MNEMONIC | CRYPTO
 	};
 
-	inline constexpr uint8_t operator&(const ContextUpdate& first, const ContextUpdate& second)
+	inline constexpr ContextUpdate operator&(const ContextUpdate& first, const ContextUpdate& second)
 	{
-		return static_cast<uint32_t>(first) & static_cast<uint32_t>(second);
-	}
+		return static_cast<ContextUpdate>(static_cast<uint32_t>(first) & static_cast<uint32_t>(second));
+	};
+
+	inline constexpr ContextUpdate operator|(const ContextUpdate& first, const ContextUpdate& second)
+	{
+		return static_cast<ContextUpdate>(static_cast<uint32_t>(first) | static_cast<uint32_t>(second));
+	};
 
 	struct ContextData
 	{
-		uint8_t seed[32];
+		uint8_t seed[MAXIMUM_SEED_SIZE];
 		uint8_t seedSize;
 		std::string mnemonic;
 		CryptoType crypto;
 
 		ContextData()
-		: seed{ 0 }, seedSize(32), mnemonic(""), crypto(CryptoType::NONE)
+		: seed{ 0 }, seedSize(MAXIMUM_SEED_SIZE), mnemonic(""), crypto(CryptoType::NONE)
 		{
+		}
+
+		ContextData(const uint8_t* inSeed, const uint8_t inSeedSize)
+		: ContextData()
+		{
+			seedSize = inSeedSize;
+			setSeed(inSeed, inSeedSize);
+		}
+
+		ContextData(CryptoType inCryptoType)
+		: ContextData()
+		{
+			 crypto = inCryptoType;
+		}
+
+		void setSeed(const uint8_t* inSeed, uint8_t inSeedSize)
+		{
+			uint8_t fillIndex = inSeedSize < seedSize ? inSeedSize : seedSize;
+			for(int i = 0; i < fillIndex; i++)
+				seed[i] = inSeed[i];
+			for(int i = fillIndex; i < MAXIMUM_SEED_SIZE; i++)
+				seed[i] = 0x0;
 		}
 
 		std::string getSeedAsHexString()
 		{
-			char hexString[64];
-			for(int i = 0; i < 32; i++)
+			char hexString[2*MAXIMUM_SEED_SIZE];
+			for(int i = 0; i < seedSize; i++)
 				sprintf(hexString+i*2, "%02x", seed[i]);
 			return std::string(hexString);
 		}
