@@ -121,7 +121,12 @@ std::shared_ptr<MenuTreeObject> Menu::getDestination(int selectedOptionIndex)
 {
 	if (selectedOptionIndex < 0 || selectedOptionIndex >= options.size())
 		throw std::string("Error trying to navigate to invalid option index");
-	std::shared_ptr<MenuTreeObject> destination = options[selectedOptionIndex]->getDestination();
+	std::shared_ptr<MenuOption> selectedOption = options[selectedOptionIndex];
+	if (selectedOption == nullptr)
+		throw std::string("Selected option is a null pointer");
+	if (selectedOption->getDisabled())
+		throw std::string("Selected option was disabled and shouldn't have been selected");
+	std::shared_ptr<MenuTreeObject> destination = selectedOption->getDestination();
 	if (destination == nullptr)
 		throw std::string("Missing destination for menu option ")+options[selectedOptionIndex]->getLabel();
 	return destination;
