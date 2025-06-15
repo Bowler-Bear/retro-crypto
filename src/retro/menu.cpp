@@ -39,15 +39,9 @@ void Menu::add(std::shared_ptr<MenuOption> option)
 
 void Menu::drawTitle(std::shared_ptr<IDisplay> display)
 {
-	Box border;
-	border.xPosition = MENU_BOX_X_POSITION;
-	border.yPosition = MENU_BOX_Y_POSITION;
-	border.width = MENU_BOX_WIDTH;
-	border.height = MENU_BOX_HEIGHT;
-	display->drawBox(border);
 	TextBox titleBox(title);
 	titleBox.yPosition = MENU_TITLE_BOX_Y_POSITION;
-	titleBox.xPosition = (border.width-titleBox.text.size())/2;
+	titleBox.xPosition = (MENU_BOX_WIDTH-titleBox.text.size())/2;
 	titleBox.width = titleBox.text.size()+2;
 	titleBox.height = MENU_TITLE_BOX_HEIGHT;
 	titleBox.setUnderlined();
@@ -91,6 +85,7 @@ void Menu::drawDescription(std::shared_ptr<IDisplay> display, int selectedOption
 
 void Menu::draw(std::shared_ptr<IDisplay> display, int selectedOptionIndex)
 {
+	drawBorder(display, selectedOptionIndex);
 	drawTitle(display);
 	drawOptions(display, selectedOptionIndex);
 	drawDescription(display, selectedOptionIndex);
