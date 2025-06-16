@@ -4,7 +4,13 @@
 extern "C"
 {
 #include "monero/monero.h"
+#include "bip32.h"
 }
+
+#define BITCOIN_ELLIPTIC_CURVE "secp256k1"
+#define BITCOIN_MAXIMUM_ADDRESS_LENGTH ADDRESS_MAXLEN
+#define BITCOIN_ADDRESS_VERSION_BYTE 0
+#define BITCOIN_HD_MASTER_SEED_SIZE 64
 
 #define MONERO_PRIVATE_SPEND_KEY_LENGTH 32
 #define MONERO_PUBLIC_SPEND_KEY_LENGTH 32
@@ -20,12 +26,40 @@ namespace RetroCrypto
 		const ContextData& data(CoreSystem::getCoreSystem().getContextData());
 		switch(data.crypto)
 		{
+		case RetroCrypto::CryptoType::BTC:
+			return bitcoinAddressFromGlobalContext();
 		case RetroCrypto::CryptoType::XMR:
 			return moneroAddressFromGlobalContext();
-			break;
 		default:
 			return std::string("Address generation for this crypto is currently not supported.");
 		}
+	}
+
+	std::string bitcoinAddressFromGlobalContext()
+	{
+		return bitcoinAddressFromSeed(CoreSystem::getCoreSystem().getContextData());
+	}
+
+	std::string bitcoinAddressFromSeed(const ContextData& data)
+	{
+		return bitcoinAddressFromSeed(data.seed, data.seedSize);
+	}
+
+	std::string bitcoinAddressFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	{
+		uint8_t masterNodeSeed[BITCOIN_HD_MASTER_SEED_SIZE] = { 0 };
+		mnemonic_to_seed(mnemonic_from_data(seed, seedSize), "", masterNodeSeed, nullptr);
+		mnemonic_clear();
+		HDNode node;
+		if (hdnode_from_seed(masterNodeSeed, BITCOIN_HD_MASTER_SEED_SIZE, BITCOIN_ELLIPTIC_CURVE, &node) != 1)
+			return string("Error generating master HD node.");
+		char btcAddress[BITCOIN_MAXIMUM_ADDRESS_LENGTH];
+		hdnode_private_ckd_prime(&node, 0);
+		hdnode_private_ckd_prime(&node, 0);
+		hdnode_private_ckd_prime(&node, 0);
+		if (hdnode_get_address(&node, BITCOIN_ADDRESS_VERSION_BYTE, (char*)&btcAddress, BITCOIN_MAXIMUM_ADDRESS_LENGTH) != 0)
+			return string("Failed to generate address from HD node");
+		return btcAddress;
 	}
 
 	std::string moneroAddressFromGlobalContext()

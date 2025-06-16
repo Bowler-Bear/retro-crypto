@@ -39,7 +39,7 @@ void AddressPage::draw(shared_ptr<IDisplay> display, int selectedOptionIndex)
 		switch(contextData.crypto)
 		{
 		case RetroCrypto::CryptoType::BTC:
-			addressType = "Bitcoin ";
+			addressType = "Bitcoin m/0'/0'/0' ";
 			break;
 		case RetroCrypto::CryptoType::DOGE:
 			addressType = "Doge ";
