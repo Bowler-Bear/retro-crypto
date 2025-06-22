@@ -14,6 +14,11 @@ extern "C"
 #define BITCOIN_ADDRESS_VERSION_BYTE 0
 #define BITCOIN_HD_MASTER_SEED_SIZE 64
 
+#define DOGE_PATH_PURPOSE 0
+#define DOGE_PATH_COIN_TYPE 3
+#define DOGE_PATH_ACCOUNT 0
+#define DOGE_ADDRESS_VERSION_BYTE 0x1e
+
 #define NOSTR_PATH_PURPOSE 44
 #define NOSTR_PATH_COIN_TYPE 1237
 #define NOSTR_PATH_ACCOUNT 0
@@ -38,6 +43,8 @@ namespace RetroCrypto
 		{
 		case RetroCrypto::CryptoType::BTC:
 			return bitcoinAddressFromGlobalContext();
+		case RetroCrypto::CryptoType::DOGE:
+			return dogeAddressFromGlobalContext();
 		case RetroCrypto::CryptoType::NOSTR:
 			return nostrAddressFromGlobalContext();
 		case RetroCrypto::CryptoType::XMR:
@@ -72,6 +79,31 @@ namespace RetroCrypto
 		if (hdnode_get_address(&node, BITCOIN_ADDRESS_VERSION_BYTE, (char*)&btcAddress, BITCOIN_MAXIMUM_ADDRESS_LENGTH) != 0)
 			return string("Failed to generate address from HD node");
 		return btcAddress;
+	}
+
+	std::string dogeAddressFromGlobalContext()
+	{
+		return dogeAddressFromSeed(CoreSystem::getCoreSystem().getContextData());
+	}
+
+	std::string dogeAddressFromSeed(const ContextData& data)
+	{
+		return dogeAddressFromSeed(data.seed, data.seedSize);
+	}
+
+	std::string dogeAddressFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	{
+		HDNode node;
+		if (hdnode_from_seed(seed, seedSize, BITCOIN_ELLIPTIC_CURVE, &node) != 1)
+			return string("Error generating master HD node.");
+		hdnode_private_ckd_prime(&node, DOGE_PATH_PURPOSE);
+		hdnode_private_ckd_prime(&node, DOGE_PATH_COIN_TYPE);
+		hdnode_private_ckd_prime(&node, DOGE_PATH_ACCOUNT);
+		hdnode_fill_public_key(&node);
+		char dogeAddress[BITCOIN_MAXIMUM_ADDRESS_LENGTH];
+		if (hdnode_get_address(&node, DOGE_ADDRESS_VERSION_BYTE, (char*)&dogeAddress, BITCOIN_MAXIMUM_ADDRESS_LENGTH) != 0)
+			return string("Failed to generate address from HD node");
+		return dogeAddress;
 	}
 
 	std::string nostrAddressFromGlobalContext()
