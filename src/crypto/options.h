@@ -63,7 +63,7 @@
 
 // support Ethereum operations
 #ifndef USE_ETHEREUM
-#define USE_ETHEREUM 0
+#define USE_ETHEREUM 1
 #endif
 
 // support Graphene operations (STEEM, BitShares)

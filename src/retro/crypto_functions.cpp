@@ -19,6 +19,13 @@ extern "C"
 #define DOGE_PATH_ACCOUNT 0
 #define DOGE_ADDRESS_VERSION_BYTE 0x1e
 
+#define ETHEREUM_HD_ELLIPTIC_CURVE BITCOIN_ELLIPTIC_CURVE
+#define ETHEREUM_PATH_PURPOSE 44
+#define ETHEREUM_PATH_COIN_TYPE 60
+#define ETHEREUM_PATH_ACCOUNT 0
+#define ETHEREUM_ADDRESS_BYTES 20
+#define ETHEREUM_ADDRESS_LENGTH 2*ETHEREUM_ADDRESS_BYTES+3
+
 #define NOSTR_PATH_PURPOSE 44
 #define NOSTR_PATH_COIN_TYPE 1237
 #define NOSTR_PATH_ACCOUNT 0
@@ -45,6 +52,8 @@ namespace RetroCrypto
 			return bitcoinAddressFromGlobalContext();
 		case RetroCrypto::CryptoType::DOGE:
 			return dogeAddressFromGlobalContext();
+		case RetroCrypto::CryptoType::ETH:
+			return ethereumAddressFromGlobalContext();
 		case RetroCrypto::CryptoType::NOSTR:
 			return nostrAddressFromGlobalContext();
 		case RetroCrypto::CryptoType::XMR:
@@ -104,6 +113,65 @@ namespace RetroCrypto
 		if (hdnode_get_address(&node, DOGE_ADDRESS_VERSION_BYTE, (char*)&dogeAddress, BITCOIN_MAXIMUM_ADDRESS_LENGTH) != 0)
 			return string("Failed to generate address from HD node");
 		return dogeAddress;
+	}
+
+	std::string ethereumAddressFromGlobalContext()
+	{
+		return ethereumAddressFromSeed(CoreSystem::getCoreSystem().getContextData());
+	}
+
+	std::string ethereumAddressFromSeed(const ContextData& data)
+	{
+		return ethereumAddressFromSeed(data.seed, data.seedSize);
+	}
+
+	std::string ethereumAddressFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	{
+		uint8_t masterNodeSeed[BITCOIN_HD_MASTER_SEED_SIZE] = { 0 };
+		mnemonic_to_seed(mnemonic_from_data(seed, seedSize), "", masterNodeSeed, nullptr);
+		mnemonic_clear();
+
+		HDNode node;
+		if (hdnode_from_seed(masterNodeSeed, BITCOIN_HD_MASTER_SEED_SIZE, ETHEREUM_HD_ELLIPTIC_CURVE, &node) != 1)
+			return string("Error generating master HD node.");
+		hdnode_private_ckd_prime(&node, ETHEREUM_PATH_PURPOSE);
+		hdnode_private_ckd_prime(&node, ETHEREUM_PATH_COIN_TYPE);
+		hdnode_private_ckd_prime(&node, ETHEREUM_PATH_ACCOUNT);
+		hdnode_fill_public_key(&node);
+		uint8_t ethAddressBytes[ETHEREUM_ADDRESS_BYTES] = { 0 };
+		if (hdnode_get_ethereum_pubkeyhash(&node, ethAddressBytes) != 1)
+			return string("Failed to generate address from HD node");
+
+		uint8_t publicKeyHash[sha3_256_hash_size] = { 0 };
+		SHA3_CTX ctx = {0};
+		sha3_256_Init(&ctx);
+		for (int i = 0; i < ETHEREUM_ADDRESS_BYTES; i++)
+		{
+			char hexString[3] = { 0 };
+			std::sprintf(hexString, "%02x", ethAddressBytes[i]);
+			sha3_Update(&ctx, (const unsigned char*)hexString, 2);
+		}
+		keccak_Final(&ctx, publicKeyHash);
+
+		char ethAddress[ETHEREUM_ADDRESS_LENGTH] = "0x";
+		for (int i = 0; i < ETHEREUM_ADDRESS_BYTES; i++)
+		{
+			char hexValue[3] = { 0 };
+			std::sprintf(hexValue, "%02x", ethAddressBytes[i]);
+			for(int j = 0; j < 2; j++)
+			{
+				if (!((hexValue[j] >= 'A' && hexValue[j] <= 'Z') || (hexValue[j] >= 'a' && hexValue[j] <= 'z')))
+				{
+					ethAddress[2+2*i+j] = hexValue[j];
+					continue;
+				}
+				if (((publicKeyHash[i] >> 4*(1-j)) & 0xF) >= 8)
+					ethAddress[2+2*i+j] = hexValue[j] - 0x20;
+				else
+					ethAddress[2+2*i+j] = hexValue[j];
+			}
+		}
+		return ethAddress;
 	}
 
 	std::string nostrAddressFromGlobalContext()
