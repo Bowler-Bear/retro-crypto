@@ -11,6 +11,9 @@ namespace RetroCrypto
 	std::string dogeAddressFromGlobalContext();
 	std::string dogeAddressFromSeed(const ContextData& data);
 	std::string dogeAddressFromSeed(const uint8_t* seed, const uint8_t seedSize);
+	std::string ethereumClassicAddressFromGlobalContext();
+	std::string ethereumClassicAddressFromSeed(const ContextData& data);
+	std::string ethereumClassicAddressFromSeed(const uint8_t* seed, const uint8_t seedSize);
 	std::string ethereumAddressFromGlobalContext();
 	std::string ethereumAddressFromSeed(const ContextData& data);
 	std::string ethereumAddressFromSeed(const uint8_t* seed, const uint8_t seedSize);
