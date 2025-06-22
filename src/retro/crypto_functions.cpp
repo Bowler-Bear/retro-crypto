@@ -5,12 +5,22 @@ extern "C"
 {
 #include "monero/monero.h"
 #include "bip32.h"
+#include "bip39.h"
+#include "segwit_addr.h"
 }
 
 #define BITCOIN_ELLIPTIC_CURVE "secp256k1"
 #define BITCOIN_MAXIMUM_ADDRESS_LENGTH ADDRESS_MAXLEN
 #define BITCOIN_ADDRESS_VERSION_BYTE 0
 #define BITCOIN_HD_MASTER_SEED_SIZE 64
+
+#define NOSTR_PATH_PURPOSE 44
+#define NOSTR_PATH_COIN_TYPE 1237
+#define NOSTR_PATH_ACCOUNT 0
+#define NOSTR_PATH_CHANGE 0
+#define NOSTR_PATH_INDEX 0
+#define NOSTR_PUBLIC_KEY_SIZE 32
+#define NOSTR_PUBLIC_ADDRESS_HRP_SIZE 4+2
 
 #define MONERO_PRIVATE_SPEND_KEY_LENGTH 32
 #define MONERO_PUBLIC_SPEND_KEY_LENGTH 32
@@ -28,6 +38,8 @@ namespace RetroCrypto
 		{
 		case RetroCrypto::CryptoType::BTC:
 			return bitcoinAddressFromGlobalContext();
+		case RetroCrypto::CryptoType::NOSTR:
+			return nostrAddressFromGlobalContext();
 		case RetroCrypto::CryptoType::XMR:
 			return moneroAddressFromGlobalContext();
 		default:
@@ -60,6 +72,43 @@ namespace RetroCrypto
 		if (hdnode_get_address(&node, BITCOIN_ADDRESS_VERSION_BYTE, (char*)&btcAddress, BITCOIN_MAXIMUM_ADDRESS_LENGTH) != 0)
 			return string("Failed to generate address from HD node");
 		return btcAddress;
+	}
+
+	std::string nostrAddressFromGlobalContext()
+	{
+		return nostrAddressFromSeed(CoreSystem::getCoreSystem().getContextData());
+	}
+
+	std::string nostrAddressFromSeed(const ContextData& data)
+	{
+		return nostrAddressFromSeed(data.seed, data.seedSize);
+	}
+
+	std::string nostrAddressFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	{
+		uint8_t masterNodeSeed[BITCOIN_HD_MASTER_SEED_SIZE] = { 0 };
+		mnemonic_to_seed(mnemonic_from_data(seed, seedSize), "", masterNodeSeed, nullptr);
+		mnemonic_clear();
+
+		HDNode node;
+		if (hdnode_from_seed(masterNodeSeed, BITCOIN_HD_MASTER_SEED_SIZE, BITCOIN_ELLIPTIC_CURVE, &node) != 1)
+			return string("Error generating master HD node.");
+		hdnode_private_ckd_prime(&node, NOSTR_PATH_PURPOSE);
+		hdnode_private_ckd_prime(&node, NOSTR_PATH_COIN_TYPE);
+		hdnode_private_ckd_prime(&node, NOSTR_PATH_ACCOUNT);
+		hdnode_private_ckd(&node, NOSTR_PATH_CHANGE);
+		hdnode_private_ckd(&node, NOSTR_PATH_INDEX);
+		hdnode_fill_public_key(&node);
+		uint8_t data[NOSTR_PUBLIC_KEY_SIZE*8/5+1] = {0};
+
+		size_t dataLength = 0;
+		if (convert_bits_wrapper(data, &dataLength, 5, (const uint8_t*)(node.public_key+1), NOSTR_PUBLIC_KEY_SIZE, 8, 1) != 1)
+			return std::string("Failed to convert public key from 8 bit array to 5 bit array.");
+		const char nostrHrp[NOSTR_PUBLIC_ADDRESS_HRP_SIZE] =  "npub\0";
+		char nostrAddress[NOSTR_PUBLIC_ADDRESS_HRP_SIZE+NOSTR_PUBLIC_KEY_SIZE*8/5+1+8] = { 0 };
+		if (bech32_encode(nostrAddress, nostrHrp, data, dataLength, BECH32_ENCODING_BECH32) != 1)
+			return string("Error encoding nostr public key.");
+		return string(nostrAddress);
 	}
 
 	std::string moneroAddressFromGlobalContext()
