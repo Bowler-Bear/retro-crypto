@@ -1,6 +1,10 @@
 #include "address_page.h"
 #include "core_system.h"
 #include "crypto_functions.h"
+#include "crypto_definitions.h"
+
+#define STRING(s) #s
+#define S(s) STRING(s)
 
 using namespace RetroCrypto;
 
@@ -39,22 +43,22 @@ void AddressPage::draw(shared_ptr<IDisplay> display, int selectedOptionIndex)
 		switch(contextData.crypto)
 		{
 		case RetroCrypto::CryptoType::BTC:
-			addressType = "Bitcoin m/0'/0'/0' ";
+			addressType = "Bitcoin m/" S(BITCOIN_PATH_PURPOSE) "'/" S(BITCOIN_PATH_COIN_TYPE) "'/" S(BITCOIN_PATH_ACCOUNT) "' ";
 			break;
 		case RetroCrypto::CryptoType::DOGE:
-			addressType = "Doge ";
+			addressType = "Doge m/" S(DOGE_PATH_PURPOSE) "'/" S(DOGE_PATH_COIN_TYPE) "'/" S(DOGE_PATH_ACCOUNT) "' ";
 			break;
 		case RetroCrypto::CryptoType::ETC:
-			addressType = "Ethereum Classic ";
+			addressType = "Ethereum Classic m/" S(ETHEREUM_CLASSIC_PATH_PURPOSE) "'/" S(ETHEREUM_CLASSIC_PATH_COIN_TYPE) "'/" S(ETHEREUM_CLASSIC_PATH_ACCOUNT) "' ";
 			break;
 		case RetroCrypto::CryptoType::ETH:
-			addressType = "Ethereum ";
+			addressType = "Ethereum m/" S(ETHEREUM_PATH_PURPOSE) "'/" S(ETHEREUM_PATH_COIN_TYPE) "'/" S(ETHEREUM_PATH_ACCOUNT) "' ";
 			break;
 		case RetroCrypto::CryptoType::NOSTR:
-			addressType = " Nostr ";
+			addressType = "Nostr m/" S(NOSTR_PATH_PURPOSE) "'/" S(NOSTR_PATH_COIN_TYPE) "'/" S(NOSTR_PATH_ACCOUNT) "'/" S(NOSTR_PATH_CHANGE) "/" S(NOSTR_PATH_INDEX) " ";
 			break;
 		case RetroCrypto::CryptoType::XMR:
-			addressType = "Monero ";
+			addressType = "Monero Primary ";
 			break;
 		default:
 			break;
