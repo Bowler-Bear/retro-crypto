@@ -10,6 +10,9 @@ extern "C"
 }
 
 #define BITCOIN_ELLIPTIC_CURVE "secp256k1"
+#define BITCOIN_PATH_PURPOSE 0
+#define BITCOIN_PATH_COIN_TYPE 0
+#define BITCOIN_PATH_ACCOUNT 0
 #define BITCOIN_MAXIMUM_ADDRESS_LENGTH ADDRESS_MAXLEN
 #define BITCOIN_ADDRESS_VERSION_BYTE 0
 #define BITCOIN_HD_MASTER_SEED_SIZE 64
@@ -91,9 +94,9 @@ namespace RetroCrypto
 		if (hdnode_from_seed(masterNodeSeed, BITCOIN_HD_MASTER_SEED_SIZE, BITCOIN_ELLIPTIC_CURVE, &node) != 1)
 			return string("Error generating master HD node.");
 		char btcAddress[BITCOIN_MAXIMUM_ADDRESS_LENGTH];
-		hdnode_private_ckd_prime(&node, 0);
-		hdnode_private_ckd_prime(&node, 0);
-		hdnode_private_ckd_prime(&node, 0);
+		hdnode_private_ckd_prime(&node, BITCOIN_PATH_PURPOSE);
+		hdnode_private_ckd_prime(&node, BITCOIN_PATH_COIN_TYPE);
+		hdnode_private_ckd_prime(&node, BITCOIN_PATH_ACCOUNT);
 		if (hdnode_get_address(&node, BITCOIN_ADDRESS_VERSION_BYTE, (char*)&btcAddress, BITCOIN_MAXIMUM_ADDRESS_LENGTH) != 0)
 			return string("Failed to generate address from HD node");
 		return btcAddress;
