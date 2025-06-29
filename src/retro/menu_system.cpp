@@ -8,7 +8,6 @@ MenuSystem::MenuSystem()
 	quitRequested = false;
 	menuTree = MenuTree();
 	currentMenuPosition = menuTree.getRoot();
-	selectedOptionIndex = 0;
 	display = nullptr;
 }
 
@@ -49,7 +48,7 @@ void MenuSystem::redraw()
 	if (display == nullptr)
 		throw std::string("MenuSystem has no display to draw to.");
 	display->clear();
-	currentMenuPosition->draw(display, selectedOptionIndex);
+	currentMenuPosition->draw(display);
 }
 
 void MenuSystem::processInput(InputType input)
@@ -60,17 +59,16 @@ void MenuSystem::processInput(InputType input)
 	case InputType::DOWN:
 	case InputType::LEFT:
 	case InputType::RIGHT:
-		selectedOptionIndex = currentMenuPosition->getNewSelectedOption(selectedOptionIndex, input);
+		currentMenuPosition->updateSelectedOption(input);
 		break;
 	case InputType::FORWARD:
 		{
-			std::shared_ptr<MenuTreeObject> destination = currentMenuPosition->getDestination(selectedOptionIndex);
+			std::shared_ptr<MenuTreeObject> destination = currentMenuPosition->getDestination();
 			if (destination == nullptr)
 				throw std::string("Missing destination for menu option.");
 			destination->setParent(currentMenuPosition);
-			currentMenuPosition->onForward(selectedOptionIndex);
+			currentMenuPosition->onForward();
 			currentMenuPosition = destination;
-			selectedOptionIndex = 0;
 			destination->onEnter();
 		}
 		break;
@@ -79,9 +77,8 @@ void MenuSystem::processInput(InputType input)
 			std::shared_ptr<MenuTreeObject> parent = currentMenuPosition->getParent();
 			if (parent == nullptr)
 				break;
-			currentMenuPosition->onBackward(selectedOptionIndex);
+			currentMenuPosition->onBackward();
 			currentMenuPosition = parent;
-			selectedOptionIndex = 0;
 			parent->onEnter();
 		}
 		break;

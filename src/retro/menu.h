@@ -30,17 +30,17 @@ namespace RetroCrypto
 
 		virtual void drawTitle(shared_ptr<IDisplay> display);
 
-		virtual void drawOptions(shared_ptr<IDisplay> display, int selectedOptionIndex);
+		virtual void drawOptions(shared_ptr<IDisplay> display);
 
-		virtual void drawDescription(shared_ptr<IDisplay> display, int selectedOptionIndex);
+		virtual void drawDescription(shared_ptr<IDisplay> display);
 
-		virtual void draw(shared_ptr<IDisplay> display, int selectedOptionIndex) override;
+		virtual void draw(shared_ptr<IDisplay> display) override;
 
-		virtual int getNewSelectedOption(int selectedOptionIndex, InputType input) override;
+		virtual std::shared_ptr<MenuTreeObject> getDestination() override;
 
-		virtual std::shared_ptr<MenuTreeObject> getDestination(int selectedOptionIndex) override;
+		virtual void updateSelectedOption(InputType input);
 
-		virtual void onForward(int selectedOptionIndex) override;
+		virtual void onForward() override;
 
 		void add(shared_ptr<MenuOption> option);
 	};

@@ -22,12 +22,12 @@ namespace RetroCrypto
 		AddressPage();
 		AddressPage(string inTitle, std::shared_ptr<MenuTreeObject> inParent = nullptr);
 		virtual void add(std::shared_ptr<MenuTreeObject> child) override;
-		virtual int getNewSelectedOption(int selectedOptionIndex, InputType input) override;
-		virtual void draw(shared_ptr<IDisplay> display, int selectedOptionIndex) override;
-		virtual shared_ptr<MenuTreeObject> getDestination(int selectedOptionIndex) override;
+		virtual void updateSelectedOption(InputType input) override;
+		virtual void draw(shared_ptr<IDisplay> display) override;
+		virtual shared_ptr<MenuTreeObject> getDestination() override;
 		virtual void onEnter() override;
 		virtual void onExit() override;
-		void onBackward(int selectedOptionIndex);
+		void onBackward();
 		void drawTitle(shared_ptr<IDisplay> display);
 		void drawSeed(shared_ptr<IDisplay> display);
 		void drawAddress(shared_ptr<IDisplay> display);

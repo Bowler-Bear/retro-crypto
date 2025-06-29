@@ -17,11 +17,11 @@ namespace RetroCrypto
 	public:
 		Prompt();
 		Prompt(string inTitle, std::shared_ptr<MenuTreeObject> inParent = nullptr);
-		virtual void drawOptions(shared_ptr<IDisplay> display, int selectedOptionIndex) override;
-		virtual void drawDescription(shared_ptr<IDisplay> display, int selectedOptionIndex) override;
+		virtual void drawOptions(shared_ptr<IDisplay> display) override;
+		virtual void drawDescription(shared_ptr<IDisplay> display) override;
 		string getDescription();
 		void setDescription(string newDescription);
-		virtual shared_ptr<MenuTreeObject> getDestination(int selectedOptionIndex) override;
+		virtual shared_ptr<MenuTreeObject> getDestination() override;
 		void setDestination(shared_ptr<MenuTreeObject> newDestination);
 	};
 }

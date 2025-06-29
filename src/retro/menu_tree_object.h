@@ -22,12 +22,13 @@ namespace RetroCrypto
 	protected:
 		std::shared_ptr<MenuTreeObject> parent;
 		std::vector<std::shared_ptr<MenuOption>> options;
+		int selectedOptionIndex;
 		BlockingAction forwardAction;
 		BlockingAction backwardAction;
 	public:
 		virtual void add(std::shared_ptr<MenuTreeObject> child) = 0;
-		virtual void draw(std::shared_ptr<IDisplay> display, int selectedOptionIndex) = 0;
-		virtual void drawBorder(std::shared_ptr<IDisplay> display, int selectedOptionIndex)
+		virtual void draw(std::shared_ptr<IDisplay> display) = 0;
+		virtual void drawBorder(std::shared_ptr<IDisplay> display)
 		{
 			Box border;
 			border.xPosition = BASE_BORDER_BOX_X_POSITION;
@@ -36,8 +37,12 @@ namespace RetroCrypto
 			border.height = BASE_BORDER_BOX_HEIGHT;
 			display->drawBox(border);
 		}
-		virtual int getNewSelectedOption(int selectedOptionIndex, InputType input) = 0;
-		virtual std::shared_ptr<MenuTreeObject> getDestination(int selectedOptionIndex) = 0;
+		virtual int getSelectedOption()
+		{
+			return selectedOptionIndex;
+		}
+		virtual void updateSelectedOption(InputType input) = 0;
+		virtual std::shared_ptr<MenuTreeObject> getDestination() = 0;
 		virtual std::vector<std::shared_ptr<MenuOption>>& getOptions()
 		{
 			return options;
@@ -58,13 +63,13 @@ namespace RetroCrypto
 		{
 			backwardAction = action;
 		}
-		virtual void onForward(int selectedOptionIndex)
+		virtual void onForward()
 		{
 			onExit();
 			if (forwardAction != nullptr)
 				(*forwardAction)();
 		}
-		virtual void onBackward(int selectedOptionIndex)
+		virtual void onBackward()
 		{
 			onExit();
 			if (backwardAction != nullptr)

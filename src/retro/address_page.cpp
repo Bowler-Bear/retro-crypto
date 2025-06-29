@@ -10,6 +10,7 @@ using namespace RetroCrypto;
 
 AddressPage::AddressPage()
 {
+	selectedOptionIndex = 0;
 	title = "";
 	address = "";
 	addressType = "";
@@ -27,20 +28,19 @@ void AddressPage::add(std::shared_ptr<MenuTreeObject> child)
 {
 }
 
-int AddressPage::getNewSelectedOption(int selectedOptionIndex, InputType input)
+void AddressPage::updateSelectedOption(InputType input)
 {
-	return 0;
 }
 
-void AddressPage::draw(shared_ptr<IDisplay> display, int selectedOptionIndex)
+void AddressPage::draw(shared_ptr<IDisplay> display)
 {
-	drawBorder(display, selectedOptionIndex);
+	drawBorder(display);
 	drawTitle(display);
 	drawSeed(display);
 	drawAddress(display);
 }
 
-shared_ptr<MenuTreeObject> AddressPage::getDestination(int selectedOptionIndex)
+shared_ptr<MenuTreeObject> AddressPage::getDestination()
 {
 	return nullptr;
 }
@@ -87,9 +87,9 @@ void AddressPage::onExit()
 	address = "";
 }
 
-void AddressPage::onBackward(int selectedOptionIndex)
+void AddressPage::onBackward()
 {
-	MenuTreeObject::onBackward(selectedOptionIndex);
+	MenuTreeObject::onBackward();
 	address = "";
 	addressType = "";
 	seed = "";

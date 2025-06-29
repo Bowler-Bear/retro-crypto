@@ -13,7 +13,7 @@ Prompt::Prompt(std::string inTitle, std::shared_ptr<MenuTreeObject> inParent)
 }
 
 
-void Prompt::drawOptions(shared_ptr<IDisplay> display, int selectedOptionIndex)
+void Prompt::drawOptions(shared_ptr<IDisplay> display)
 {
 	TextBox optionBox("Continue");
 	optionBox.yPosition = MENU_BOX_Y_POSITION + MENU_TITLE_BOX_HEIGHT + PROMPT_DESCRIPTION_HEIGHT + 5;
@@ -26,7 +26,7 @@ void Prompt::drawOptions(shared_ptr<IDisplay> display, int selectedOptionIndex)
 	display->drawTextBox(optionBox);
 }
 
-void Prompt::drawDescription(shared_ptr<IDisplay> display, int selectedOptionIndex)
+void Prompt::drawDescription(shared_ptr<IDisplay> display)
 {
 	TextBox descriptionBox(getDescription());
 	descriptionBox.yPosition = MENU_BOX_Y_POSITION + MENU_TITLE_BOX_HEIGHT + 4;
@@ -47,7 +47,7 @@ void Prompt::setDescription(string newDescription)
 	description = newDescription;
 }
 
-shared_ptr<MenuTreeObject> Prompt::getDestination(int selectedOptionIndex)
+shared_ptr<MenuTreeObject> Prompt::getDestination()
 {
 	return destination;
 }
