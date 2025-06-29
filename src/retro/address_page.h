@@ -1,19 +1,15 @@
 #ifndef ADDRESS_PAGE_H
 #define ADDRESS_PAGE_H
 
-#include "menu_tree_object.h"
-
-#define PAGE_TITLE_BOX_Y_POSITION 2
-#define PAGE_TITLE_BOX_HEIGHT 5
+#include "page.h"
 
 using namespace std;
 
 namespace RetroCrypto
 {
-	class AddressPage : public MenuTreeObject
+	class AddressPage : public Page
 	{
-	private:
-		string title;
+	protected:
 		string address;
 		string addressType;
 		string seed;
@@ -21,14 +17,9 @@ namespace RetroCrypto
 	public:
 		AddressPage();
 		AddressPage(string inTitle, std::shared_ptr<MenuTreeObject> inParent = nullptr);
-		virtual void add(std::shared_ptr<MenuTreeObject> child) override;
-		virtual void updateSelectedOption(InputType input) override;
 		virtual void draw(shared_ptr<IDisplay> display) override;
-		virtual shared_ptr<MenuTreeObject> getDestination() override;
 		virtual void onEnter() override;
-		virtual void onExit() override;
-		void onBackward();
-		void drawTitle(shared_ptr<IDisplay> display);
+		virtual void onBackward() override;
 		void drawSeed(shared_ptr<IDisplay> display);
 		void drawAddress(shared_ptr<IDisplay> display);
 	};

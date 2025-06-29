@@ -9,9 +9,8 @@
 using namespace RetroCrypto;
 
 AddressPage::AddressPage()
+: Page()
 {
-	selectedOptionIndex = 0;
-	title = "";
 	address = "";
 	addressType = "";
 	seed = "";
@@ -24,25 +23,11 @@ AddressPage::AddressPage(string inTitle, std::shared_ptr<MenuTreeObject> inParen
 	parent = inParent;
 }
 
-void AddressPage::add(std::shared_ptr<MenuTreeObject> child)
-{
-}
-
-void AddressPage::updateSelectedOption(InputType input)
-{
-}
-
 void AddressPage::draw(shared_ptr<IDisplay> display)
 {
-	drawBorder(display);
-	drawTitle(display);
+	Page::draw(display);
 	drawSeed(display);
 	drawAddress(display);
-}
-
-shared_ptr<MenuTreeObject> AddressPage::getDestination()
-{
-	return nullptr;
 }
 
 void AddressPage::onEnter()
@@ -81,31 +66,12 @@ void AddressPage::onEnter()
 	}
 }
 
-void AddressPage::onExit()
-{
-	seed = "";
-	address = "";
-}
-
 void AddressPage::onBackward()
 {
-	MenuTreeObject::onBackward();
+	Page::onBackward();
 	address = "";
 	addressType = "";
 	seed = "";
-}
-
-void AddressPage::drawTitle(shared_ptr<IDisplay> display)
-{
-	TextBox titleBox(title);
-	titleBox.yPosition = PAGE_TITLE_BOX_Y_POSITION;
-	titleBox.xPosition = (BASE_BORDER_BOX_WIDTH-titleBox.text.size())/2;
-	titleBox.width = titleBox.text.size()+1;
-	titleBox.height = PAGE_TITLE_BOX_HEIGHT;
-	titleBox.setUnderlined();
-	titleBox.setBold();
-	titleBox.setBordered();
-	display->drawTextBox(titleBox);
 }
 
 void AddressPage::drawSeed(shared_ptr<IDisplay> display)
