@@ -8,6 +8,18 @@ namespace RetroCrypto
 
 	void setRandomSeed(uint8_t seedSize);
 
+	void setMnemonicTypeContext(MnemonicType newMnemonicTypeContext);
+
+	void clearMnemonicTypeContext();
+
+	void setBIP39MnemonicContext();
+
+	void setLegacyMoneroMnemonicContext();
+
+	void clearMnemonicContext();
+
+	void setMnemonicContext();
+
 	void setCryptoContext(CryptoType newCryptoContext);
 
 	void clearCryptoContext();

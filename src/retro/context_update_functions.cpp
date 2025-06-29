@@ -19,6 +19,36 @@ namespace RetroCrypto
 		CoreSystem::getCoreSystem().updateContextData(ContextUpdate::SEED | ContextUpdate::SEED_SIZE, newData);
 	}
 
+	void setMnemonicTypeContext(MnemonicType newMnemonicTypeContext)
+	{
+		CoreSystem::getCoreSystem().updateContextData(ContextUpdate::MNEMONIC_TYPE, ContextData(newMnemonicTypeContext));
+	}
+
+	void clearMnemonicTypeContext()
+	{
+		setMnemonicTypeContext(MnemonicType::NONE);
+	}
+
+	void setBIP39MnemonicContext()
+	{
+		setMnemonicTypeContext(MnemonicType::BIP39);
+	}
+
+	void setLegacyMoneroMnemonicContext()
+	{
+		setMnemonicTypeContext(MnemonicType::LEGACY_MONERO);
+	}
+
+	void clearMnemonicContext()
+	{
+		CoreSystem::getCoreSystem().updateContextData(ContextUpdate::MNEMONIC, ContextData());
+	}
+
+	void setMnemonicContext(std::string inMnemonic)
+	{
+		CoreSystem::getCoreSystem().updateContextData(ContextUpdate::MNEMONIC, ContextData(inMnemonic));
+	}
+
 	void setCryptoContext(CryptoType newCryptoContext)
 	{
 		CoreSystem::getCoreSystem().updateContextData(ContextUpdate::CRYPTO, ContextData(newCryptoContext));
