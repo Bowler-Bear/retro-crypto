@@ -276,4 +276,33 @@ namespace RetroCrypto
 		xmr_base58_addr_encode_check(MONERO_MAINNET_MAGIC_BYTE, publicBytes, MONERO_PUBLIC_KEYS_LENGTH, (char*)&xmrAddress, MONERO_MAXIMUM_ADDRESS_LENGTH);
 		return std::string(xmrAddress);
 	}
+
+	std::string mnemonicFromGlobalContext()
+	{
+		const ContextData& data(CoreSystem::getCoreSystem().getContextData());
+		switch(data.mnemonicType)
+		{
+		case RetroCrypto::MnemonicType::BIP39:
+			return bip39MnemonicFromGlobalContext();
+		default:
+			return std::string("This seed phrase is currently not supported.");
+		}
+	}
+
+	std::string bip39MnemonicFromGlobalContext()
+	{
+		return bip39MnemonicFromSeed(CoreSystem::getCoreSystem().getContextData());
+	}
+
+	std::string bip39MnemonicFromSeed(const ContextData& data)
+	{
+		return bip39MnemonicFromSeed(data.seed, data.seedSize);
+	}
+
+	std::string bip39MnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	{
+		std::string mnemonic(mnemonic_from_data(seed, seedSize));
+		mnemonic_clear();
+		return mnemonic;
+	}
 }
