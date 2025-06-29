@@ -25,6 +25,8 @@ namespace RetroCrypto
 		virtual int getNewSelectedOption(int selectedOptionIndex, InputType input) override;
 		virtual void draw(shared_ptr<IDisplay> display, int selectedOptionIndex) override;
 		virtual shared_ptr<MenuTreeObject> getDestination(int selectedOptionIndex) override;
+		virtual void onEnter() override;
+		virtual void onExit() override;
 		void onBackward(int selectedOptionIndex);
 		void drawTitle(shared_ptr<IDisplay> display);
 		void drawSeed(shared_ptr<IDisplay> display);

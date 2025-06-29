@@ -71,6 +71,7 @@ void MenuSystem::processInput(InputType input)
 			currentMenuPosition->onForward(selectedOptionIndex);
 			currentMenuPosition = destination;
 			selectedOptionIndex = 0;
+			destination->onEnter();
 		}
 		break;
 	case InputType::BACK:
@@ -81,6 +82,7 @@ void MenuSystem::processInput(InputType input)
 			currentMenuPosition->onBackward(selectedOptionIndex);
 			currentMenuPosition = parent;
 			selectedOptionIndex = 0;
+			parent->onEnter();
 		}
 		break;
 	case InputType::NONE:

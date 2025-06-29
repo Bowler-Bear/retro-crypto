@@ -60,13 +60,21 @@ namespace RetroCrypto
 		}
 		virtual void onForward(int selectedOptionIndex)
 		{
+			onExit();
 			if (forwardAction != nullptr)
 				(*forwardAction)();
 		}
 		virtual void onBackward(int selectedOptionIndex)
 		{
+			onExit();
 			if (backwardAction != nullptr)
 				(*backwardAction)();
+		}
+		virtual void onEnter()
+		{
+		}
+		virtual void onExit()
+		{
 		}
 	};
 }

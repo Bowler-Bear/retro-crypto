@@ -34,8 +34,23 @@ int AddressPage::getNewSelectedOption(int selectedOptionIndex, InputType input)
 
 void AddressPage::draw(shared_ptr<IDisplay> display, int selectedOptionIndex)
 {
+	drawBorder(display, selectedOptionIndex);
+	drawTitle(display);
+	drawSeed(display);
+	drawAddress(display);
+}
+
+shared_ptr<MenuTreeObject> AddressPage::getDestination(int selectedOptionIndex)
+{
+	return nullptr;
+}
+
+void AddressPage::onEnter()
+{
 	if (address == "")
+	{
 		address = cryptoAddressFromGlobalContext();
+	}
 	if (seed == "")
 	{
 		ContextData contextData = CoreSystem::getCoreSystem().getContextData();
@@ -64,15 +79,12 @@ void AddressPage::draw(shared_ptr<IDisplay> display, int selectedOptionIndex)
 			break;
 		}
 	}
-	drawBorder(display, selectedOptionIndex);
-	drawTitle(display);
-	drawSeed(display);
-	drawAddress(display);
 }
 
-shared_ptr<MenuTreeObject> AddressPage::getDestination(int selectedOptionIndex)
+void AddressPage::onExit()
 {
-	return nullptr;
+	seed = "";
+	address = "";
 }
 
 void AddressPage::onBackward(int selectedOptionIndex)
