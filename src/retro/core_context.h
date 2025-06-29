@@ -17,6 +17,13 @@ namespace RetroCrypto
 		NOSTR,
 		XMR
 	};
+	
+	enum class MnemonicType
+	{
+		NONE,
+		BIP39,
+		LEGACY_MONERO
+	};
 
 	enum ContextUpdate : uint32_t
 	{
@@ -24,7 +31,8 @@ namespace RetroCrypto
 		SEED_SIZE = 0x00000001 << 1,
 		MNEMONIC = 0x00000001 << 2,
 		CRYPTO = 0x00000001 << 3,
-		ALL = SEED | SEED_SIZE | MNEMONIC | CRYPTO
+		MNEMONIC_TYPE = 0x00000001 << 4,
+		ALL = SEED | SEED_SIZE | MNEMONIC | CRYPTO | MNEMONIC_TYPE
 	};
 
 	inline constexpr ContextUpdate operator&(const ContextUpdate& first, const ContextUpdate& second)
@@ -41,11 +49,12 @@ namespace RetroCrypto
 	{
 		uint8_t seed[MAXIMUM_SEED_SIZE];
 		uint8_t seedSize;
+		MnemonicType mnemonicType;
 		std::string mnemonic;
 		CryptoType crypto;
 
 		ContextData()
-		: seed{ 0 }, seedSize(MAXIMUM_SEED_SIZE), mnemonic(""), crypto(CryptoType::NONE)
+		: seed{ 0 }, seedSize(MAXIMUM_SEED_SIZE), mnemonicType(MnemonicType::NONE), mnemonic(""), crypto(CryptoType::NONE)
 		{
 		}
 
@@ -54,6 +63,18 @@ namespace RetroCrypto
 		{
 			seedSize = inSeedSize;
 			setSeed(inSeed, inSeedSize);
+		}
+
+		ContextData(MnemonicType inMnemonicType)
+		: ContextData()
+		{
+			 mnemonicType = inMnemonicType;
+		}
+
+		ContextData(std::string inMnemonic)
+		: ContextData()
+		{
+			 mnemonic = inMnemonic;
 		}
 
 		ContextData(CryptoType inCryptoType)

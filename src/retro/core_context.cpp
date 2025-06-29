@@ -12,6 +12,10 @@ void Context::updateData(ContextUpdate update, ContextData dataContainer)
 	{
 		data.setSeed(dataContainer.seed, dataContainer.seedSize);
 	}
+	if (update & ContextUpdate::MNEMONIC_TYPE)
+	{
+		data.mnemonicType = dataContainer.mnemonicType;
+	}
 	if (update & ContextUpdate::MNEMONIC)
 	{
 		data.mnemonic = dataContainer.mnemonic;
