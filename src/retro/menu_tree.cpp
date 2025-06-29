@@ -29,38 +29,52 @@ MenuTree::MenuTree()
 
 			shared_ptr<Prompt> generateSeedFromRNGPrompt = make_shared<Prompt>("Generate Seed From RNG", generateSeedMenu);
 			generateSeedFromRngOption->add(static_pointer_cast<MenuTreeObject>(generateSeedFromRNGPrompt));
-			generateSeedFromRNGPrompt->setDescription("You are about ot generate a seed using the built in random number generator(RNG).");
+			generateSeedFromRNGPrompt->setDescription("You are about to generate a seed using random number generation(RNG).");
 			generateSeedFromRNGPrompt->setForwardAction(&setRandom256BitSeed);
 
-				shared_ptr<Menu> showAddressMenu = make_shared<Menu>("Show Address", generateSeedFromRNGPrompt);
-				generateSeedFromRNGPrompt->setDestination(static_pointer_cast<MenuTreeObject>(showAddressMenu));
-				shared_ptr<MenuOption> showBTCAddressOption = make_shared<MenuOption>(showAddressMenu, "BTC", "Show bitcoin public address from seed.");
-				showBTCAddressOption->setOnSelectedFunction(&setBitcoinContext);
-				shared_ptr<MenuOption> showDOGEAddressOption = make_shared<MenuOption>(showAddressMenu, "DOGE", "show DOGE public address from seed.");
-				showDOGEAddressOption->setOnSelectedFunction(&setDogeContext);
-				shared_ptr<MenuOption> showETCAddressOption = make_shared<MenuOption>(showAddressMenu, "ETC", "Show ethereum classic public address from seed.");
-				showETCAddressOption->setOnSelectedFunction(&setEthereumClassicContext);
-				shared_ptr<MenuOption> showETHAddressOption = make_shared<MenuOption>(showAddressMenu, "ETH", "Show ethereum public address from seed.");
-				showETHAddressOption->setOnSelectedFunction(&setEthereumContext);
-				shared_ptr<MenuOption> showNOSTRAddressOption = make_shared<MenuOption>(showAddressMenu, "Nostr", "show Nostr public keys from seed.");
-				showNOSTRAddressOption->setOnSelectedFunction(&setNostrContext);
-				shared_ptr<MenuOption> showXMRAddressOption = make_shared<MenuOption>(showAddressMenu, "XMR", "Show monero public address from seed.");
-				showXMRAddressOption->setOnSelectedFunction(&setMoneroContext);
-				showAddressMenu->add(showBTCAddressOption);
-				showAddressMenu->add(showDOGEAddressOption);
-				showAddressMenu->add(showETCAddressOption);
-				showAddressMenu->add(showETHAddressOption);
-				showAddressMenu->add(showNOSTRAddressOption);
-				showAddressMenu->add(showXMRAddressOption);
+				shared_ptr<Menu> showSeedOptionsMenu = make_shared<Menu>("Seed Options", generateSeedFromRNGPrompt);
+				generateSeedFromRNGPrompt->setDestination(static_pointer_cast<MenuTreeObject>(showSeedOptionsMenu));
+				shared_ptr<MenuOption> showAddressesOption = make_shared<MenuOption>(showSeedOptionsMenu, "Show Addresses", "Show addresses from this seed.");
+				shared_ptr<MenuOption> showSeedPhrasesOption = make_shared<MenuOption>(showSeedOptionsMenu, "Show Seed Phrases", "Show seed phrases for this seed.");
+				showSeedOptionsMenu->add(showAddressesOption);
+				showSeedOptionsMenu->add(showSeedPhrasesOption);
 
-					shared_ptr<AddressPage> addressPage = make_shared<AddressPage>("Seed Address", showAddressMenu);
-					addressPage->setBackwardAction(&clearCryptoContext);
-					showBTCAddressOption->add(static_pointer_cast<MenuTreeObject>(addressPage));
-					showDOGEAddressOption->add(static_pointer_cast<MenuTreeObject>(addressPage));
-					showETCAddressOption->add(static_pointer_cast<MenuTreeObject>(addressPage));
-					showETHAddressOption->add(static_pointer_cast<MenuTreeObject>(addressPage));
-					showNOSTRAddressOption->add(static_pointer_cast<MenuTreeObject>(addressPage));
-					showXMRAddressOption->add(static_pointer_cast<MenuTreeObject>(addressPage));
+					shared_ptr<Menu> showAddressMenu = make_shared<Menu>("Show An Address", showSeedOptionsMenu);
+					showAddressesOption->add(static_pointer_cast<MenuTreeObject>(showAddressMenu));
+					shared_ptr<MenuOption> showBTCAddressOption = make_shared<MenuOption>(showAddressMenu, "BTC", "Show bitcoin public address from seed.");
+					showBTCAddressOption->setOnSelectedFunction(&setBitcoinContext);
+					shared_ptr<MenuOption> showDOGEAddressOption = make_shared<MenuOption>(showAddressMenu, "DOGE", "show DOGE public address from seed.");
+					showDOGEAddressOption->setOnSelectedFunction(&setDogeContext);
+					shared_ptr<MenuOption> showETCAddressOption = make_shared<MenuOption>(showAddressMenu, "ETC", "Show ethereum classic public address from seed.");
+					showETCAddressOption->setOnSelectedFunction(&setEthereumClassicContext);
+					shared_ptr<MenuOption> showETHAddressOption = make_shared<MenuOption>(showAddressMenu, "ETH", "Show ethereum public address from seed.");
+					showETHAddressOption->setOnSelectedFunction(&setEthereumContext);
+					shared_ptr<MenuOption> showNOSTRAddressOption = make_shared<MenuOption>(showAddressMenu, "Nostr", "show Nostr public keys from seed.");
+					showNOSTRAddressOption->setOnSelectedFunction(&setNostrContext);
+					shared_ptr<MenuOption> showXMRAddressOption = make_shared<MenuOption>(showAddressMenu, "XMR", "Show monero public address from seed.");
+					showXMRAddressOption->setOnSelectedFunction(&setMoneroContext);
+					showAddressMenu->add(showBTCAddressOption);
+					showAddressMenu->add(showDOGEAddressOption);
+					showAddressMenu->add(showETCAddressOption);
+					showAddressMenu->add(showETHAddressOption);
+					showAddressMenu->add(showNOSTRAddressOption);
+					showAddressMenu->add(showXMRAddressOption);
+
+						shared_ptr<AddressPage> addressPage = make_shared<AddressPage>("Seed Address", showAddressMenu);
+						addressPage->setBackwardAction(&clearCryptoContext);
+						showBTCAddressOption->add(static_pointer_cast<MenuTreeObject>(addressPage));
+						showDOGEAddressOption->add(static_pointer_cast<MenuTreeObject>(addressPage));
+						showETCAddressOption->add(static_pointer_cast<MenuTreeObject>(addressPage));
+						showETHAddressOption->add(static_pointer_cast<MenuTreeObject>(addressPage));
+						showNOSTRAddressOption->add(static_pointer_cast<MenuTreeObject>(addressPage));
+						showXMRAddressOption->add(static_pointer_cast<MenuTreeObject>(addressPage));
+
+					shared_ptr<Menu> showPhrasesMenu = make_shared<Menu>("Show A Phrase", showSeedOptionsMenu);
+					showSeedPhrasesOption->add(static_pointer_cast<MenuTreeObject>(showPhrasesMenu));
+					shared_ptr<MenuOption> showBIP39Option = make_shared<MenuOption>(showPhrasesMenu, "BIP-39", "Show Bitcoin Improvement Proposal 39 seed phrase for this seed(bits).");
+					shared_ptr<MenuOption> showMoneroPhraseOption = make_shared<MenuOption>(showPhrasesMenu, "Legacy Monero", "Show legacy monero seed phrase for this seed.");
+					showPhrasesMenu->add(showBIP39Option);
+					showPhrasesMenu->add(showMoneroPhraseOption);
 
 		shared_ptr<Menu> generateAddressMenu = make_shared<Menu>("Generate Vanity Address", mainMenu);
 		generateAddressOption->add(static_pointer_cast<MenuTreeObject>(generateAddressMenu));
@@ -76,6 +90,13 @@ MenuTree::MenuTree()
 		generateAddressMenu->add(generateETCAddressOption);
 		generateAddressMenu->add(generateDOGEAddressOption);
 		generateAddressMenu->add(generateNostrAddressOption);
+
+		shared_ptr<Menu> pickPhraseTypeMenu = make_shared<Menu>("Pick Seed Phrase Type", mainMenu);
+		seedRestoreOption->add(static_pointer_cast<MenuTreeObject>(pickPhraseTypeMenu));
+		shared_ptr<MenuOption> restoreFromBIP39Option = make_shared<MenuOption>(pickPhraseTypeMenu, "BIP-39", "Restore seed bits from Bitcoin Improvement Proposal 39 seed phrase.");
+		shared_ptr<MenuOption> restoreFromLegacyMoneroPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero", "Restore seed bit from legacy monero seed phrase.");
+		pickPhraseTypeMenu->add(restoreFromBIP39Option);
+		pickPhraseTypeMenu->add(restoreFromLegacyMoneroPhraseOption);
 
 }
 
