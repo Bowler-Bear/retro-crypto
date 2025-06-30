@@ -2,6 +2,7 @@
 #include "menu.h"
 #include "prompt.h"
 #include "address_page.h"
+#include "mnemonic_page.h"
 #include "context_update_functions.h"
 
 using namespace RetroCrypto;
@@ -77,6 +78,11 @@ MenuTree::MenuTree()
 					showMoneroPhraseOption->setOnSelectedFunction(&setLegacyMoneroMnemonicContext);
 					showPhrasesMenu->add(showBIP39Option);
 					showPhrasesMenu->add(showMoneroPhraseOption);
+
+						shared_ptr<MnemonicPage> mnemonicPage = make_shared<MnemonicPage>("Seed Phrase", showPhrasesMenu);
+						addressPage->setBackwardAction(&clearMnemonicTypeContext);
+						showBIP39Option->add(static_pointer_cast<MenuTreeObject>(mnemonicPage));
+						showMoneroPhraseOption->add(static_pointer_cast<MenuTreeObject>(mnemonicPage));
 
 		shared_ptr<Menu> generateAddressMenu = make_shared<Menu>("Generate Vanity Address", mainMenu);
 		generateAddressOption->add(static_pointer_cast<MenuTreeObject>(generateAddressMenu));
