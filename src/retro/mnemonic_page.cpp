@@ -80,21 +80,25 @@ void MnemonicPage::drawMnemonic(shared_ptr<IDisplay> display)
 	mnemonicTitleBox.setBold();
 	display->drawTextBox(mnemonicTitleBox);
 
-	uint8_t splitPoints[] = { 0, 0, 0, 0 };
+	uint32_t splitPoints[] = { 0, 0, 0, 0 };
+	const uint8_t lines = sizeof(splitPoints)/sizeof(uint32_t);
+	const uint8_t phraseWordsCount = 24;
+	const uint8_t wordsPerLine = phraseWordsCount/lines;
 	uint8_t spaceCount = 0;
-	const uint8_t wordsPerLine = 6;
-	for (int i = 0; i < mnemonic.size(); i++)
+	for (uint32_t i = 0; i < mnemonic.size(); i++)
 	{
 		if (mnemonic[i] == ' ')
 		{
 			spaceCount++;
 			if (spaceCount % wordsPerLine == 0)
 				splitPoints[spaceCount/wordsPerLine] = i;
+			if (spaceCount >= 3*wordsPerLine)
+				break;
 		}
-	}
-	for (int i = 0; i < sizeof(splitPoints); i++)
+	};
+	for (uint8_t i = 0; i < lines; i++)
 	{
-		uint8_t splitLength = (i < sizeof(splitPoints)-1 ? splitPoints[i+1] : mnemonic.size())-splitPoints[i];
+		uint32_t splitLength = (i < lines-1 ? splitPoints[i+1] : mnemonic.size())-splitPoints[i];
 		TextBox phraseBox(mnemonic.substr(splitPoints[i], splitLength));
 		phraseBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+8+2*i;
 		phraseBox.xPosition = 2;
