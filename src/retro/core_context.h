@@ -1,6 +1,7 @@
 #ifndef CONTEXT_H
 #define CONTEXT_H
 
+#include <cstdint>
 #include <string>
 
 #define MAXIMUM_SEED_SIZE 32

@@ -1,9 +1,10 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
-#include "drawable.h"
-
+#include <cstdint>
 #include <string>
+
+#include "drawable.h"
 
 namespace RetroCrypto
 {
