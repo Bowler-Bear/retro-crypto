@@ -37,8 +37,10 @@ MenuTree::MenuTree()
 				generateSeedFromRNGPrompt->setDestination(static_pointer_cast<MenuTreeObject>(showSeedOptionsMenu));
 				shared_ptr<MenuOption> showAddressesOption = make_shared<MenuOption>(showSeedOptionsMenu, "Show Addresses", "Show addresses from this seed.");
 				shared_ptr<MenuOption> showSeedPhrasesOption = make_shared<MenuOption>(showSeedOptionsMenu, "Show Seed Phrases", "Show seed phrases for this seed.");
+				shared_ptr<MenuOption> showSeedQROption = make_shared<MenuOption>(showSeedOptionsMenu, "Show QR code", "Show QR code of this seed.");
 				showSeedOptionsMenu->add(showAddressesOption);
 				showSeedOptionsMenu->add(showSeedPhrasesOption);
+				showSeedOptionsMenu->add(showSeedQROption);
 
 					shared_ptr<Menu> showAddressMenu = make_shared<Menu>("Show An Address", showSeedOptionsMenu);
 					showAddressesOption->add(static_pointer_cast<MenuTreeObject>(showAddressMenu));
