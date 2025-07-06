@@ -94,6 +94,8 @@ void Menu::draw(std::shared_ptr<IDisplay> display)
 
 void Menu::updateSelectedOption(InputType input)
 {
+	if (input != InputType::UP && input != InputType::DOWN)
+		return;
 	if (options.size() <= 0)
 	{
 		selectedOptionIndex = 0;
