@@ -1,6 +1,7 @@
 #ifndef MENU_TREE_OBJECT_H
 #define MENU_TREE_OBJECT_H
 
+#include <cstdint>
 #include <memory>
 #include <vector>
 
@@ -22,7 +23,7 @@ namespace RetroCrypto
 	protected:
 		std::shared_ptr<MenuTreeObject> parent;
 		std::vector<std::shared_ptr<MenuOption>> options;
-		int selectedOptionIndex;
+		uint8_t selectedOptionIndex;
 		BlockingAction forwardAction;
 		BlockingAction backwardAction;
 	public:
@@ -37,7 +38,7 @@ namespace RetroCrypto
 			border.height = BASE_BORDER_BOX_HEIGHT;
 			display->drawBox(border);
 		}
-		virtual int getSelectedOption()
+		virtual uint8_t getSelectedOption()
 		{
 			return selectedOptionIndex;
 		}

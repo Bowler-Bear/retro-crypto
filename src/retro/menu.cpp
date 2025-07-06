@@ -52,7 +52,7 @@ void Menu::drawTitle(std::shared_ptr<IDisplay> display)
 
 void Menu::drawOptions(std::shared_ptr<IDisplay> display)
 {
-	for(int i = 0; i < options.size(); i++)
+	for(uint8_t i = 0; i < options.size(); i++)
 	{
 		const shared_ptr<MenuOption> option = options[i];
 		TextBox optionBox(i == selectedOptionIndex?"-> "+option->getLabel()+" <-":option->getLabel());
@@ -101,8 +101,8 @@ void Menu::updateSelectedOption(InputType input)
 		selectedOptionIndex = 0;
 		return;
 	}
-	int addition = input == InputType::UP ? -1 : 1;
-	uint32_t newOptionIndex = (selectedOptionIndex + addition + options.size()) % options.size();
+	uint8_t addition = input == InputType::UP ? -1 : 1;
+	uint8_t newOptionIndex = (selectedOptionIndex + addition + options.size()) % options.size();
 	do
 	{
 		if (!options[newOptionIndex]->getDisabled())
