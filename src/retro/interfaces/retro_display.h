@@ -1,5 +1,5 @@
-#ifndef DISPLAY_H
-#define DISPLAY_H
+#ifndef RETRO_DISPLAY_H
+#define RETRO_DISPLAY_H
 
 #include <cstdint>
 #include <string>

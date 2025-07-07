@@ -5,7 +5,7 @@
 #include <memory>
 #include <vector>
 
-#include "display.h"
+#include "retro_display.h"
 #include "input_capturer.h"
 
 #define BASE_BORDER_BOX_X_POSITION 0

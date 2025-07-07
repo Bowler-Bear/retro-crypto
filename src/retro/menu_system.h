@@ -2,7 +2,7 @@
 #define MENU_SYSTEM_H
 
 #include "system.h"
-#include "display.h"
+#include "retro_display.h"
 #include "menu_tree.h"
 #include "input_capturer.h"
 

@@ -1,7 +1,7 @@
 #ifndef CLI_DISPLAY_H
 #define CLI_DISPLAY_H
 
-#include "display.h"
+#include "retro_display.h"
 
 using namespace RetroCrypto;
 
