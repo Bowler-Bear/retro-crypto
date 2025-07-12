@@ -14,8 +14,9 @@ namespace RetroCrypto
 			seedSize = MAXIMUM_SEED_SIZE;
 		ContextData newData;
 		newData.seedSize = seedSize;
+		shared_ptr<IRandomNumberGenerator> generator = CoreSystem::getCoreSystem().getRandomNumberGenerator();
 		for(int i = 0; i < newData.seedSize; i++)
-			newData.seed[i] = std::rand() & 0xFF;
+			newData.seed[i] = generator->getRandom8();
 		CoreSystem::getCoreSystem().updateContextData(ContextUpdate::SEED | ContextUpdate::SEED_SIZE, newData);
 	}
 
