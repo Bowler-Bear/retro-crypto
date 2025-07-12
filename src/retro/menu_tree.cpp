@@ -20,7 +20,7 @@ MenuTree::MenuTree()
 	mainMenu->addOption(seedRestoreOption);
 
 		shared_ptr<Menu> generateSeedMenu = make_shared<Menu>("Generate Seed", mainMenu);
-		generateSeedOption->add(static_pointer_cast<MenuTreeObject>(generateSeedMenu));
+		generateSeedOption->setDestination(static_pointer_cast<MenuTreeObject>(generateSeedMenu));
 		shared_ptr<MenuOption> generateSeedFromRngOption = make_shared<MenuOption>(generateSeedMenu, "From RNG", "Use random number generation.");
 		shared_ptr<MenuOption> generateSeedFromDiceOption = make_shared<MenuOption>(generateSeedMenu, "From Dice", "Use physical dice to generate a seed.");
 		shared_ptr<MenuOption> generateSeedFromInputOption = make_shared<MenuOption>(generateSeedMenu, "From Input", "Use user input.");
@@ -29,7 +29,7 @@ MenuTree::MenuTree()
 		generateSeedMenu->addOption(generateSeedFromInputOption);
 
 			shared_ptr<Prompt> generateSeedFromRNGPrompt = make_shared<Prompt>("Generate Seed From RNG", generateSeedMenu);
-			generateSeedFromRngOption->add(static_pointer_cast<MenuTreeObject>(generateSeedFromRNGPrompt));
+			generateSeedFromRngOption->setDestination(static_pointer_cast<MenuTreeObject>(generateSeedFromRNGPrompt));
 			generateSeedFromRNGPrompt->setDescription("You are about to generate a seed using random number generation(RNG).");
 			generateSeedFromRNGPrompt->setForwardAction(&setRandom256BitSeed);
 
@@ -43,7 +43,7 @@ MenuTree::MenuTree()
 				showSeedOptionsMenu->addOption(showSeedQROption);
 
 					shared_ptr<Menu> showAddressMenu = make_shared<Menu>("Show An Address", showSeedOptionsMenu);
-					showAddressesOption->add(static_pointer_cast<MenuTreeObject>(showAddressMenu));
+					showAddressesOption->setDestination(static_pointer_cast<MenuTreeObject>(showAddressMenu));
 					shared_ptr<MenuOption> showBTCAddressOption = make_shared<MenuOption>(showAddressMenu, "BTC", "Show bitcoin public address from seed.");
 					showBTCAddressOption->setOnSelectedFunction(&setBitcoinContext);
 					shared_ptr<MenuOption> showDOGEAddressOption = make_shared<MenuOption>(showAddressMenu, "DOGE", "show DOGE public address from seed.");
@@ -65,15 +65,15 @@ MenuTree::MenuTree()
 
 						shared_ptr<AddressPage> addressPage = make_shared<AddressPage>("Seed Address", showAddressMenu);
 						addressPage->setBackwardAction(&clearCryptoContext);
-						showBTCAddressOption->add(static_pointer_cast<MenuTreeObject>(addressPage));
-						showDOGEAddressOption->add(static_pointer_cast<MenuTreeObject>(addressPage));
-						showETCAddressOption->add(static_pointer_cast<MenuTreeObject>(addressPage));
-						showETHAddressOption->add(static_pointer_cast<MenuTreeObject>(addressPage));
-						showNOSTRAddressOption->add(static_pointer_cast<MenuTreeObject>(addressPage));
-						showXMRAddressOption->add(static_pointer_cast<MenuTreeObject>(addressPage));
+						showBTCAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(addressPage));
+						showDOGEAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(addressPage));
+						showETCAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(addressPage));
+						showETHAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(addressPage));
+						showNOSTRAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(addressPage));
+						showXMRAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(addressPage));
 
 					shared_ptr<Menu> showPhrasesMenu = make_shared<Menu>("Show A Phrase", showSeedOptionsMenu);
-					showSeedPhrasesOption->add(static_pointer_cast<MenuTreeObject>(showPhrasesMenu));
+					showSeedPhrasesOption->setDestination(static_pointer_cast<MenuTreeObject>(showPhrasesMenu));
 					shared_ptr<MenuOption> showBIP39Option = make_shared<MenuOption>(showPhrasesMenu, "BIP-39", "Show Bitcoin Improvement Proposal 39 seed phrase for this seed(bits).");
 					showBIP39Option->setOnSelectedFunction(&setBIP39MnemonicContext);
 					shared_ptr<MenuOption> showMoneroPhraseOption = make_shared<MenuOption>(showPhrasesMenu, "Legacy Monero", "Show legacy monero seed phrase for this seed.");
@@ -83,11 +83,11 @@ MenuTree::MenuTree()
 
 						shared_ptr<MnemonicPage> mnemonicPage = make_shared<MnemonicPage>("Seed Phrase", showPhrasesMenu);
 						addressPage->setBackwardAction(&clearMnemonicTypeContext);
-						showBIP39Option->add(static_pointer_cast<MenuTreeObject>(mnemonicPage));
-						showMoneroPhraseOption->add(static_pointer_cast<MenuTreeObject>(mnemonicPage));
+						showBIP39Option->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
+						showMoneroPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
 
 		shared_ptr<Menu> generateAddressMenu = make_shared<Menu>("Generate Vanity Address", mainMenu);
-		generateAddressOption->add(static_pointer_cast<MenuTreeObject>(generateAddressMenu));
+		generateAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(generateAddressMenu));
 		shared_ptr<MenuOption> generateXMRAddressOption = make_shared<MenuOption>(generateAddressMenu, "XMR", "Generate a monero public address.");
 		shared_ptr<MenuOption> generateBTCAddressOption = make_shared<MenuOption>(generateAddressMenu, "BTC", "Generate a bitcoin public address.");
 		shared_ptr<MenuOption> generateETHAddressOption = make_shared<MenuOption>(generateAddressMenu, "ETH", "Generate a ethereum public address.");
@@ -102,7 +102,7 @@ MenuTree::MenuTree()
 		generateAddressMenu->addOption(generateNostrAddressOption);
 
 		shared_ptr<Menu> pickPhraseTypeMenu = make_shared<Menu>("Pick Seed Phrase Type", mainMenu);
-		seedRestoreOption->add(static_pointer_cast<MenuTreeObject>(pickPhraseTypeMenu));
+		seedRestoreOption->setDestination(static_pointer_cast<MenuTreeObject>(pickPhraseTypeMenu));
 		shared_ptr<MenuOption> restoreFromBIP39Option = make_shared<MenuOption>(pickPhraseTypeMenu, "BIP-39", "Restore seed bits from Bitcoin Improvement Proposal 39 seed phrase.");
 		restoreFromBIP39Option->setOnSelectedFunction(&setBIP39MnemonicContext);
 		shared_ptr<MenuOption> restoreFromLegacyMoneroPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero", "Restore seed bit from legacy monero seed phrase.");

@@ -29,7 +29,7 @@ namespace RetroCrypto
 	public:
 		MenuOption(const shared_ptr<Menu> menu, const string& label, const string& description);
 
-		void add(shared_ptr<MenuTreeObject> destination);
+		void setDestination(shared_ptr<MenuTreeObject> destination);
 
 		shared_ptr<MenuTreeObject> getDestination();
 

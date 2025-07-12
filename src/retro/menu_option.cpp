@@ -10,7 +10,7 @@ MenuOption::MenuOption(const std::shared_ptr<Menu> menu, const std::string& labe
 	onSelectedFunction = nullptr;
 }
 
-void MenuOption::add(std::shared_ptr<MenuTreeObject> destination)
+void MenuOption::setDestination(std::shared_ptr<MenuTreeObject> destination)
 {
 	this->destination = destination;
 }
