@@ -65,7 +65,7 @@ void MenuSystem::processInput(InputType input)
 		{
 			std::shared_ptr<MenuTreeObject> destination = currentMenuPosition->getDestination();
 			if (destination == nullptr)
-				throw std::string("Missing destination for menu option.");
+				return;
 			destination->setParent(currentMenuPosition);
 			currentMenuPosition->onForward();
 			currentMenuPosition = destination;

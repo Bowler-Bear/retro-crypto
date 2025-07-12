@@ -42,7 +42,8 @@ void Menu::drawTitle(std::shared_ptr<IDisplay> display)
 
 void Menu::drawOptions(std::shared_ptr<IDisplay> display)
 {
-	for(uint8_t i = 0; i < options.size(); i++)
+	const uint8_t optionCount = getOptionCount();
+	for(uint8_t i = 0; i < optionCount; i++)
 	{
 		const shared_ptr<MenuOption> option = options[i];
 		TextBox optionBox(i == selectedOptionIndex?"-> "+option->getLabel()+" <-":option->getLabel());
@@ -62,7 +63,7 @@ void Menu::drawOptions(std::shared_ptr<IDisplay> display)
 
 void Menu::drawDescription(std::shared_ptr<IDisplay> display)
 {
-	if (selectedOptionIndex < options.size())
+	if (selectedOptionIndex < getOptionCount())
 	{
 		TextBox descriptionBox(options[selectedOptionIndex]->getDescription());
 		descriptionBox.yPosition = MENU_BOX_HEIGHT-6;
@@ -86,13 +87,14 @@ void Menu::updateSelectedOption(InputType input)
 {
 	if (input != InputType::UP && input != InputType::DOWN)
 		return;
-	if (options.size() <= 0)
+	const uint8_t optionCount = getOptionCount();
+	if (optionCount <= 0)
 	{
 		selectedOptionIndex = 0;
 		return;
 	}
-	uint8_t addition = input == InputType::UP ? -1 : 1;
-	uint8_t newOptionIndex = (selectedOptionIndex + addition + options.size()) % options.size();
+	int8_t addition = input == InputType::UP ? -1 : 1;
+	uint8_t newOptionIndex = (selectedOptionIndex + addition + optionCount) % optionCount;
 	do
 	{
 		if (!options[newOptionIndex]->getDisabled())
@@ -100,30 +102,27 @@ void Menu::updateSelectedOption(InputType input)
 			selectedOptionIndex = newOptionIndex;
 			return;
 		}
-		newOptionIndex = (selectedOptionIndex + addition + options.size()) % options.size();
+		newOptionIndex = (selectedOptionIndex + addition + optionCount) % optionCount;
 	} while(newOptionIndex != selectedOptionIndex);
 	selectedOptionIndex = newOptionIndex;
 }
 
 std::shared_ptr<MenuTreeObject> Menu::getDestination()
 {
-	if (selectedOptionIndex < 0 || selectedOptionIndex >= options.size())
+	if (selectedOptionIndex < 0 || selectedOptionIndex >= getOptionCount())
 		throw std::string("Error trying to navigate to invalid option index");
 	std::shared_ptr<MenuOption> selectedOption = options[selectedOptionIndex];
 	if (selectedOption == nullptr)
 		throw std::string("Selected option is a null pointer");
 	if (selectedOption->getDisabled())
 		throw std::string("Selected option was disabled and shouldn't have been selected");
-	std::shared_ptr<MenuTreeObject> destination = selectedOption->getDestination();
-	if (destination == nullptr)
-		throw std::string("Missing destination for menu option ")+options[selectedOptionIndex]->getLabel();
-	return destination;
+	return selectedOption->getDestination();
 }
 
 void Menu::onForward()
 {
 	MenuTreeObject::onForward();
-	if (selectedOptionIndex < 0 || selectedOptionIndex >= options.size())
+	if (selectedOptionIndex < 0 || selectedOptionIndex >= getOptionCount())
 		return;
 	std::shared_ptr<MenuOption> selectedOption = options[selectedOptionIndex];
 	if (selectedOption != nullptr && !selectedOption->getDisabled())
