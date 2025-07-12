@@ -27,7 +27,15 @@ namespace RetroCrypto
 		BlockingAction forwardAction;
 		BlockingAction backwardAction;
 	public:
-		virtual void add(std::shared_ptr<MenuTreeObject> child) = 0;
+		virtual void addOption(std::shared_ptr<MenuOption> option)
+		{
+			if (options.size() < 0xff)
+				options.push_back(option);
+		}
+		virtual uint8_t getOptionCount()
+		{
+			return options.size() > 0xff ? 0xff : options.size();
+		}
 		virtual void draw(std::shared_ptr<IDisplay> display) = 0;
 		virtual void drawBorder(std::shared_ptr<IDisplay> display)
 		{

@@ -18,7 +18,7 @@ namespace RetroCrypto
 	public:
 		Page();
 		Page(string inTitle, std::shared_ptr<MenuTreeObject> inParent = nullptr);
-		virtual void add(std::shared_ptr<MenuTreeObject> child) override;
+		virtual void addOption(std::shared_ptr<MenuOption> option) override;
 		virtual void updateSelectedOption(InputType input) override;
 		virtual void draw(shared_ptr<IDisplay> display) override;
 		virtual shared_ptr<MenuTreeObject> getDestination() override;

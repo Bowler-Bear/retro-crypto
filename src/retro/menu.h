@@ -26,8 +26,6 @@ namespace RetroCrypto
 
 		string getTitle();
 
-		virtual void add(shared_ptr<MenuTreeObject> option) override;
-
 		virtual void drawTitle(shared_ptr<IDisplay> display);
 
 		virtual void drawOptions(shared_ptr<IDisplay> display);
@@ -41,8 +39,6 @@ namespace RetroCrypto
 		virtual void updateSelectedOption(InputType input);
 
 		virtual void onForward() override;
-
-		void add(shared_ptr<MenuOption> option);
 	};
 }
 #endif

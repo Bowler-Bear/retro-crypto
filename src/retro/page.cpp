@@ -16,7 +16,7 @@ Page::Page(string inTitle, std::shared_ptr<MenuTreeObject> inParent)
 	parent = inParent;
 }
 
-void Page::add(std::shared_ptr<MenuTreeObject> child)
+void Page::addOption(std::shared_ptr<MenuOption> option)
 {
 }
 

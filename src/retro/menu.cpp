@@ -28,16 +28,6 @@ std::string Menu::getTitle()
 	return title;
 }
 
-void Menu::add(std::shared_ptr<MenuTreeObject> option)
-{
-	add(std::dynamic_pointer_cast<MenuOption>(option));
-}
-
-void Menu::add(std::shared_ptr<MenuOption> option)
-{
-	options.push_back(option);
-}
-
 void Menu::drawTitle(std::shared_ptr<IDisplay> display)
 {
 	TextBox titleBox(title);

@@ -15,18 +15,18 @@ MenuTree::MenuTree()
 	shared_ptr<MenuOption> generateSeedOption = make_shared<MenuOption>(mainMenu, "Generate Seed", "Generate a random seed.");
 	shared_ptr<MenuOption> generateAddressOption = make_shared<MenuOption>(mainMenu, "Generate Vanity Address", "Generate an address.");
 	shared_ptr<MenuOption> seedRestoreOption = make_shared<MenuOption>(mainMenu, "Restore Seed", "Restore a seed from a mnemonic.");
-	mainMenu->add(generateSeedOption);
-	mainMenu->add(generateAddressOption);
-	mainMenu->add(seedRestoreOption);
+	mainMenu->addOption(generateSeedOption);
+	mainMenu->addOption(generateAddressOption);
+	mainMenu->addOption(seedRestoreOption);
 
 		shared_ptr<Menu> generateSeedMenu = make_shared<Menu>("Generate Seed", mainMenu);
 		generateSeedOption->add(static_pointer_cast<MenuTreeObject>(generateSeedMenu));
 		shared_ptr<MenuOption> generateSeedFromRngOption = make_shared<MenuOption>(generateSeedMenu, "From RNG", "Use random number generation.");
 		shared_ptr<MenuOption> generateSeedFromDiceOption = make_shared<MenuOption>(generateSeedMenu, "From Dice", "Use physical dice to generate a seed.");
 		shared_ptr<MenuOption> generateSeedFromInputOption = make_shared<MenuOption>(generateSeedMenu, "From Input", "Use user input.");
-		generateSeedMenu->add(generateSeedFromRngOption);
-		generateSeedMenu->add(generateSeedFromDiceOption);
-		generateSeedMenu->add(generateSeedFromInputOption);
+		generateSeedMenu->addOption(generateSeedFromRngOption);
+		generateSeedMenu->addOption(generateSeedFromDiceOption);
+		generateSeedMenu->addOption(generateSeedFromInputOption);
 
 			shared_ptr<Prompt> generateSeedFromRNGPrompt = make_shared<Prompt>("Generate Seed From RNG", generateSeedMenu);
 			generateSeedFromRngOption->add(static_pointer_cast<MenuTreeObject>(generateSeedFromRNGPrompt));
@@ -38,9 +38,9 @@ MenuTree::MenuTree()
 				shared_ptr<MenuOption> showAddressesOption = make_shared<MenuOption>(showSeedOptionsMenu, "Show Addresses", "Show addresses from this seed.");
 				shared_ptr<MenuOption> showSeedPhrasesOption = make_shared<MenuOption>(showSeedOptionsMenu, "Show Seed Phrases", "Show seed phrases for this seed.");
 				shared_ptr<MenuOption> showSeedQROption = make_shared<MenuOption>(showSeedOptionsMenu, "Show QR code", "Show QR code of this seed.");
-				showSeedOptionsMenu->add(showAddressesOption);
-				showSeedOptionsMenu->add(showSeedPhrasesOption);
-				showSeedOptionsMenu->add(showSeedQROption);
+				showSeedOptionsMenu->addOption(showAddressesOption);
+				showSeedOptionsMenu->addOption(showSeedPhrasesOption);
+				showSeedOptionsMenu->addOption(showSeedQROption);
 
 					shared_ptr<Menu> showAddressMenu = make_shared<Menu>("Show An Address", showSeedOptionsMenu);
 					showAddressesOption->add(static_pointer_cast<MenuTreeObject>(showAddressMenu));
@@ -56,12 +56,12 @@ MenuTree::MenuTree()
 					showNOSTRAddressOption->setOnSelectedFunction(&setNostrContext);
 					shared_ptr<MenuOption> showXMRAddressOption = make_shared<MenuOption>(showAddressMenu, "XMR", "Show monero public address from seed.");
 					showXMRAddressOption->setOnSelectedFunction(&setMoneroContext);
-					showAddressMenu->add(showBTCAddressOption);
-					showAddressMenu->add(showDOGEAddressOption);
-					showAddressMenu->add(showETCAddressOption);
-					showAddressMenu->add(showETHAddressOption);
-					showAddressMenu->add(showNOSTRAddressOption);
-					showAddressMenu->add(showXMRAddressOption);
+					showAddressMenu->addOption(showBTCAddressOption);
+					showAddressMenu->addOption(showDOGEAddressOption);
+					showAddressMenu->addOption(showETCAddressOption);
+					showAddressMenu->addOption(showETHAddressOption);
+					showAddressMenu->addOption(showNOSTRAddressOption);
+					showAddressMenu->addOption(showXMRAddressOption);
 
 						shared_ptr<AddressPage> addressPage = make_shared<AddressPage>("Seed Address", showAddressMenu);
 						addressPage->setBackwardAction(&clearCryptoContext);
@@ -78,8 +78,8 @@ MenuTree::MenuTree()
 					showBIP39Option->setOnSelectedFunction(&setBIP39MnemonicContext);
 					shared_ptr<MenuOption> showMoneroPhraseOption = make_shared<MenuOption>(showPhrasesMenu, "Legacy Monero", "Show legacy monero seed phrase for this seed.");
 					showMoneroPhraseOption->setOnSelectedFunction(&setLegacyMoneroMnemonicContext);
-					showPhrasesMenu->add(showBIP39Option);
-					showPhrasesMenu->add(showMoneroPhraseOption);
+					showPhrasesMenu->addOption(showBIP39Option);
+					showPhrasesMenu->addOption(showMoneroPhraseOption);
 
 						shared_ptr<MnemonicPage> mnemonicPage = make_shared<MnemonicPage>("Seed Phrase", showPhrasesMenu);
 						addressPage->setBackwardAction(&clearMnemonicTypeContext);
@@ -94,12 +94,12 @@ MenuTree::MenuTree()
 		shared_ptr<MenuOption> generateETCAddressOption = make_shared<MenuOption>(generateAddressMenu, "ETC", "Generate a ethereum classic public address.");
 		shared_ptr<MenuOption> generateDOGEAddressOption = make_shared<MenuOption>(generateAddressMenu, "DOGE", "Generate a DOGE public address.");
 		shared_ptr<MenuOption> generateNostrAddressOption = make_shared<MenuOption>(generateAddressMenu, "Nostr", "Generate a Nostr public keys.");
-		generateAddressMenu->add(generateXMRAddressOption);
-		generateAddressMenu->add(generateBTCAddressOption);
-		generateAddressMenu->add(generateETHAddressOption);
-		generateAddressMenu->add(generateETCAddressOption);
-		generateAddressMenu->add(generateDOGEAddressOption);
-		generateAddressMenu->add(generateNostrAddressOption);
+		generateAddressMenu->addOption(generateXMRAddressOption);
+		generateAddressMenu->addOption(generateBTCAddressOption);
+		generateAddressMenu->addOption(generateETHAddressOption);
+		generateAddressMenu->addOption(generateETCAddressOption);
+		generateAddressMenu->addOption(generateDOGEAddressOption);
+		generateAddressMenu->addOption(generateNostrAddressOption);
 
 		shared_ptr<Menu> pickPhraseTypeMenu = make_shared<Menu>("Pick Seed Phrase Type", mainMenu);
 		seedRestoreOption->add(static_pointer_cast<MenuTreeObject>(pickPhraseTypeMenu));
@@ -107,8 +107,8 @@ MenuTree::MenuTree()
 		restoreFromBIP39Option->setOnSelectedFunction(&setBIP39MnemonicContext);
 		shared_ptr<MenuOption> restoreFromLegacyMoneroPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero", "Restore seed bit from legacy monero seed phrase.");
 		restoreFromLegacyMoneroPhraseOption->setOnSelectedFunction(&setLegacyMoneroMnemonicContext);
-		pickPhraseTypeMenu->add(restoreFromBIP39Option);
-		pickPhraseTypeMenu->add(restoreFromLegacyMoneroPhraseOption);
+		pickPhraseTypeMenu->addOption(restoreFromBIP39Option);
+		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroPhraseOption);
 
 }
 
