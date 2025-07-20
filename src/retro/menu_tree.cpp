@@ -3,6 +3,7 @@
 #include "prompt.h"
 #include "address_page.h"
 #include "mnemonic_page.h"
+#include "vanity_input_page.h"
 #include "context_update_functions.h"
 
 using namespace RetroCrypto;
@@ -89,17 +90,32 @@ MenuTree::MenuTree()
 		shared_ptr<Menu> generateAddressMenu = make_shared<Menu>("Generate Vanity Address", mainMenu);
 		generateAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(generateAddressMenu));
 		shared_ptr<MenuOption> generateXMRAddressOption = make_shared<MenuOption>(generateAddressMenu, "XMR", "Generate a monero public address.");
+		generateXMRAddressOption->setOnSelectedFunction(&setMoneroContext);
 		shared_ptr<MenuOption> generateBTCAddressOption = make_shared<MenuOption>(generateAddressMenu, "BTC", "Generate a bitcoin public address.");
+		generateBTCAddressOption->setOnSelectedFunction(&setBitcoinContext);
 		shared_ptr<MenuOption> generateETHAddressOption = make_shared<MenuOption>(generateAddressMenu, "ETH", "Generate a ethereum public address.");
+		generateETHAddressOption->setOnSelectedFunction(&setEthereumContext);
 		shared_ptr<MenuOption> generateETCAddressOption = make_shared<MenuOption>(generateAddressMenu, "ETC", "Generate a ethereum classic public address.");
+		generateETCAddressOption->setOnSelectedFunction(&setEthereumClassicContext);
 		shared_ptr<MenuOption> generateDOGEAddressOption = make_shared<MenuOption>(generateAddressMenu, "DOGE", "Generate a DOGE public address.");
+		generateDOGEAddressOption->setOnSelectedFunction(&setDogeContext);
 		shared_ptr<MenuOption> generateNostrAddressOption = make_shared<MenuOption>(generateAddressMenu, "Nostr", "Generate a Nostr public keys.");
+		generateNostrAddressOption->setOnSelectedFunction(&setNostrContext);
 		generateAddressMenu->addOption(generateXMRAddressOption);
 		generateAddressMenu->addOption(generateBTCAddressOption);
 		generateAddressMenu->addOption(generateETHAddressOption);
 		generateAddressMenu->addOption(generateETCAddressOption);
 		generateAddressMenu->addOption(generateDOGEAddressOption);
 		generateAddressMenu->addOption(generateNostrAddressOption);
+
+			shared_ptr<VanityInputPage> vanityAddressInput = make_shared<VanityInputPage>("Input Vanity Address", generateAddressMenu);
+			vanityAddressInput->setBackwardAction(&clearCryptoContext);
+			generateXMRAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(vanityAddressInput));
+			generateBTCAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(vanityAddressInput));
+			generateETHAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(vanityAddressInput));
+			generateETCAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(vanityAddressInput));
+			generateDOGEAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(vanityAddressInput));
+			generateNostrAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(vanityAddressInput));
 
 		shared_ptr<Menu> pickPhraseTypeMenu = make_shared<Menu>("Pick Seed Phrase Type", mainMenu);
 		seedRestoreOption->setDestination(static_pointer_cast<MenuTreeObject>(pickPhraseTypeMenu));
