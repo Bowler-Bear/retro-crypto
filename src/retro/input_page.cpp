@@ -32,13 +32,13 @@ void InputPage::updateSelectedOption(InputType input)
 	case InputType::UP:
 	case InputType::DOWN:
 		{
-			uint32_t charSetSize = std::strlen(usedCharSet);
+			int32_t charSetSize = std::strlen(usedCharSet);
 			if (inputString[selectedOptionIndex] == -1)
 			{
 				inputString[selectedOptionIndex] = input == InputType::DOWN ? charSetSize-1 : 0;
 				break;
 			}
-			uint32_t nextValue = (inputString[selectedOptionIndex] + charSetSize + (input == InputType::DOWN ? -1 : 1)) % charSetSize;
+			int32_t nextValue = (inputString[selectedOptionIndex] + charSetSize + (input == InputType::DOWN ? -1 : 1)) % charSetSize;
 			if ((inputString[selectedOptionIndex] == 0 && nextValue == charSetSize-1) || (inputString[selectedOptionIndex] == charSetSize-1 && nextValue == 0))
 				nextValue = -1;
 			inputString[selectedOptionIndex] = nextValue;
