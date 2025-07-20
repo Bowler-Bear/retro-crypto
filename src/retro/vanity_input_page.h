@@ -14,7 +14,6 @@ namespace RetroCrypto
 	public:
 		VanityInputPage();
 		VanityInputPage(string inTitle, std::shared_ptr<MenuTreeObject> inParent = nullptr);
-		virtual void draw(shared_ptr<IDisplay> display) override;
 		virtual void onEnter() override;
 		virtual void drawInput(shared_ptr<IDisplay> display);
 	};

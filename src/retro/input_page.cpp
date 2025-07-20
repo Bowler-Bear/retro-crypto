@@ -73,6 +73,7 @@ void InputPage::draw(shared_ptr<IDisplay> display)
 {
 	Page::draw(display);
 	drawInput(display);
+	drawDescription(display);
 }
 void InputPage::setStringSize(uint8_t size)
 {
@@ -144,4 +145,17 @@ void InputPage::drawInput(shared_ptr<IDisplay> display)
 		}
 		display->drawTextBox(inputBox);
 	}
+}
+
+void InputPage::drawDescription(shared_ptr<IDisplay> display)
+{
+	if (description.empty())
+		return;
+	TextBox descriptionBox(description);
+	descriptionBox.yPosition = BASE_BORDER_BOX_HEIGHT-6;
+	descriptionBox.xPosition = 2;
+	descriptionBox.width = BASE_BORDER_BOX_WIDTH-3;
+	descriptionBox.height = 5;
+	descriptionBox.setBordered();
+	display->drawTextBox(descriptionBox);
 }

@@ -25,12 +25,6 @@ VanityInputPage::VanityInputPage(string inTitle, std::shared_ptr<MenuTreeObject>
 	prefix = "";
 }
 
-void VanityInputPage::draw(shared_ptr<IDisplay> display)
-{
-	Page::draw(display);
-	drawInput(display);
-}
-
 void VanityInputPage::onEnter()
 {
 	ContextData contextData = CoreSystem::getCoreSystem().getContextData();
@@ -59,19 +53,24 @@ void VanityInputPage::onEnter()
 	switch (contextData.crypto)
 	{
 	case CryptoType::BTC:
+		description = "Enter the bitcoin address you want to generate.";
 		prefix = "1";
 		break;
 	case CryptoType::DOGE:
+		description = "Enter the doge address you want to generate.";
 		prefix = "D";
 		break;
 	case CryptoType::ETC:
 	case CryptoType::ETH:
+		description = "Enter the ethereum address you want to generate.";
 		prefix = "0x";
 		break;
 	case CryptoType::NOSTR:
+		description = "Enter the nostr public key you want to generate.";
 		prefix = "npub1";
 		break;
 	case CryptoType::XMR:
+		description = "Enter the monero address you want to generate.";
 		prefix = "4";
 		break;
 	default:

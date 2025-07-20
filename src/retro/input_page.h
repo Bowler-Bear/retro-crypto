@@ -28,6 +28,7 @@ namespace RetroCrypto
 		virtual void onEnter() override;
 		virtual void onForward() override;
 		virtual void drawInput(shared_ptr<IDisplay> display);
+		virtual void drawDescription(shared_ptr<IDisplay> display);
 	};
 }
 #endif
