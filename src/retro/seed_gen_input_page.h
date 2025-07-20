@@ -22,9 +22,11 @@ namespace RetroCrypto
 		SeedGenInputPage();
 		SeedGenInputPage(string inTitle, std::shared_ptr<MenuTreeObject> inParent = nullptr);
 		virtual void updateSelectedOption(InputType input) override;
+		virtual void draw(shared_ptr<IDisplay> display) override;
 		virtual shared_ptr<MenuTreeObject> getDestination() override;
 		virtual void onForward() override;
 		void setSeedGenInputType(SeedGenPageType newInput);
+		void drawCollisionOdds(shared_ptr<IDisplay> display);
 	};
 }
 #endif

@@ -1,3 +1,6 @@
+#include <cstring>
+#include <math.h>
+
 #include "seed_gen_input_page.h"
 #include "context_update_functions.h"
 
@@ -52,6 +55,12 @@ void SeedGenInputPage::updateSelectedOption(InputType input)
 		selectedOptionIndex = 0;
 }
 
+void SeedGenInputPage::draw(shared_ptr<IDisplay> display)
+{
+	InputPage::draw(display);
+	drawCollisionOdds(display);
+}
+
 shared_ptr<MenuTreeObject> SeedGenInputPage::getDestination()
 {
 	if (pageType != DIRECTIONAL)
@@ -83,4 +92,30 @@ void SeedGenInputPage::setSeedGenInputType(SeedGenPageType newPageType)
 	default:
 		break;
 	}
+}
+
+void SeedGenInputPage::drawCollisionOdds(shared_ptr<IDisplay> display)
+{
+	if (usedCharSet == nullptr)
+		return;
+	if (selectedOptionIndex == 0 && inputString[selectedOptionIndex] == -1)
+		return;
+	std::string odds = "Current Collision Odds: 1 in ";
+	uint8_t highestIndex = 1;
+	for (uint8_t i = stringSize-1; i > 0; i--)
+	{
+		if (inputString[i] != -1)
+		{
+			highestIndex = i+1;
+			break;
+		}
+	}
+	odds += std::to_string(pow(std::strlen(usedCharSet), highestIndex));
+	TextBox oddsBox(odds);
+	oddsBox.yPosition = BASE_BORDER_BOX_HEIGHT-6-4;
+	oddsBox.xPosition = 2;
+	oddsBox.width = BASE_BORDER_BOX_WIDTH-3;
+	oddsBox.height = 5;
+	oddsBox.setBordered();
+	display->drawTextBox(oddsBox);
 }
