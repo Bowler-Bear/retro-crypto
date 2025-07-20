@@ -4,11 +4,10 @@
 #include "address_page.h"
 #include "mnemonic_page.h"
 #include "vanity_input_page.h"
+#include "seed_gen_input_page.h"
 #include "context_update_functions.h"
 
 using namespace RetroCrypto;
-
-static const char* dieCharSet = "123456";
 
 MenuTree::MenuTree()
 {
@@ -89,11 +88,16 @@ MenuTree::MenuTree()
 						showBIP39Option->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
 						showMoneroPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
 
-			shared_ptr<InputPage> diceRollsInput = make_shared<InputPage>("Enter Dice Rolls", generateSeedMenu);
-			generateSeedFromDiceOption->setDestination(static_pointer_cast<MenuTreeObject>(diceRollsInput));
-			diceRollsInput->setStringSize(35);
-			diceRollsInput->setDescription("Eneter a series of ranomly rolled dice values to generate a seed with.");
-			diceRollsInput->setUsedCharSet(dieCharSet);
+			shared_ptr<SeedGenInputPage> diceRollsInputPage = make_shared<SeedGenInputPage>("Enter Dice Rolls", generateSeedMenu);
+			diceRollsInputPage->setDestination(static_pointer_cast<MenuTreeObject>(showSeedOptionsMenu));
+			generateSeedFromDiceOption->setDestination(static_pointer_cast<MenuTreeObject>(diceRollsInputPage));
+			diceRollsInputPage->setDescription("Enter a series of randomly rolled dice values to generate a seed with.");
+
+			shared_ptr<SeedGenInputPage> directionalInputsPage = make_shared<SeedGenInputPage>("Enter Directional Inputs", generateSeedMenu);
+			directionalInputsPage->setSeedGenInputType(DIRECTIONAL);
+			directionalInputsPage->setDestination(static_pointer_cast<MenuTreeObject>(showSeedOptionsMenu));
+			generateSeedFromInputOption->setDestination(static_pointer_cast<MenuTreeObject>(directionalInputsPage));
+			directionalInputsPage->setDescription("Enter a series of random directions to generate a seed with.");
 
 		shared_ptr<Menu> generateAddressMenu = make_shared<Menu>("Generate Vanity Address", mainMenu);
 		generateAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(generateAddressMenu));
