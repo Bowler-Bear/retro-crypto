@@ -8,6 +8,8 @@
 
 using namespace RetroCrypto;
 
+static const char* dieCharSet = "123456";
+
 MenuTree::MenuTree()
 {
 	shared_ptr<Menu> mainMenu = make_shared<Menu>("Main Menu");
@@ -86,6 +88,12 @@ MenuTree::MenuTree()
 						addressPage->setBackwardAction(&clearMnemonicTypeContext);
 						showBIP39Option->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
 						showMoneroPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
+
+			shared_ptr<InputPage> diceRollsInput = make_shared<InputPage>("Enter Dice Rolls", generateSeedMenu);
+			generateSeedFromDiceOption->setDestination(static_pointer_cast<MenuTreeObject>(diceRollsInput));
+			diceRollsInput->setStringSize(35);
+			diceRollsInput->setDescription("Eneter a series of ranomly rolled dice values to generate a seed with.");
+			diceRollsInput->setUsedCharSet(dieCharSet);
 
 		shared_ptr<Menu> generateAddressMenu = make_shared<Menu>("Generate Vanity Address", mainMenu);
 		generateAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(generateAddressMenu));
