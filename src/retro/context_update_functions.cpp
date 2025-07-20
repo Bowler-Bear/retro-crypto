@@ -8,6 +8,12 @@ extern "C"
 
 namespace RetroCrypto
 {
+	void clearSeed()
+	{
+		ContextData newData;
+		CoreSystem::getCoreSystem().updateContextData(ContextUpdate::SEED, newData);
+	}
+
 	void setRandom256BitSeed()
 	{
 		setRandomSeed(256/8);

@@ -4,6 +4,8 @@
 
 namespace RetroCrypto
 {
+	void clearSeed();
+
 	void setRandom256BitSeed();
 
 	void setRandomSeed(uint8_t seedSize);
