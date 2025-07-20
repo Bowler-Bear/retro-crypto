@@ -36,6 +36,7 @@ MenuTree::MenuTree()
 			generateSeedFromRNGPrompt->setForwardAction(&setRandom256BitSeed);
 
 				shared_ptr<Menu> showSeedOptionsMenu = make_shared<Menu>("Seed Options", generateSeedFromRNGPrompt);
+				showSeedOptionsMenu->setBackwardAction(&clearSeed);
 				generateSeedFromRNGPrompt->setDestination(static_pointer_cast<MenuTreeObject>(showSeedOptionsMenu));
 				shared_ptr<MenuOption> showAddressesOption = make_shared<MenuOption>(showSeedOptionsMenu, "Show Addresses", "Show addresses from this seed.");
 				shared_ptr<MenuOption> showSeedPhrasesOption = make_shared<MenuOption>(showSeedOptionsMenu, "Show Seed Phrases", "Show seed phrases for this seed.");
