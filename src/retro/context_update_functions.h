@@ -8,6 +8,8 @@ namespace RetroCrypto
 
 	void setRandomSeed(uint8_t seedSize);
 
+	void setSeedFromHashedData(const uint8_t* data, uint8_t length);
+
 	void setMnemonicTypeContext(MnemonicType newMnemonicTypeContext);
 
 	void clearMnemonicTypeContext();

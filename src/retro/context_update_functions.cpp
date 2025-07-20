@@ -1,6 +1,11 @@
 #include "context_update_functions.h"
 #include "core_system.h"
 
+extern "C"
+{
+#include "sha2.h"
+}
+
 namespace RetroCrypto
 {
 	void setRandom256BitSeed()
@@ -17,6 +22,14 @@ namespace RetroCrypto
 		shared_ptr<IRandomNumberGenerator> generator = CoreSystem::getCoreSystem().getRandomNumberGenerator();
 		for(int i = 0; i < newData.seedSize; i++)
 			newData.seed[i] = generator->getRandom8();
+		CoreSystem::getCoreSystem().updateContextData(ContextUpdate::SEED | ContextUpdate::SEED_SIZE, newData);
+	}
+
+	void setSeedFromHashedData(const uint8_t* data, uint8_t length)
+	{
+		ContextData newData;
+		newData.seedSize = SHA256_DIGEST_LENGTH;
+		sha256_Raw(data, length, newData.seed);
 		CoreSystem::getCoreSystem().updateContextData(ContextUpdate::SEED | ContextUpdate::SEED_SIZE, newData);
 	}
 
