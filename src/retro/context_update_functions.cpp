@@ -16,7 +16,7 @@ namespace RetroCrypto
 
 	void setRandom256BitSeed()
 	{
-		setRandomSeed(MAXIMUM_SEED_SIZE);
+		setRandomSeed(256/8);
 	}
 
 	void setRandomSeed(uint8_t seedSize = MAXIMUM_SEED_SIZE)
