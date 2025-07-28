@@ -13,6 +13,7 @@ namespace RetroCrypto
 		string address;
 		string addressType;
 		string seed;
+		string seedTitle;
 
 	public:
 		AddressPage();

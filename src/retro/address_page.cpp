@@ -13,6 +13,7 @@ AddressPage::AddressPage()
 {
 	address = "";
 	addressType = "";
+	seedTitle = "";
 	seed = "";
 }
 
@@ -43,21 +44,27 @@ void AddressPage::onEnter()
 		switch(contextData.crypto)
 		{
 		case RetroCrypto::CryptoType::BTC:
+			seedTitle = "Seed Bits";
 			addressType = "Bitcoin m/" S(BITCOIN_PATH_PURPOSE) "'/" S(BITCOIN_PATH_COIN_TYPE) "'/" S(BITCOIN_PATH_ACCOUNT) "' ";
 			break;
 		case RetroCrypto::CryptoType::DOGE:
+			seedTitle = "Seed Bits";
 			addressType = "Doge m/" S(DOGE_PATH_PURPOSE) "'/" S(DOGE_PATH_COIN_TYPE) "'/" S(DOGE_PATH_ACCOUNT) "' ";
 			break;
 		case RetroCrypto::CryptoType::ETC:
+			seedTitle = "Seed Bits";
 			addressType = "Ethereum Classic m/" S(ETHEREUM_CLASSIC_PATH_PURPOSE) "'/" S(ETHEREUM_CLASSIC_PATH_COIN_TYPE) "'/" S(ETHEREUM_CLASSIC_PATH_ACCOUNT) "' ";
 			break;
 		case RetroCrypto::CryptoType::ETH:
+			seedTitle = "Seed Bits";
 			addressType = "Ethereum m/" S(ETHEREUM_PATH_PURPOSE) "'/" S(ETHEREUM_PATH_COIN_TYPE) "'/" S(ETHEREUM_PATH_ACCOUNT) "' ";
 			break;
 		case RetroCrypto::CryptoType::NOSTR:
+			seedTitle = "Seed Bits";
 			addressType = "Nostr m/" S(NOSTR_PATH_PURPOSE) "'/" S(NOSTR_PATH_COIN_TYPE) "'/" S(NOSTR_PATH_ACCOUNT) "'/" S(NOSTR_PATH_CHANGE) "/" S(NOSTR_PATH_INDEX) " ";
 			break;
 		case RetroCrypto::CryptoType::XMR:
+			seedTitle = "Private Spend Key";
 			addressType = "Monero Primary ";
 			break;
 		default:
@@ -71,12 +78,13 @@ void AddressPage::onBackward()
 	Page::onBackward();
 	address = "";
 	addressType = "";
+	seedTitle = "";
 	seed = "";
 }
 
 void AddressPage::drawSeed(shared_ptr<IDisplay> display)
 {
-	TextBox seedTitleBox(string("Seed"));
+	TextBox seedTitleBox(seedTitle);
 	seedTitleBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+1;
 	seedTitleBox.xPosition = (BASE_BORDER_BOX_WIDTH-seedTitleBox.text.size())/2;
 	seedTitleBox.width = seedTitleBox.text.size();

@@ -51,7 +51,7 @@ void MnemonicPage::onBackward()
 
 void MnemonicPage::drawSeed(shared_ptr<IDisplay> display)
 {
-	TextBox seedTitleBox(string("Seed"));
+	TextBox seedTitleBox(string("Seed Bits"));
 	seedTitleBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT;
 	seedTitleBox.xPosition = (BASE_BORDER_BOX_WIDTH-seedTitleBox.text.size())/2;
 	seedTitleBox.width = seedTitleBox.text.size();
