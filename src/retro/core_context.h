@@ -4,7 +4,8 @@
 #include <cstdint>
 #include <string>
 
-#define MAXIMUM_SEED_SIZE 32
+#define MAXIMUM_SEED_SIZE 64
+#define DEFAULT_SEED_SIZE 32
 
 namespace RetroCrypto
 {
@@ -55,7 +56,7 @@ namespace RetroCrypto
 		CryptoType crypto;
 
 		ContextData()
-		: seed{ 0 }, seedSize(MAXIMUM_SEED_SIZE), mnemonicType(MnemonicType::NONE), mnemonic(""), crypto(CryptoType::NONE)
+		: seed{ 0 }, seedSize(DEFAULT_SEED_SIZE), mnemonicType(MnemonicType::NONE), mnemonic(""), crypto(CryptoType::NONE)
 		{
 		}
 

@@ -4,7 +4,7 @@ using namespace RetroCrypto;
 
 void Context::updateData(ContextUpdate update, ContextData dataContainer)
 {
-	if (update & ContextUpdate::SEED_SIZE)
+	if (update & ContextUpdate::SEED_SIZE && dataContainer.seedSize <= MAXIMUM_SEED_SIZE)
 	{
 		data.seedSize = dataContainer.seedSize;
 	}
