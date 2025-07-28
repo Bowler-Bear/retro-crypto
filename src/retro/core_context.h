@@ -105,7 +105,7 @@ namespace RetroCrypto
 		uint8_t getMnemonicWordCount()
 		{
 			uint8_t count = 0;
-			for (int i = 0; i < mnemonic.size(); i++)
+			for (size_t i = 0; i < mnemonic.size(); i++)
 			{
 				if (mnemonic[i] == ' ')
 					count ++;

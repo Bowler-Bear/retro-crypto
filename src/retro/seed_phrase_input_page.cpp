@@ -64,10 +64,10 @@ void SeedPhraseInputPage::updateSelectedOption(InputType input)
 	if (foundWord)
 	{
 		predictedWord = foundWord;
-		for (int i = selectedOptionIndex+1; i < std::strlen(foundWord); i++)
+		for (size_t i = selectedOptionIndex+1; i < std::strlen(foundWord); i++)
 			if (usedCharSet == alphabetCharSet)
 				inputString[i] = foundWord[i]-0x61;
-		for (int i = std::strlen(foundWord); i < MAXIMUM_WORD_LENGTH; i++)
+		for (size_t i = std::strlen(foundWord); i < MAXIMUM_WORD_LENGTH; i++)
 			inputString[i] = -1;
 	}
 	if (!previousWord.empty())
