@@ -100,6 +100,19 @@ namespace RetroCrypto
 				sprintf(hexString+i*2, "%02x", seed[i]);
 			return std::string(hexString);
 		}
+
+		uint8_t getMnemonicWordCount()
+		{
+			uint8_t count = 0;
+			for (int i = 0; i < mnemonic.size(); i++)
+			{
+				if (mnemonic[i] == ' ')
+					count ++;
+			}
+			if (mnemonic.size() > 0)
+				count += 1;
+			return count;
+		}
 	};
 
 	class Context
