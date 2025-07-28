@@ -5,6 +5,7 @@
 #include "mnemonic_page.h"
 #include "vanity_input_page.h"
 #include "seed_gen_input_page.h"
+#include "seed_phrase_input_page.h"
 #include "context_update_functions.h"
 
 using namespace RetroCrypto;
@@ -139,6 +140,11 @@ MenuTree::MenuTree()
 		pickPhraseTypeMenu->addOption(restoreFromBIP39Option);
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroPhraseOption);
 
+			shared_ptr<SeedPhraseInputPage> seedPhraseInputPage = make_shared<SeedPhraseInputPage>("Input Seed Phrase", pickPhraseTypeMenu);
+			seedPhraseInputPage->setDestination(static_pointer_cast<MenuTreeObject>(showSeedOptionsMenu));
+			seedPhraseInputPage->setBackwardAction(&clearMnemonicTypeContext);
+			restoreFromBIP39Option->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
+			restoreFromLegacyMoneroPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
 }
 
 shared_ptr<MenuTreeObject> MenuTree::getRoot()
