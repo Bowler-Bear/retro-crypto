@@ -47,6 +47,8 @@ namespace RetroCrypto
 
 	std::string bitcoinAddressFromSeed(const uint8_t* seed, const uint8_t seedSize)
 	{
+		if (seedSize != 16 && seedSize != 24 && seedSize != 32)
+			return string("Invalid seed bits size for this address.");
 		uint8_t masterNodeSeed[BITCOIN_HD_MASTER_SEED_SIZE] = { 0 };
 		mnemonic_to_seed(mnemonic_from_data(seed, seedSize), "", masterNodeSeed, nullptr);
 		mnemonic_clear();
@@ -99,6 +101,8 @@ namespace RetroCrypto
 
 	std::string ethereumClassicAddressFromSeed(const uint8_t* seed, const uint8_t seedSize)
 	{
+		if (seedSize != 16 && seedSize != 24 && seedSize != 32)
+			return string("Invalid seed bits size for this address.");
 		uint8_t masterNodeSeed[BITCOIN_HD_MASTER_SEED_SIZE] = { 0 };
 		mnemonic_to_seed(mnemonic_from_data(seed, seedSize), "", masterNodeSeed, nullptr);
 		mnemonic_clear();
@@ -158,6 +162,8 @@ namespace RetroCrypto
 
 	std::string ethereumAddressFromSeed(const uint8_t* seed, const uint8_t seedSize)
 	{
+		if (seedSize != 16 && seedSize != 24 && seedSize != 32)
+			return string("Invalid seed bits size for this address.");
 		uint8_t masterNodeSeed[BITCOIN_HD_MASTER_SEED_SIZE] = { 0 };
 		mnemonic_to_seed(mnemonic_from_data(seed, seedSize), "", masterNodeSeed, nullptr);
 		mnemonic_clear();
@@ -217,6 +223,8 @@ namespace RetroCrypto
 
 	std::string nostrAddressFromSeed(const uint8_t* seed, const uint8_t seedSize)
 	{
+		if (seedSize != 16 && seedSize != 24 && seedSize != 32)
+			return string("Invalid seed bits size for this address.");
 		uint8_t masterNodeSeed[BITCOIN_HD_MASTER_SEED_SIZE] = { 0 };
 		mnemonic_to_seed(mnemonic_from_data(seed, seedSize), "", masterNodeSeed, nullptr);
 		mnemonic_clear();
