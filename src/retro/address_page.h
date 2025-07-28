@@ -11,7 +11,7 @@ namespace RetroCrypto
 	{
 	protected:
 		string address;
-		string addressType;
+		string addressTitle;
 		string seed;
 		string seedTitle;
 
