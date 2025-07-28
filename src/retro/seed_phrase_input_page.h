@@ -16,6 +16,8 @@ namespace RetroCrypto
 		SeedPhraseInputPage();
 		SeedPhraseInputPage(string inTitle, std::shared_ptr<MenuTreeObject> inParent = nullptr);
 		virtual void updateSelectedOption(InputType input) override;
+		virtual bool canConsumeAllInputs() override;
+		virtual bool consumeInput(InputType input) override;
 		virtual void draw(shared_ptr<IDisplay> display) override;
 		virtual shared_ptr<MenuTreeObject> getDestination() override;
 		virtual void reset() override;

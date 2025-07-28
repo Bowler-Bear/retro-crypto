@@ -82,84 +82,129 @@ void SeedPhraseInputPage::draw(shared_ptr<IDisplay> display)
 
 shared_ptr<MenuTreeObject> SeedPhraseInputPage::getDestination()
 {
-	int32_t foundWordIndex = -1;
-	char currentWord[MAXIMUM_WORD_LENGTH] = { '\0' };
-	for (uint8_t i = 0; i < MAXIMUM_WORD_LENGTH; i++)
+	return destination;
+}
+
+bool SeedPhraseInputPage::canConsumeAllInputs()
+{
+	return true;
+}
+
+bool SeedPhraseInputPage::consumeInput(InputType input)
+{
+	switch (input)
 	{
-		int32_t charIndex = inputString[i];
-		if (charIndex < 0)
+	case InputType::FORWARD:
+		{
+		int32_t foundWordIndex = -1;
+		char currentWord[MAXIMUM_WORD_LENGTH] = { '\0' };
+		for (uint8_t i = 0; i < MAXIMUM_WORD_LENGTH; i++)
+		{
+			int32_t charIndex = inputString[i];
+			if (charIndex < 0)
+				break;
+			currentWord[i] = usedCharSet[charIndex];
+		}
+		ContextData contextData = CoreSystem::getCoreSystem().getContextData();
+		switch (contextData.mnemonicType)
+		{
+		case MnemonicType::LEGACY_MONERO:
+			foundWordIndex = monero_mnemonic_find_word_index(currentWord, MoneroEnglish);
+			if (foundWordIndex == -1)
+			{
+				description = "INVALID WORD ENTERED.";
+				return true;
+			}
+			if (contextData.getMnemonicWordCount() >= 1)
+				contextData.mnemonic += " ";
+			contextData.mnemonic += std::string(currentWord);
+			setMnemonicContext(contextData.mnemonic);
+			contextData = CoreSystem::getCoreSystem().getContextData();
+			if (contextData.getMnemonicWordCount() >= 25)
+			{
+				if (legacy_monero_mnemonic_check(contextData.mnemonic.c_str(), MoneroEnglish) > 0)
+				{
+					contextData.seedSize = 32;
+					legacy_monero_mnemonic_to_seed(contextData.mnemonic.c_str(), contextData.seed, MoneroEnglish);
+					CoreSystem::getCoreSystem().updateContextData(ContextUpdate::SEED | ContextUpdate::SEED_SIZE, contextData);
+					return false;
+				}
+				else
+				{
+					reset();
+					description = "INVALID PHRASE ENTERED. CHECK IT THEN RE-ENTER.";
+					return true;
+				}
+			}
 			break;
-		currentWord[i] = usedCharSet[charIndex];
-	}
-	ContextData contextData = CoreSystem::getCoreSystem().getContextData();
-	switch (contextData.mnemonicType)
-	{
-	case MnemonicType::LEGACY_MONERO:
-		foundWordIndex = monero_mnemonic_find_word_index(currentWord, MoneroEnglish);
-		if (foundWordIndex == -1)
-		{
-			description = "INVALID WORD ENETERED.";
-			return nullptr;
-		}
-		if (contextData.getMnemonicWordCount() >= 1)
-			contextData.mnemonic += " ";
-		contextData.mnemonic += std::string(currentWord);
-		setMnemonicContext(contextData.mnemonic);
-		if (contextData.getMnemonicWordCount() == 25)
-		{
-			if (legacy_monero_mnemonic_check(contextData.mnemonic.c_str(), MoneroEnglish) > 0)
+		case MnemonicType::BIP39:
+		case MnemonicType::NONE:
+		default:
+			foundWordIndex = mnemonic_find_word(currentWord);
+			if (foundWordIndex == -1)
 			{
-				contextData.seedSize = 32;
-				legacy_monero_mnemonic_to_seed(contextData.mnemonic.c_str(), contextData.seed, MoneroEnglish);
-				CoreSystem::getCoreSystem().updateContextData(ContextUpdate::SEED | ContextUpdate::SEED_SIZE, contextData);
-				return destination;
+				description = "INVALID WORD ENTERED.";
+				return true;
+			}
+			if (contextData.getMnemonicWordCount() >= 1)
+				contextData.mnemonic += " ";
+			contextData.mnemonic += std::string(currentWord);
+			setMnemonicContext(contextData.mnemonic);
+			contextData = CoreSystem::getCoreSystem().getContextData();
+			if (contextData.getMnemonicWordCount() >= 24)
+			{
+				if (mnemonic_check(contextData.mnemonic.c_str()) > 0)
+				{
+					contextData.seedSize = 32;
+					mnemonic_to_bits(contextData.mnemonic.c_str(), contextData.seed);
+					CoreSystem::getCoreSystem().updateContextData(ContextUpdate::SEED | ContextUpdate::SEED_SIZE, contextData);
+					return false;
+				}
+				else
+				{
+					reset();
+					description = "INVALID PHRASE ENTERED. CHECK IT THEN RE-ENTER.";
+					return true;
+				}
+			}
+			break;
+		}
+		previousWord = currentWord;
+		InputPage::reset();
+		description = std::string("Enter word ") + std::to_string(contextData.getMnemonicWordCount()+1) + std::string(" of the phrase. Your previous word was '") + previousWord + std::string("'.");
+		predictedWord = "";
+		return true;
+		}
+		break;
+	case InputType::BACK:
+		{
+		ContextData contextData = CoreSystem::getCoreSystem().getContextData();
+		if (contextData.getMnemonicWordCount() >= 1)
+		{
+			if (contextData.getMnemonicWordCount() == 1)
+			{
+				contextData.mnemonic = "";
+				previousWord = "";
+				description = "Enter the first word of your seed phrase.";
 			}
 			else
 			{
-				reset();
-				description = "INVALID PHRASE ENTERED. CHECK IT THEN RE-ENTER.";
-				return nullptr;
+				contextData.mnemonic = contextData.mnemonic.substr(0, contextData.mnemonic.find_last_of(' '));
+				previousWord = contextData.mnemonic.substr(contextData.mnemonic.find_last_of(' ')+1);
+				description = std::string("Enter word ") + std::to_string(contextData.getMnemonicWordCount()+1) + std::string(" of the phrase. Your previous word was '") + previousWord + std::string("'.");
 			}
+			setMnemonicContext(contextData.mnemonic);
+			InputPage::reset();
+			predictedWord = "";
+			return true;
+		}
+		return false;
 		}
 		break;
-	case MnemonicType::BIP39:
-	case MnemonicType::NONE:
 	default:
-		foundWordIndex = mnemonic_find_word(currentWord);
-		if (foundWordIndex == -1)
-		{
-			description = "INVALID WORD ENETERED.";
-			return nullptr;
-		}
-		if (contextData.getMnemonicWordCount() >= 1)
-			contextData.mnemonic += " ";
-		contextData.mnemonic += std::string(currentWord);
-		setMnemonicContext(contextData.mnemonic);
-		contextData = CoreSystem::getCoreSystem().getContextData();
-		if (contextData.getMnemonicWordCount() == 24)
-		{
-			if(mnemonic_check(contextData.mnemonic.c_str()) > 0)
-			{
-				ContextData newContext;
-				newContext.seedSize = 32;
-				mnemonic_to_bits(contextData.mnemonic.c_str(), newContext.seed);
-				CoreSystem::getCoreSystem().updateContextData(ContextUpdate::SEED | ContextUpdate::SEED_SIZE, newContext);
-				return destination;
-			}
-			else
-			{
-				reset();
-				description = "INVALID PHRASE ENTERED. CHECK IT THEN RE-ENTER.";
-				return nullptr;
-			}
-		}
 		break;
 	}
-	previousWord = currentWord;
-	InputPage::reset();
-	description = std::string("Enter word ") + std::to_string(contextData.getMnemonicWordCount()+1) + std::string(" of the phrase. Your previous word was ") + previousWord + std::string(".");
-	predictedWord = "";
-	return nullptr;
+	return true;
 }
 
 void SeedPhraseInputPage::reset()
