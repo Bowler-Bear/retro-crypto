@@ -22,7 +22,7 @@ namespace RetroCrypto
 
 	void clearMnemonicContext();
 
-	void setMnemonicContext();
+	void setMnemonicContext(std::string inMnemonic);
 
 	void setCryptoContext(CryptoType newCryptoContext);
 
