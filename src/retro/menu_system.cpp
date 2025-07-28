@@ -63,6 +63,8 @@ void MenuSystem::processInput(InputType input)
 		break;
 	case InputType::FORWARD:
 		{
+			if (currentMenuPosition->canConsumeAllInputs() && currentMenuPosition->consumeInput(input))
+					return;
 			std::shared_ptr<MenuTreeObject> destination = currentMenuPosition->getDestination();
 			if (destination == nullptr)
 				return;
@@ -74,6 +76,8 @@ void MenuSystem::processInput(InputType input)
 		break;
 	case InputType::BACK:
 		{
+			if (currentMenuPosition->canConsumeAllInputs() && currentMenuPosition->consumeInput(input))
+					return;
 			std::shared_ptr<MenuTreeObject> parent = currentMenuPosition->getParent();
 			if (parent == nullptr)
 				break;
