@@ -187,6 +187,8 @@ int32_t monero_mnemonic_find_word_index_allowing_partial_word(const char* word, 
         } else if (comparison_result > 0) {
             upper = tested_midpoint - 1;
         }
+        if (lower < 0 || lower >= MONERO_WORDLIST_WORD_COUNT || upper < 0 || upper >= MONERO_WORDLIST_WORD_COUNT)
+            return -1;
     }
     return -1;
 }
