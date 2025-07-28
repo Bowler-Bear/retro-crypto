@@ -51,6 +51,14 @@ namespace RetroCrypto
 			return selectedOptionIndex;
 		}
 		virtual void updateSelectedOption(InputType input) = 0;
+		virtual bool canConsumeAllInputs()
+		{
+			return false;
+		}
+		virtual bool consumeInput(InputType input)
+		{
+			return false;
+		}
 		virtual std::shared_ptr<MenuTreeObject> getDestination() = 0;
 		virtual std::vector<std::shared_ptr<MenuOption>>& getOptions()
 		{
