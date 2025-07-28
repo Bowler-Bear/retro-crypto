@@ -20,6 +20,7 @@ namespace RetroCrypto
 		InputPage(string inTitle, std::shared_ptr<MenuTreeObject> inParent = nullptr);
 		virtual void updateSelectedOption(InputType input) override;
 		virtual void draw(shared_ptr<IDisplay> display) override;
+		virtual void reset();
 		void setStringSize(uint8_t size);
 		void setUsedCharSet(const char* charSet);
 		void setDescription(string newDescription);

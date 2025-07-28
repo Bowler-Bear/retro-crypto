@@ -75,6 +75,14 @@ void InputPage::draw(shared_ptr<IDisplay> display)
 	drawInput(display);
 	drawDescription(display);
 }
+
+void InputPage::reset()
+{
+	selectedOptionIndex = 0;
+	inputString.clear();
+	inputString.resize(stringSize, -1);
+}
+
 void InputPage::setStringSize(uint8_t size)
 {
 	stringSize = size;
@@ -108,9 +116,7 @@ shared_ptr<MenuTreeObject> InputPage::getDestination()
 
 void InputPage::onEnter()
 {
-	selectedOptionIndex = 0;
-	inputString.clear();
-	inputString.resize(stringSize, -1);
+	reset();
 }
 
 void InputPage::onForward()
