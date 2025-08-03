@@ -68,7 +68,8 @@ void MenuSystem::processInput(InputType input)
 			std::shared_ptr<MenuTreeObject> destination = currentMenuPosition->getDestination();
 			if (destination == nullptr)
 				return;
-			destination->setParent(currentMenuPosition);
+			if (destination->getShouldReparent())
+				destination->setParent(currentMenuPosition);
 			currentMenuPosition->onForward();
 			currentMenuPosition = destination;
 			destination->onEnter();
