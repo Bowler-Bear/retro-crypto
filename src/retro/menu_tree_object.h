@@ -13,6 +13,8 @@
 #define BASE_BORDER_BOX_WIDTH 100
 #define BASE_BORDER_BOX_HEIGHT 25
 
+#define MENU_TREE_OBJECT_REPARENT_DEFAULT true
+
 typedef void (*BlockingAction)(void);
 
 namespace RetroCrypto
@@ -22,6 +24,7 @@ namespace RetroCrypto
 	{
 	protected:
 		std::shared_ptr<MenuTreeObject> parent;
+		bool shouldReparent;
 		std::vector<std::shared_ptr<MenuOption>> options;
 		uint8_t selectedOptionIndex;
 		BlockingAction forwardAction;
@@ -71,6 +74,14 @@ namespace RetroCrypto
 		virtual void setParent(std::shared_ptr<MenuTreeObject> newParent)
 		{
 			parent = newParent;
+		}
+		virtual void setShouldReparent(bool newShouldReparent)
+		{
+			shouldReparent = newShouldReparent;
+		}
+		virtual bool getShouldReparent()
+		{
+			return shouldReparent;
 		}
 		virtual void setForwardAction(BlockingAction action)
 		{

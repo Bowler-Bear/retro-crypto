@@ -7,6 +7,7 @@ Page::Page()
 	selectedOptionIndex = 0;
 	title = "";
 	parent = nullptr;
+	shouldReparent = MENU_TREE_OBJECT_REPARENT_DEFAULT;
 }
 
 Page::Page(string inTitle, std::shared_ptr<MenuTreeObject> inParent)

@@ -6,6 +6,7 @@ Menu::Menu()
 {
 	title = "";
 	setParent(nullptr);
+	setShouldReparent(MENU_TREE_OBJECT_REPARENT_DEFAULT);
 	selectedOptionIndex = 0;
 	setForwardAction(nullptr);
 	setBackwardAction(nullptr);
