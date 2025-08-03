@@ -18,9 +18,13 @@ MenuTree::MenuTree()
 	shared_ptr<MenuOption> generateSeedOption = make_shared<MenuOption>(mainMenu, "Generate Seed", "Generate a random seed.");
 	shared_ptr<MenuOption> generateAddressOption = make_shared<MenuOption>(mainMenu, "Generate Vanity Address", "Generate an address.");
 	shared_ptr<MenuOption> seedRestoreOption = make_shared<MenuOption>(mainMenu, "Restore Seed", "Restore a seed from a mnemonic.");
+	shared_ptr<MenuOption> exitOption = make_shared<MenuOption>(mainMenu, "Exit", "Exit this program.");
+	exitOption->setDestination(static_pointer_cast<MenuTreeObject>(mainMenu));
+	exitOption->setOnSelectedFunction(&requestExit);
 	mainMenu->addOption(generateSeedOption);
 	mainMenu->addOption(generateAddressOption);
 	mainMenu->addOption(seedRestoreOption);
+	mainMenu->addOption(exitOption);
 
 		shared_ptr<Menu> generateSeedMenu = make_shared<Menu>("Generate Seed", mainMenu);
 		generateSeedOption->setDestination(static_pointer_cast<MenuTreeObject>(generateSeedMenu));
