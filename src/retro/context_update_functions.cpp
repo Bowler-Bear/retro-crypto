@@ -8,6 +8,11 @@ extern "C"
 
 namespace RetroCrypto
 {
+	void requestExit()
+	{
+		CoreSystem::getCoreSystem().setQuitRequested(true);
+	}
+
 	void clearSeed()
 	{
 		ContextData newData;
