@@ -132,7 +132,7 @@ MenuTree::MenuTree()
 		generateAddressMenu->addOption(generateNostrAddressOption);
 
 			shared_ptr<VanityInputPage> vanityAddressInput = make_shared<VanityInputPage>("Input Vanity Address", generateAddressMenu);
-			vanityAddressInput->setBackwardAction(&clearCryptoContext);
+			vanityAddressInput->setDestination(static_pointer_cast<MenuTreeObject>(showSeedOptionsMenu));
 			generateXMRAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(vanityAddressInput));
 			generateBTCAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(vanityAddressInput));
 			generateETHAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(vanityAddressInput));
