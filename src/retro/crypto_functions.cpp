@@ -285,15 +285,14 @@ namespace RetroCrypto
 	{
 		if (seedSize != MONERO_PRIVATE_SPEND_KEY_LENGTH)
 			return std::string("Invalid Seed Size.");
-		ContextData data = CoreSystem::getCoreSystem().getContextData();
 		bignum256modm seedAsBigNum;
-		expand256_modm(seedAsBigNum, (const unsigned char*)&data.seed, MONERO_PRIVATE_SPEND_KEY_LENGTH);
+		expand256_modm(seedAsBigNum, seed, MONERO_PRIVATE_SPEND_KEY_LENGTH);
 
 		ge25519 publicSpendKey;
 		ge25519_scalarmult_base_wrapper(&publicSpendKey, seedAsBigNum);
 
 		bignum256modm viewSecretAsBigNum;
-		xmr_hash_to_scalar(viewSecretAsBigNum, (const unsigned char*)&data.seed, MONERO_PRIVATE_SPEND_KEY_LENGTH);
+		xmr_hash_to_scalar(viewSecretAsBigNum, seed, MONERO_PRIVATE_SPEND_KEY_LENGTH);
 
 		ge25519 publicViewKey;
 		ge25519_scalarmult_base_wrapper(&publicViewKey, viewSecretAsBigNum);
