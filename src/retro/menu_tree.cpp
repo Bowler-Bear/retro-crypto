@@ -40,7 +40,8 @@ MenuTree::MenuTree()
 			generateSeedFromRNGPrompt->setDescription("You are about to generate a seed using random number generation(RNG).");
 			generateSeedFromRNGPrompt->setForwardAction(&setRandom256BitSeed);
 
-				shared_ptr<Menu> showSeedOptionsMenu = make_shared<Menu>("Seed Options", generateSeedFromRNGPrompt);
+				shared_ptr<Menu> showSeedOptionsMenu = make_shared<Menu>("Seed Options", mainMenu);
+				showSeedOptionsMenu->setShouldReparent(false);
 				showSeedOptionsMenu->setBackwardAction(&clearSeed);
 				generateSeedFromRNGPrompt->setDestination(static_pointer_cast<MenuTreeObject>(showSeedOptionsMenu));
 				shared_ptr<MenuOption> showAddressesOption = make_shared<MenuOption>(showSeedOptionsMenu, "Show Addresses", "Show addresses from this seed.");
