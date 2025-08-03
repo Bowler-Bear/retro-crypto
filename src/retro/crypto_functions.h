@@ -4,6 +4,7 @@
 
 namespace RetroCrypto
 {
+	std::string cryptoAddressFromContextData(const ContextData& data);
 	std::string cryptoAddressFromGlobalContext();
 	std::string bitcoinAddressFromGlobalContext();
 	std::string bitcoinAddressFromSeed(const ContextData& data);
