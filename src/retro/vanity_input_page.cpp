@@ -1,6 +1,8 @@
 #include "vanity_input_page.h"
 #include "core_system.h"
 #include "crypto_definitions.h"
+#include "crypto_functions.h"
+#include "context_update_functions.h"
 
 extern "C"
 {
@@ -17,12 +19,69 @@ VanityInputPage::VanityInputPage()
 : InputPage()
 {
 	prefix = "";
+	currentState = INPUT;
 }
 
 VanityInputPage::VanityInputPage(string inTitle, std::shared_ptr<MenuTreeObject> inParent)
 : InputPage(inTitle, inParent)
 {
 	prefix = "";
+	currentState = INPUT;
+}
+
+bool VanityInputPage::canConsumeAllInputs()
+{
+	return true;
+}
+
+bool VanityInputPage::consumeInput(InputType input)
+{
+
+	switch (currentState)
+	{
+	case GENERATING:
+		if (input != BACK)
+			return false;
+		generationData.currentAttempt = 0;
+		currentState = INPUT;
+		return true;
+	case FOUND:
+		return false;
+	case INPUT:
+	default:
+		if (input != FORWARD)
+			return false;
+		while (selectedOptionIndex != 0 && inputString[selectedOptionIndex] == -1)
+		{
+			updateSelectedOption(InputType::LEFT);
+		}
+		if (selectedOptionIndex == 0 && inputString[selectedOptionIndex] == -1)
+			break;
+		generationData.matchString = prefix;
+		for (size_t i = 0; i < inputString.size(); i++)
+		{
+			if (inputString[i] == -1)
+				break;
+			generationData.matchString += usedCharSet[inputString[i]];
+		}
+		currentState = GENERATING;
+	}
+	return true;
+}
+
+void VanityInputPage::reset()
+{
+	InputPage::reset();
+	prefix = "";
+	currentState = INPUT;
+	generationData = GenerationData();
+	generationData.seedData.crypto = CoreSystem::getCoreSystem().getContextData().crypto;
+}
+
+void VanityInputPage::onForward()
+{
+	MenuTreeObject::onForward();
+	CoreSystem::getCoreSystem().updateContextData(ContextUpdate::SEED | ContextUpdate::SEED_SIZE, generationData.seedData);
 }
 
 void VanityInputPage::onEnter()
@@ -50,6 +109,7 @@ void VanityInputPage::onEnter()
 		setStringSize(1);
 		break;
 	}
+	reset();
 	switch (contextData.crypto)
 	{
 	case CryptoType::BTC:
@@ -77,7 +137,29 @@ void VanityInputPage::onEnter()
 		prefix = "";
 		break;
 	}
-	InputPage::onEnter();
+}
+
+void VanityInputPage::onExit()
+{
+	clearCryptoContext();
+}
+
+void VanityInputPage::draw(shared_ptr<IDisplay> display)
+{
+	switch (currentState)
+	{
+	case GENERATING:
+	case FOUND:
+		drawBorder(display);
+		drawGenerationPage(display);
+		break;
+	case INPUT:
+	default:
+		Page::draw(display);
+		drawInput(display);
+		drawDescription(display);
+		break;
+	}
 }
 
 void VanityInputPage::drawInput(shared_ptr<IDisplay> display)
@@ -113,4 +195,76 @@ void VanityInputPage::drawInput(shared_ptr<IDisplay> display)
 		}
 		display->drawTextBox(inputBox);
 	}
+}
+
+void VanityInputPage::tick()
+{
+	switch (currentState)
+	{
+	case GENERATING:
+		{
+		shared_ptr<IRandomNumberGenerator> generator = CoreSystem::getCoreSystem().getRandomNumberGenerator();
+		for (uint8_t i = 0; i < DEFAULT_SEED_SIZE; i++)
+			generationData.seedData.seed[i] = generator->getRandom8();
+		generationData.address = cryptoAddressFromContextData(generationData.seedData);
+		generationData.currentAttempt++;
+		if (generationData.seedData.crypto == CryptoType::ETC || generationData.seedData.crypto == CryptoType::ETH)
+			for (uint8_t i = 0; i < generationData.address.size(); i++)
+				if (generationData.address[i] >= 'A' && generationData.address[i] <= 'Z')
+					generationData.address[i] = generationData.address[i] - ('Z' - 'z');
+		if (generationData.address.find(generationData.matchString) == 0)
+		{
+			currentState = FOUND;
+		}
+		}
+		break;
+	case FOUND:
+	case INPUT:
+	default:
+		return;
+	}
+}
+
+void VanityInputPage::drawGenerationPage(shared_ptr<IDisplay> display)
+{
+	string title = currentState == FOUND ? "Address Found" : "Generating Address";
+	TextBox titleBox(title);
+	titleBox.yPosition = PAGE_TITLE_BOX_Y_POSITION;
+	titleBox.xPosition = (BASE_BORDER_BOX_WIDTH-titleBox.text.size())/2;
+	titleBox.width = titleBox.text.size()+1;
+	titleBox.height = PAGE_TITLE_BOX_HEIGHT;
+	titleBox.setUnderlined();
+	titleBox.setBold();
+	titleBox.setBordered();
+	display->drawTextBox(titleBox);
+
+	TextBox attemptBox(std::string("Attempt: ")+std::to_string(generationData.currentAttempt+1));
+	attemptBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT;
+	attemptBox.xPosition = (BASE_BORDER_BOX_WIDTH-attemptBox.text.size())/2;
+	attemptBox.width = attemptBox.text.size()+1;
+	attemptBox.height = PAGE_TITLE_BOX_HEIGHT;
+	attemptBox.setBordered();
+	display->drawTextBox(attemptBox);
+
+	TextBox matchStringBox(std::string("Matching: ")+generationData.matchString);
+	matchStringBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+2*PAGE_TITLE_BOX_HEIGHT;
+	matchStringBox.xPosition = (BASE_BORDER_BOX_WIDTH-matchStringBox.text.size())/2;
+	matchStringBox.width = matchStringBox.text.size()+1;
+	matchStringBox.height = PAGE_TITLE_BOX_HEIGHT;
+	matchStringBox.setBordered();
+	display->drawTextBox(matchStringBox);
+
+	string addressTitle = currentState == FOUND ? "Found Address: " : "Current Address: ";
+	TextBox addressBox(addressTitle+generationData.address);
+	addressBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+3*PAGE_TITLE_BOX_HEIGHT;
+	addressBox.xPosition = (BASE_BORDER_BOX_WIDTH-addressBox.text.size())/2;
+	addressBox.width = addressBox.text.size()+1;
+	addressBox.height = PAGE_TITLE_BOX_HEIGHT;
+	addressBox.setBordered();
+	display->drawTextBox(addressBox);
+}
+
+shared_ptr<MenuTreeObject> VanityInputPage::getDestination()
+{
+	return destination;
 }
