@@ -40,6 +40,7 @@ void MenuSystem::tick()
 {
 	if (getInitialized() == false)
 		throw std::string("MenuSystem must be initialized before running.");
+	currentMenuPosition->tick();
 	redraw();
 }
 

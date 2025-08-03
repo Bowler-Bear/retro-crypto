@@ -109,6 +109,9 @@ namespace RetroCrypto
 		virtual void onExit()
 		{
 		}
+		virtual void tick()
+		{
+		}
 	};
 }
 #endif
