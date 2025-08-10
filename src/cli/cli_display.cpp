@@ -3,10 +3,29 @@
 #include "cli_display.h"
 #include "control_sequences.h"
 
+#ifndef BG_COLOR_RED
+#define BG_COLOR_RED DEFAULT_BG_COLOR_RED
+#endif
+#ifndef BG_COLOR_GREEN
+#define BG_COLOR_GREEN DEFAULT_BG_COLOR_GREEN
+#endif
+#ifndef BG_COLOR_BLUE
+#define BG_COLOR_BLUE DEFAULT_BG_COLOR_BLUE
+#endif
+#ifndef FG_COLOR_RED
+#define FG_COLOR_RED DEFAULT_FG_COLOR_RED
+#endif
+#ifndef FG_COLOR_GREEN
+#define FG_COLOR_GREEN DEFAULT_FG_COLOR_GREEN
+#endif
+#ifndef FG_COLOR_BLUE
+#define FG_COLOR_BLUE DEFAULT_FG_COLOR_BLUE
+#endif
+
 CLIDisplay::CLIDisplay()
 {
 	ControlSequences::sendHideCursor();
-	ColorSettings baseColors(TerminalColor(0, 0, 0), TerminalColor(255, 255, 255));
+	ColorSettings baseColors(TerminalColor(BG_COLOR_RED, BG_COLOR_GREEN, BG_COLOR_BLUE), TerminalColor(FG_COLOR_RED, FG_COLOR_GREEN, FG_COLOR_BLUE));
 	ControlSequences::sendRestoreColorSettings(baseColors);
 	termios attributes = {0};
 	tcgetattr(0, &attributes);

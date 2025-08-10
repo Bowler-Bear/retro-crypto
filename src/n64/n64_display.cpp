@@ -5,11 +5,30 @@
 
 #define DISPLAY_BUFFERS 2
 
+#ifndef BG_COLOR_RED
+#define BG_COLOR_RED DEFAULT_BG_COLOR_RED
+#endif
+#ifndef BG_COLOR_GREEN
+#define BG_COLOR_GREEN DEFAULT_BG_COLOR_GREEN
+#endif
+#ifndef BG_COLOR_BLUE
+#define BG_COLOR_BLUE DEFAULT_BG_COLOR_BLUE
+#endif
+#ifndef FG_COLOR_RED
+#define FG_COLOR_RED DEFAULT_FG_COLOR_RED
+#endif
+#ifndef FG_COLOR_GREEN
+#define FG_COLOR_GREEN DEFAULT_FG_COLOR_GREEN
+#endif
+#ifndef FG_COLOR_BLUE
+#define FG_COLOR_BLUE DEFAULT_FG_COLOR_BLUE
+#endif
+
 N64Display::N64Display()
 {
 	display_init(RESOLUTION_640x480, DEPTH_32_BPP, DISPLAY_BUFFERS, GAMMA_NONE, FILTERS_DISABLED);
-	uint32_t background(color_to_packed32(RGBA32(0, 0, 0, 255)));
-	uint32_t foreground(color_to_packed32(RGBA32(255, 255, 255, 255)));
+	uint32_t background(color_to_packed32(RGBA32(BG_COLOR_RED, BG_COLOR_GREEN, BG_COLOR_BLUE, 255)));
+	uint32_t foreground(color_to_packed32(RGBA32(FG_COLOR_RED, FG_COLOR_GREEN, FG_COLOR_BLUE, 255)));
 	graphics_set_color(foreground, background);
 	currentFrame = display_get();
 	blinkFrame = false;
