@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include <string>
 
 #include "input_system.h"

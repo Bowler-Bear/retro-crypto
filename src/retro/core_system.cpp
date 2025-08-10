@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include "core_system.h"
 #include "c_rng.h"
 

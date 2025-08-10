@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include "menu.h"
 
 using namespace RetroCrypto;
