@@ -31,7 +31,7 @@ bool MenuSystem::init()
 	if (getInitialized() == true)
 		return getInitialized();
 	if (display == nullptr)
-		throw std::string("No IDisplay passed to MenuSystem.");
+		throw std::runtime_error(std::string(__func__)+": No IDisplay passed to MenuSystem.");
 	setInitialized(true);
 	return getInitialized();
 }
@@ -39,7 +39,7 @@ bool MenuSystem::init()
 void MenuSystem::tick()
 {
 	if (getInitialized() == false)
-		throw std::string("MenuSystem must be initialized before running.");
+		throw std::runtime_error(std::string(__func__)+": MenuSystem must be initialized before running.");
 	currentMenuPosition->tick();
 	redraw();
 }
@@ -47,7 +47,7 @@ void MenuSystem::tick()
 void MenuSystem::redraw()
 {
 	if (display == nullptr)
-		throw std::string("MenuSystem has no display to draw to.");
+		throw std::runtime_error(std::string(__func__)+": MenuSystem has no display to draw to.");
 	display->clear();
 	currentMenuPosition->draw(display);
 }

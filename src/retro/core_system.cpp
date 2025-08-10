@@ -24,14 +24,14 @@ CoreSystem& CoreSystem::getCoreSystem()
 void CoreSystem::setDisplay(std::shared_ptr<IDisplay> inDisplay)
 {
 	if (menuSystem->getInitialized() == true)
-		std::string("The display has to be set before initialization.");
+		throw std::runtime_error(std::string(__func__)+": The display has to be set before initialization.");
 	menuSystem->setDisplay(inDisplay);
 }
 
 void CoreSystem::setInputCapturer(std::shared_ptr<IInputCapturer> capturer)
 {
 	if (inputSystem->getInitialized() == true)
-		std::string("The input capturer has to be set before initialization.");
+		throw std::runtime_error(std::string(__func__)+": The input capturer has to be set before initialization.");
 	inputSystem->setInputCapturer(capturer);
 }
 
@@ -48,7 +48,7 @@ std::shared_ptr<IRandomNumberGenerator> CoreSystem::getRandomNumberGenerator()
 void CoreSystem::tick()
 {
 	if (getInitialized() == false)
-		throw std::string("CoreSystem must be initialized before running.");
+		throw std::runtime_error(std::string(__func__)+": CoreSystem must be initialized before running.");
 	if (getQuitRequested() == true)
 		return;
 	if (inputSystem->getQuitRequested() != getQuitRequested())
@@ -66,9 +66,9 @@ bool CoreSystem::init()
 	if (getInitialized() == true)
 		return getInitialized();
 	if (!menuSystem->init())
-		throw std::string("MenuSystem failed to be initialized.");
+		throw std::runtime_error(std::string(__func__)+": MenuSystem failed to be initialized.");
 	if (!inputSystem->init())
-		throw std::string("InputSystem failed to be initialized.");
+		throw std::runtime_error(std::string(__func__)+": InputSystem failed to be initialized.");
 	setInitialized(true);
 	return getInitialized();
 }

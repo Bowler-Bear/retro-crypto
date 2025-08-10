@@ -111,12 +111,12 @@ void Menu::updateSelectedOption(InputType input)
 std::shared_ptr<MenuTreeObject> Menu::getDestination()
 {
 	if (selectedOptionIndex < 0 || selectedOptionIndex >= getOptionCount())
-		throw std::string("Error trying to navigate to invalid option index");
+		throw std::runtime_error(std::string(__func__)+": Error trying to navigate to invalid option index");
 	std::shared_ptr<MenuOption> selectedOption = options[selectedOptionIndex];
 	if (selectedOption == nullptr)
-		throw std::string("Selected option is a null pointer");
+		throw std::runtime_error(std::string(__func__)+": Selected option is a null pointer");
 	if (selectedOption->getDisabled())
-		throw std::string("Selected option was disabled and shouldn't have been selected");
+		throw std::runtime_error(std::string(__func__)+": Selected option was disabled and shouldn't have been selected");
 	return selectedOption->getDestination();
 }
 

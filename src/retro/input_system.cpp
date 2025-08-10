@@ -23,11 +23,11 @@ InputSystem* InputSystem::getInputSystem()
 void InputSystem::tick()
 {
 	if (getInitialized() == false)
-		throw std::string("InputSystem must be initialized before running.");
+		throw std::runtime_error(std::string(__func__)+": InputSystem must be initialized before running.");
 	if (getQuitRequested() == true)
 		return;
 	if (inputCapturer == nullptr)
-		throw std::string("No input capturer in InputSystem.");
+		throw std::runtime_error(std::string(__func__)+": No input capturer in InputSystem.");
 	inputQueue.push(inputCapturer->getInput());
 }
 
@@ -36,7 +36,7 @@ bool InputSystem::init()
 	if (getInitialized() == true)
 		return getInitialized();
 	if (inputCapturer == nullptr)
-		throw std::string("Input capturer not passed to InputSystem.");
+		throw std::runtime_error(std::string(__func__)+": Input capturer not passed to InputSystem.");
 	setInitialized(true);
 	return getInitialized();
 }
