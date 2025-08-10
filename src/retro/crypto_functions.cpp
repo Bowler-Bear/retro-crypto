@@ -36,24 +36,7 @@ namespace RetroCrypto
 
 	std::string cryptoAddressFromGlobalContext()
 	{
-		const ContextData& data(CoreSystem::getCoreSystem().getContextData());
-		switch(data.crypto)
-		{
-		case RetroCrypto::CryptoType::BTC:
-			return bitcoinAddressFromGlobalContext();
-		case RetroCrypto::CryptoType::DOGE:
-			return dogeAddressFromGlobalContext();
-		case RetroCrypto::CryptoType::ETC:
-			return ethereumClassicAddressFromGlobalContext();
-		case RetroCrypto::CryptoType::ETH:
-			return ethereumAddressFromGlobalContext();
-		case RetroCrypto::CryptoType::NOSTR:
-			return nostrAddressFromGlobalContext();
-		case RetroCrypto::CryptoType::XMR:
-			return moneroAddressFromGlobalContext();
-		default:
-			return std::string("Address generation for this crypto is currently not supported.");
-		}
+		return cryptoAddressFromContextData(CoreSystem::getCoreSystem().getContextData());
 	}
 
 	std::string bitcoinAddressFromGlobalContext()
