@@ -119,11 +119,6 @@ void InputPage::onEnter()
 	reset();
 }
 
-void InputPage::onForward()
-{
-	//set global context
-}
-
 void InputPage::drawInput(shared_ptr<IDisplay> display)
 {
 	if (usedCharSet == nullptr)

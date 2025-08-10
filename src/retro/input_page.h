@@ -27,7 +27,6 @@ namespace RetroCrypto
 		void setDestination(shared_ptr<MenuTreeObject> newDestination);
 		virtual shared_ptr<MenuTreeObject> getDestination() override;
 		virtual void onEnter() override;
-		virtual void onForward() override;
 		virtual void drawInput(shared_ptr<IDisplay> display);
 		virtual void drawDescription(shared_ptr<IDisplay> display);
 	};
