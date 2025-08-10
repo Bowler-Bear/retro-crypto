@@ -115,15 +115,5 @@ namespace RetroCrypto
 			return count;
 		}
 	};
-
-	class Context
-	{
-	private:
-		ContextData data;
-
-	public:
-		void updateData(ContextUpdate update, ContextData dataContainer);
-		ContextData getData();
-	};
 }
 #endif

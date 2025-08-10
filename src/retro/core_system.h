@@ -18,7 +18,7 @@ namespace RetroCrypto
 
 		std::shared_ptr<IRandomNumberGenerator> rng;
 
-		Context context;
+		ContextData contextData;
 
 		CoreSystem();
 

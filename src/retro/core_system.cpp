@@ -75,10 +75,29 @@ bool CoreSystem::init()
 
 void CoreSystem::updateContextData(ContextUpdate update, ContextData dataContainer)
 {
-	context.updateData(update, dataContainer);
+	if (update & ContextUpdate::SEED_SIZE && dataContainer.seedSize <= MAXIMUM_SEED_SIZE)
+	{
+		contextData.seedSize = dataContainer.seedSize;
+	}
+	if (update & ContextUpdate::SEED)
+	{
+		contextData.setSeed(dataContainer.seed, dataContainer.seedSize);
+	}
+	if (update & ContextUpdate::MNEMONIC_TYPE)
+	{
+		contextData.mnemonicType = dataContainer.mnemonicType;
+	}
+	if (update & ContextUpdate::MNEMONIC)
+	{
+		contextData.mnemonic = dataContainer.mnemonic;
+	}
+	if (update & ContextUpdate::CRYPTO)
+	{
+		contextData.crypto = dataContainer.crypto;
+	}
 }
 
 ContextData CoreSystem::getContextData()
 {
-	return context.getData();
+	return contextData;
 }
