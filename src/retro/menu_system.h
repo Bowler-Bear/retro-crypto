@@ -36,6 +36,8 @@ namespace RetroCrypto
 		void redraw();
 
 		void processInput(InputType input);
+
+		void setMenuTree(MenuTree& newMenuTree);
 	};
 }
 #endif

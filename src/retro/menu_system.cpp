@@ -93,3 +93,9 @@ void MenuSystem::processInput(InputType input)
 		break;
 	}
 }
+
+void MenuSystem::setMenuTree(MenuTree& newMenuTree)
+{
+	menuTree = newMenuTree;
+	currentMenuPosition = menuTree.getRoot();
+}

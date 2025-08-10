@@ -35,6 +35,11 @@ void CoreSystem::setInputCapturer(std::shared_ptr<IInputCapturer> capturer)
 	inputSystem->setInputCapturer(capturer);
 }
 
+void CoreSystem::setMenuTree(MenuTree& newMenuTree)
+{
+	menuSystem->setMenuTree(newMenuTree);
+}
+
 void CoreSystem::setRandomNumberGenerator(std::shared_ptr<IRandomNumberGenerator> inGenerator)
 {
 	rng = inGenerator;

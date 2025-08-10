@@ -34,6 +34,8 @@ namespace RetroCrypto
 
 		void setInputCapturer(std::shared_ptr<IInputCapturer> capturer);
 
+		void setMenuTree(MenuTree& newMenuTree);
+
 		void setRandomNumberGenerator(std::shared_ptr<IRandomNumberGenerator> rng);
 
 		std::shared_ptr<IRandomNumberGenerator> getRandomNumberGenerator();
