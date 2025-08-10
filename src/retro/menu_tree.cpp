@@ -6,6 +6,7 @@
 #include "vanity_input_page.h"
 #include "seed_gen_input_page.h"
 #include "seed_phrase_input_page.h"
+#include "seed_qr_page.h"
 #include "context_update_functions.h"
 
 using namespace RetroCrypto;
@@ -98,6 +99,9 @@ MenuTree::MenuTree()
 						addressPage->setBackwardAction(&clearMnemonicTypeContext);
 						showBIP39Option->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
 						showMoneroPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
+
+					shared_ptr<SeedQRPage> seedQrPage = make_shared<SeedQRPage>("QR Code", showSeedOptionsMenu);
+					showSeedQROption->setDestination(static_pointer_cast<MenuTreeObject>(seedQrPage));
 
 			shared_ptr<SeedGenInputPage> diceRollsInputPage = make_shared<SeedGenInputPage>("Enter Dice Rolls", generateSeedMenu);
 			diceRollsInputPage->setDestination(static_pointer_cast<MenuTreeObject>(showSeedOptionsMenu));
