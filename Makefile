@@ -24,6 +24,7 @@ BINARY_DIR = bin/
 
 INCLUDE += -I$(LIB_SRC)
 INCLUDE += -I$(LIB_SRC)interfaces
+INCLUDE += -I$(BASE_SOURCE_DIR)qr
 INCLUDE += -I$(CRYPTO_SRC)
 
 CXXFLAGS = $(INCLUDE) -DUSE_MONERO=1 -DUSE_KECCAK=1
@@ -35,6 +36,7 @@ ifeq ($(CLI_TARGET), cli)
 endif
 
 LIB_SOURCES = $(shell find $(LIB_SRC) -type f -iname '*.cpp')
+LIB_SOURCES += $(BASE_SOURCE_DIR)qr/qrcodegen.cpp
 LIB_OBJECTS = $(foreach x, $(basename $(LIB_SOURCES)), $(BASE_BUILD_DIR)$(patsubst $(BASE_SOURCE_DIR)%,%,$(x).o))
 
 CRYPTO_SOURCES = $(shell find $(CRYPTO_SRC) -type f -iname '*.c')
@@ -54,6 +56,10 @@ ifeq ($(N64_TARGET), n64)
 	BUILD_DIR = $(BASE_BUILD_DIR)$(N64_DIR)
 	include $(N64_INST)/include/n64.mk
 endif
+
+$(BASE_BUILD_DIR)qr/%.o: $(BASE_SOURCE_DIR)qr/%.cpp
+	@mkdir -p "$(dir $@)"
+	@$(CXX) $(CXXFLAGS) -c $^ -o $@
 
 $(BASE_BUILD_DIR)$(LIB_DIR)%.o: $(LIB_SRC)%.cpp
 	@mkdir -p "$(dir $@)"
