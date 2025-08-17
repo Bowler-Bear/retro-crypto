@@ -3,7 +3,7 @@
 
 #include "n64_display.h"
 
-#define DISPLAY_BUFFERS 2
+#define DISPLAY_BUFFERS 4
 
 #ifndef BG_COLOR_RED
 #define BG_COLOR_RED DEFAULT_BG_COLOR_RED
@@ -23,6 +23,9 @@
 #ifndef FG_COLOR_BLUE
 #define FG_COLOR_BLUE DEFAULT_FG_COLOR_BLUE
 #endif
+
+#define CHARACTER_PIXEL_WIDTH 8+2
+#define CHARACTER_PIXEL_HEIGHT 8+2
 
 N64Display::N64Display()
 {
@@ -61,12 +64,12 @@ void N64Display::drawBox(const Box& box)
 		{
 			for (int x = box.xPosition; x < box.xPosition+box.width; x++)
 			{
-				graphics_draw_character(currentFrame, x, y, borderChar);
+				graphics_draw_character(currentFrame, x*CHARACTER_PIXEL_WIDTH, y*CHARACTER_PIXEL_HEIGHT, borderChar);
 			}
 			continue;
 		}
-		graphics_draw_character(currentFrame, box.xPosition, y, borderChar);
-		graphics_draw_character(currentFrame, box.xPosition+box.width, y, borderChar);
+		graphics_draw_character(currentFrame, box.xPosition*CHARACTER_PIXEL_WIDTH, y*CHARACTER_PIXEL_HEIGHT, borderChar);
+		graphics_draw_character(currentFrame, (box.xPosition+box.width)*CHARACTER_PIXEL_WIDTH, y*CHARACTER_PIXEL_HEIGHT, borderChar);
 	}
 }
 
@@ -76,5 +79,5 @@ void N64Display::drawTextBox(const TextBox& textBox)
 		return;
 	if (textBox.isBordered())
 		drawBox(textBox);
-	graphics_draw_text(currentFrame, textBox.xPosition+1+(textBox.width-textBox.text.size())/2, textBox.yPosition+1+textBox.height/2,textBox.text.c_str());
+	graphics_draw_text(currentFrame, (textBox.xPosition+1+(textBox.width-textBox.text.size())/2)*CHARACTER_PIXEL_WIDTH, (textBox.yPosition+1+textBox.height/2)*CHARACTER_PIXEL_HEIGHT,textBox.text.c_str());
 }
