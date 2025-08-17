@@ -7,7 +7,6 @@
 int main()
 {
 	debug_init_isviewer();
-	debug_init_usblog();
 
 	RetroCrypto::CoreSystem& coreSystem = RetroCrypto::CoreSystem::getCoreSystem();
 	std::shared_ptr<N64Display> display = std::make_shared<N64Display>();
@@ -19,8 +18,8 @@ int main()
 	register_VI_handler((void(*)(void))rand);
 	while (!coreSystem.getQuitRequested())
 	{
-		controller_scan();
 		coreSystem.tick();
+		wait_ms(100);
 	}
 	return 0;
 }
