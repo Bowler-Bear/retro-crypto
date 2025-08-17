@@ -52,8 +52,7 @@ void N64Display::clear()
 
 void N64Display::drawBox(const Box& box)
 {
-	surface_t* currentDisplay = display_get();
-	if (!currentDisplay)
+	if (!currentFrame)
 		return;
 	char borderChar('*');
 	for (int y = box.yPosition; y < box.yPosition+box.height; y++)
@@ -62,12 +61,12 @@ void N64Display::drawBox(const Box& box)
 		{
 			for (int x = box.xPosition; x < box.xPosition+box.width; x++)
 			{
-				graphics_draw_character(currentDisplay, x, y, borderChar);
+				graphics_draw_character(currentFrame, x, y, borderChar);
 			}
 			continue;
 		}
-		graphics_draw_character(currentDisplay, box.xPosition, y, borderChar);
-		graphics_draw_character(currentDisplay, box.xPosition+box.width, y, borderChar);
+		graphics_draw_character(currentFrame, box.xPosition, y, borderChar);
+		graphics_draw_character(currentFrame, box.xPosition+box.width, y, borderChar);
 	}
 }
 
