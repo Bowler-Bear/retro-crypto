@@ -24,8 +24,11 @@
 #define FG_COLOR_BLUE DEFAULT_FG_COLOR_BLUE
 #endif
 
-#define CHARACTER_PIXEL_WIDTH 8+2
-#define CHARACTER_PIXEL_HEIGHT 8+2
+#define CHARACTER_PIXEL_WIDTH 8+1
+#define CHARACTER_PIXEL_HEIGHT 8+1
+
+#define BLINK_EVERY_X_FRAMES 50
+#define BLINK_FOR_X_FRAMES 10
 
 N64Display::N64Display()
 {
@@ -34,7 +37,7 @@ N64Display::N64Display()
 	uint32_t foreground(color_to_packed32(RGBA32(FG_COLOR_RED, FG_COLOR_GREEN, FG_COLOR_BLUE, 255)));
 	graphics_set_color(foreground, background);
 	currentFrame = display_get();
-	blinkFrame = false;
+	blinkFrameCount = 0;
 }
 
 N64Display::~N64Display()
@@ -49,7 +52,7 @@ void N64Display::redraw()
 void N64Display::clear()
 {
 	display_show(currentFrame);
-	blinkFrame = !blinkFrame;
+	blinkFrameCount = (blinkFrameCount + 1) % BLINK_EVERY_X_FRAMES;
 	currentFrame = display_get();
 }
 
@@ -75,7 +78,7 @@ void N64Display::drawBox(const Box& box)
 
 void N64Display::drawTextBox(const TextBox& textBox)
 {
-	if (textBox.isBlinking() && blinkFrame == true)
+	if (textBox.isBlinking() && blinkFrameCount >= BLINK_EVERY_X_FRAMES-BLINK_FOR_X_FRAMES)
 		return;
 	if (textBox.isBordered())
 		drawBox(textBox);
