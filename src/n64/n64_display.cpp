@@ -64,9 +64,9 @@ void N64Display::drawBox(const Box& box)
 	char borderChar('*');
 	for (int y = box.yPosition; y < box.yPosition+box.height; y++)
 	{
-		if (y == box.yPosition || y == box.yPosition+box.height)
+		if (y == box.yPosition || y == box.yPosition+box.height-1)
 		{
-			for (int x = box.xPosition; x < box.xPosition+box.width; x++)
+			for (int x = box.xPosition; x < box.xPosition+box.width+1; x++)
 			{
 				graphics_draw_character(currentFrame, x*CHARACTER_PIXEL_WIDTH, y*CHARACTER_PIXEL_HEIGHT, borderChar);
 			}
@@ -83,5 +83,5 @@ void N64Display::drawTextBox(const TextBox& textBox)
 		return;
 	if (textBox.isBordered())
 		drawBox(textBox);
-	graphics_draw_text(currentFrame, (textBox.xPosition+1+(textBox.width-textBox.text.size())/2)*CHARACTER_PIXEL_WIDTH, (textBox.yPosition+1+textBox.height/2)*CHARACTER_PIXEL_HEIGHT,textBox.text.c_str());
+	graphics_draw_text(currentFrame, (textBox.xPosition+1+(textBox.width-textBox.text.size())/2)*CHARACTER_PIXEL_WIDTH, (textBox.yPosition+textBox.height/2)*CHARACTER_PIXEL_HEIGHT,textBox.text.c_str());
 }
