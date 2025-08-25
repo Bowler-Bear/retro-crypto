@@ -74,7 +74,10 @@ void SeedGenInputPage::onForward()
 {
 	uint8_t data[0xFF] = { 0 };
 	for (uint8_t i = 0; i < stringSize; i++)
-		data[i] = usedCharSet[inputString[i]];
+		if (inputString[i] == -1)
+			break;
+		else
+			data[i] = usedCharSet[inputString[i]];
 	setSeedFromHashedData(data, stringSize);
 }
 
