@@ -72,6 +72,7 @@ shared_ptr<MenuTreeObject> SeedGenInputPage::getDestination()
 
 void SeedGenInputPage::onForward()
 {
+	MenuTreeObject::onForward();
 	uint8_t data[0xFF] = { 0 };
 	for (uint8_t i = 0; i < stringSize; i++)
 		if (inputString[i] == -1)

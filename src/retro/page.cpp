@@ -7,6 +7,8 @@ Page::Page()
 	selectedOptionIndex = 0;
 	title = "";
 	parent = nullptr;
+	forwardAction = nullptr;
+	backwardAction = nullptr;
 	shouldReparent = MENU_TREE_OBJECT_REPARENT_DEFAULT;
 }
 
