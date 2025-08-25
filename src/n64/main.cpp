@@ -19,7 +19,6 @@ int main()
 	while (!coreSystem.getQuitRequested())
 	{
 		coreSystem.tick();
-		wait_ms(100);
 	}
 	return 0;
 }
