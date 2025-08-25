@@ -54,6 +54,7 @@ void N64Display::clear()
 	display_show(currentFrame);
 	blinkFrameCount = (blinkFrameCount + 1) % BLINK_EVERY_X_FRAMES;
 	currentFrame = display_get();
+	graphics_fill_screen(currentFrame, graphics_make_color(BG_COLOR_RED, BG_COLOR_GREEN, BG_COLOR_BLUE, 255));
 }
 
 void N64Display::drawBox(const Box& box)
