@@ -18,15 +18,15 @@ namespace RetroCrypto
 		switch(data.crypto)
 		{
 		case RetroCrypto::CryptoType::BTC:
-			return bitcoinAddressFromSeed(data);
+			return bitcoinAddressFromSeedBits(data);
 		case RetroCrypto::CryptoType::DOGE:
-			return dogeAddressFromSeed(data);
+			return dogeAddressFromSeedBits(data);
 		case RetroCrypto::CryptoType::ETC:
-			return ethereumClassicAddressFromSeed(data);
+			return ethereumClassicAddressFromSeedBits(data);
 		case RetroCrypto::CryptoType::ETH:
-			return ethereumAddressFromSeed(data);
+			return ethereumAddressFromSeedBits(data);
 		case RetroCrypto::CryptoType::NOSTR:
-			return nostrAddressFromSeed(data);
+			return nostrAddressFromSeedBits(data);
 		case RetroCrypto::CryptoType::XMR:
 			return moneroAddressFromSeed(data);
 		default:
@@ -41,20 +41,20 @@ namespace RetroCrypto
 
 	std::string bitcoinAddressFromGlobalContext()
 	{
-		return bitcoinAddressFromSeed(CoreSystem::getCoreSystem().getContextData());
+		return bitcoinAddressFromSeedBits(CoreSystem::getCoreSystem().getContextData());
 	}
 
-	std::string bitcoinAddressFromSeed(const ContextData& data)
+	std::string bitcoinAddressFromSeedBits(const ContextData& data)
 	{
-		return bitcoinAddressFromSeed(data.seed, data.seedSize);
+		return bitcoinAddressFromSeedBits(data.seed, data.seedSize);
 	}
 
-	std::string bitcoinAddressFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	std::string bitcoinAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize)
 	{
 		if (seedSize != 16 && seedSize != 24 && seedSize != 32)
 			return string("Invalid seed bits size for this address.");
 		uint8_t masterNodeSeed[BITCOIN_HD_MASTER_SEED_SIZE] = { 0 };
-		mnemonic_to_seed(mnemonic_from_data(seed, seedSize), "", masterNodeSeed, nullptr);
+		mnemonic_to_seed(mnemonic_from_data(seedBits, seedSize), "", masterNodeSeed, nullptr);
 		mnemonic_clear();
 		HDNode node;
 		if (hdnode_from_seed(masterNodeSeed, BITCOIN_HD_MASTER_SEED_SIZE, BITCOIN_ELLIPTIC_CURVE, &node) != 1)
@@ -70,18 +70,18 @@ namespace RetroCrypto
 
 	std::string dogeAddressFromGlobalContext()
 	{
-		return dogeAddressFromSeed(CoreSystem::getCoreSystem().getContextData());
+		return dogeAddressFromSeedBits(CoreSystem::getCoreSystem().getContextData());
 	}
 
-	std::string dogeAddressFromSeed(const ContextData& data)
+	std::string dogeAddressFromSeedBits(const ContextData& data)
 	{
-		return dogeAddressFromSeed(data.seed, data.seedSize);
+		return dogeAddressFromSeedBits(data.seed, data.seedSize);
 	}
 
-	std::string dogeAddressFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	std::string dogeAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize)
 	{
 		HDNode node;
-		if (hdnode_from_seed(seed, seedSize, BITCOIN_ELLIPTIC_CURVE, &node) != 1)
+		if (hdnode_from_seed(seedBits, seedSize, BITCOIN_ELLIPTIC_CURVE, &node) != 1)
 			return string("Error generating master HD node.");
 		hdnode_private_ckd_prime(&node, DOGE_PATH_PURPOSE);
 		hdnode_private_ckd_prime(&node, DOGE_PATH_COIN_TYPE);
@@ -95,20 +95,20 @@ namespace RetroCrypto
 
 	std::string ethereumClassicAddressFromGlobalContext()
 	{
-		return ethereumClassicAddressFromSeed(CoreSystem::getCoreSystem().getContextData());
+		return ethereumClassicAddressFromSeedBits(CoreSystem::getCoreSystem().getContextData());
 	}
 
-	std::string ethereumClassicAddressFromSeed(const ContextData& data)
+	std::string ethereumClassicAddressFromSeedBits(const ContextData& data)
 	{
-		return ethereumClassicAddressFromSeed(data.seed, data.seedSize);
+		return ethereumClassicAddressFromSeedBits(data.seed, data.seedSize);
 	}
 
-	std::string ethereumClassicAddressFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	std::string ethereumClassicAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize)
 	{
 		if (seedSize != 16 && seedSize != 24 && seedSize != 32)
 			return string("Invalid seed bits size for this address.");
 		uint8_t masterNodeSeed[BITCOIN_HD_MASTER_SEED_SIZE] = { 0 };
-		mnemonic_to_seed(mnemonic_from_data(seed, seedSize), "", masterNodeSeed, nullptr);
+		mnemonic_to_seed(mnemonic_from_data(seedBits, seedSize), "", masterNodeSeed, nullptr);
 		mnemonic_clear();
 
 		HDNode node;
@@ -156,20 +156,20 @@ namespace RetroCrypto
 
 	std::string ethereumAddressFromGlobalContext()
 	{
-		return ethereumAddressFromSeed(CoreSystem::getCoreSystem().getContextData());
+		return ethereumAddressFromSeedBits(CoreSystem::getCoreSystem().getContextData());
 	}
 
-	std::string ethereumAddressFromSeed(const ContextData& data)
+	std::string ethereumAddressFromSeedBits(const ContextData& data)
 	{
-		return ethereumAddressFromSeed(data.seed, data.seedSize);
+		return ethereumAddressFromSeedBits(data.seed, data.seedSize);
 	}
 
-	std::string ethereumAddressFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	std::string ethereumAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize)
 	{
 		if (seedSize != 16 && seedSize != 24 && seedSize != 32)
 			return string("Invalid seed bits size for this address.");
 		uint8_t masterNodeSeed[BITCOIN_HD_MASTER_SEED_SIZE] = { 0 };
-		mnemonic_to_seed(mnemonic_from_data(seed, seedSize), "", masterNodeSeed, nullptr);
+		mnemonic_to_seed(mnemonic_from_data(seedBits, seedSize), "", masterNodeSeed, nullptr);
 		mnemonic_clear();
 
 		HDNode node;
@@ -217,20 +217,20 @@ namespace RetroCrypto
 
 	std::string nostrAddressFromGlobalContext()
 	{
-		return nostrAddressFromSeed(CoreSystem::getCoreSystem().getContextData());
+		return nostrAddressFromSeedBits(CoreSystem::getCoreSystem().getContextData());
 	}
 
-	std::string nostrAddressFromSeed(const ContextData& data)
+	std::string nostrAddressFromSeedBits(const ContextData& data)
 	{
-		return nostrAddressFromSeed(data.seed, data.seedSize);
+		return nostrAddressFromSeedBits(data.seed, data.seedSize);
 	}
 
-	std::string nostrAddressFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	std::string nostrAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize)
 	{
 		if (seedSize != 16 && seedSize != 24 && seedSize != 32)
 			return string("Invalid seed bits size for this address.");
 		uint8_t masterNodeSeed[BITCOIN_HD_MASTER_SEED_SIZE] = { 0 };
-		mnemonic_to_seed(mnemonic_from_data(seed, seedSize), "", masterNodeSeed, nullptr);
+		mnemonic_to_seed(mnemonic_from_data(seedBits, seedSize), "", masterNodeSeed, nullptr);
 		mnemonic_clear();
 
 		HDNode node;
@@ -305,17 +305,17 @@ namespace RetroCrypto
 
 	std::string bip39MnemonicFromGlobalContext()
 	{
-		return bip39MnemonicFromSeed(CoreSystem::getCoreSystem().getContextData());
+		return bip39MnemonicFromSeedBits(CoreSystem::getCoreSystem().getContextData());
 	}
 
-	std::string bip39MnemonicFromSeed(const ContextData& data)
+	std::string bip39MnemonicFromSeedBits(const ContextData& data)
 	{
-		return bip39MnemonicFromSeed(data.seed, data.seedSize);
+		return bip39MnemonicFromSeedBits(data.seed, data.seedSize);
 	}
 
-	std::string bip39MnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	std::string bip39MnemonicFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize)
 	{
-		std::string mnemonic(mnemonic_from_data(seed, seedSize));
+		std::string mnemonic(mnemonic_from_data(seedBits, seedSize));
 		mnemonic_clear();
 		return mnemonic;
 	}
