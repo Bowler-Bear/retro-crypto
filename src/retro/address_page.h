@@ -15,6 +15,8 @@ namespace RetroCrypto
 		string addressTitle;
 		string seed;
 		string seedTitle;
+		string xpriv;
+		string xpub;
 
 	public:
 		AddressPage();
@@ -24,6 +26,8 @@ namespace RetroCrypto
 		virtual void onBackward() override;
 		void drawSeed(shared_ptr<IDisplay> display);
 		void drawAddress(shared_ptr<IDisplay> display);
+		void drawXpriv(shared_ptr<IDisplay> display);
+		void drawXpub(shared_ptr<IDisplay> display);
 	};
 }
 #endif

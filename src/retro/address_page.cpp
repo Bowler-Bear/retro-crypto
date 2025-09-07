@@ -13,6 +13,8 @@ AddressPage::AddressPage()
 	addressTitle = "";
 	seedTitle = "";
 	seed = "";
+	xpriv = "";
+	xpub = "";
 }
 
 AddressPage::AddressPage(string inTitle, std::shared_ptr<MenuTreeObject> inParent)
@@ -27,17 +29,31 @@ void AddressPage::draw(shared_ptr<IDisplay> display)
 	Page::draw(display);
 	drawSeed(display);
 	drawAddress(display);
+	drawXpriv(display);
+	drawXpub(display);
 }
 
 void AddressPage::onEnter()
 {
+	ContextData contextData = CoreSystem::getCoreSystem().getContextData();
 	if (addressInformation.address == "")
 	{
 		addressInformation = cryptoAddressFromGlobalContext();
+		switch(contextData.crypto)
+		{
+		case RetroCrypto::CryptoType::NOSTR:
+			//TODO: convert xpriv to nsec using crypto function
+			break;
+		case RetroCrypto::CryptoType::XMR:
+			break;
+		default:
+			xpriv = addressInformation.getXprivAsHexString();
+			xpub = addressInformation.getXpubAsHexString();
+			break;
+		}
 	}
 	if (seed == "")
 	{
-		ContextData contextData = CoreSystem::getCoreSystem().getContextData();
 		seed = contextData.getSeedAsHexString();
 		switch(contextData.crypto)
 		{
@@ -74,9 +90,12 @@ void AddressPage::onEnter()
 void AddressPage::onBackward()
 {
 	Page::onBackward();
+	addressInformation = AddressInformation();
 	addressTitle = "";
 	seedTitle = "";
 	seed = "";
+	xpriv = "";
+	xpub = "";
 }
 
 void AddressPage::drawSeed(shared_ptr<IDisplay> display)
@@ -117,4 +136,59 @@ void AddressPage::drawAddress(shared_ptr<IDisplay> display)
 	addressBox.height = 3;
 	addressBox.setBordered();
 	display->drawTextBox(addressBox);
+}
+
+void AddressPage::drawXpriv(shared_ptr<IDisplay> display)
+{
+	switch(CoreSystem::getCoreSystem().getContextData().crypto)
+	{
+	case RetroCrypto::CryptoType::XMR:
+		return;
+	default:
+		break;
+	}
+	TextBox titleBox(string("XPriv"));
+	titleBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+11;
+	titleBox.xPosition = (BASE_BORDER_BOX_WIDTH-titleBox.text.size())/2;
+	titleBox.width = titleBox.text.size();
+	titleBox.height = 3;
+	titleBox.setUnderlined();
+	titleBox.setBold();
+	display->drawTextBox(titleBox);
+
+	TextBox keyBox(xpriv);
+	keyBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+13;
+	keyBox.xPosition = 2;
+	keyBox.width = BASE_BORDER_BOX_WIDTH-3;
+	keyBox.height = 3;
+	keyBox.setBordered();
+	display->drawTextBox(keyBox);
+}
+
+void AddressPage::drawXpub(shared_ptr<IDisplay> display)
+{
+	switch(CoreSystem::getCoreSystem().getContextData().crypto)
+	{
+	case RetroCrypto::CryptoType::NOSTR:
+	case RetroCrypto::CryptoType::XMR:
+		return;
+	default:
+		break;
+	}
+	TextBox titleBox(string("XPub"));
+	titleBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+16;
+	titleBox.xPosition = (BASE_BORDER_BOX_WIDTH-titleBox.text.size())/2;
+	titleBox.width = titleBox.text.size();
+	titleBox.height = 3;
+	titleBox.setUnderlined();
+	titleBox.setBold();
+	display->drawTextBox(titleBox);
+
+	TextBox keyBox(xpub);
+	keyBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+18;
+	keyBox.xPosition = 2;
+	keyBox.width = BASE_BORDER_BOX_WIDTH-3;
+	keyBox.height = 3;
+	keyBox.setBordered();
+	display->drawTextBox(keyBox);
 }

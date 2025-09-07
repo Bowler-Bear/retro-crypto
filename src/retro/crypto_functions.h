@@ -29,6 +29,24 @@ namespace RetroCrypto
 			for (int i = 0; i < XPRIV_BYTE_SIZE; i++)
 				xpriv[i] = 0;
 		}
+
+		std::string getKeyAsHexString(const uint8_t* keyArray, uint8_t keySize)
+		{
+			char hexString[2*XPUB_BYTE_SIZE];
+			for(int i = 0; i < keySize; i++)
+				sprintf(hexString+i*2, "%02x", keyArray[i]);
+			return std::string(hexString);
+		}
+
+		std::string getXprivAsHexString()
+		{
+			return getKeyAsHexString(xpriv, XPRIV_BYTE_SIZE);
+		}
+
+		std::string getXpubAsHexString()
+		{
+			return getKeyAsHexString(xpub, XPUB_BYTE_SIZE);
+		}
 	};
 
 	AddressInformation cryptoAddressFromContextData(const ContextData& data);
