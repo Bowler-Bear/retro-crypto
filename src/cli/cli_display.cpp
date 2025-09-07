@@ -91,12 +91,18 @@ void CLIDisplay::drawQrBox(const QrBox& qrBox)
 	{
 		for (int x = 0; x < qrBox.width; x++)
 		{
-			TextBox blockBox(qrBox.qrCode.getModule(x, y) ? "#" : " ");
+			TextBox blockBox("  ");
 			blockBox.yPosition = qrBox.yPosition+y;
-			blockBox.xPosition = qrBox.xPosition+x;
-			blockBox.width = 1;
+			blockBox.xPosition = qrBox.xPosition/2+2*x;
+			blockBox.width = 2;
 			blockBox.height = 1;
+			if (qrBox.qrCode.getModule(x, y))
+				ControlSequences::sendSetBackgroundColor(TerminalColor(FG_COLOR_RED, FG_COLOR_GREEN, FG_COLOR_BLUE));
+			else
+				ControlSequences::sendSetBackgroundColor(TerminalColor(BG_COLOR_RED, BG_COLOR_GREEN, BG_COLOR_BLUE));
 			drawTextBox(blockBox);
 		}
 	}
+	ControlSequences::sendSetBackgroundColor(TerminalColor(BG_COLOR_RED, BG_COLOR_GREEN, BG_COLOR_BLUE));
+	ControlSequences::flush();
 }
