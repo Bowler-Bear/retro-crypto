@@ -2,6 +2,7 @@
 #define ADDRESS_PAGE_H
 
 #include "page.h"
+#include "crypto_functions.h"
 
 using namespace std;
 
@@ -10,7 +11,7 @@ namespace RetroCrypto
 	class AddressPage : public Page
 	{
 	protected:
-		string address;
+		AddressInformation addressInformation;
 		string addressTitle;
 		string seed;
 		string seedTitle;

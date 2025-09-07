@@ -13,7 +13,7 @@ extern "C"
 
 namespace RetroCrypto
 {
-	std::string cryptoAddressFromContextData(const ContextData& data)
+	AddressInformation cryptoAddressFromContextData(const ContextData& data)
 	{
 		switch(data.crypto)
 		{
@@ -34,22 +34,22 @@ namespace RetroCrypto
 		}
 	}
 
-	std::string cryptoAddressFromGlobalContext()
+	AddressInformation cryptoAddressFromGlobalContext()
 	{
 		return cryptoAddressFromContextData(CoreSystem::getCoreSystem().getContextData());
 	}
 
-	std::string bitcoinAddressFromGlobalContext()
+	AddressInformation bitcoinAddressFromGlobalContext()
 	{
 		return bitcoinAddressFromSeedBits(CoreSystem::getCoreSystem().getContextData());
 	}
 
-	std::string bitcoinAddressFromSeedBits(const ContextData& data)
+	AddressInformation bitcoinAddressFromSeedBits(const ContextData& data)
 	{
 		return bitcoinAddressFromSeedBits(data.seed, data.seedSize);
 	}
 
-	std::string bitcoinAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize)
+	AddressInformation bitcoinAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize)
 	{
 		if (seedSize != 16 && seedSize != 24 && seedSize != 32)
 			return string("Invalid seed bits size for this address.");
@@ -63,22 +63,29 @@ namespace RetroCrypto
 		hdnode_private_ckd_prime(&node, BITCOIN_PATH_PURPOSE);
 		hdnode_private_ckd_prime(&node, BITCOIN_PATH_COIN_TYPE);
 		hdnode_private_ckd_prime(&node, BITCOIN_PATH_ACCOUNT);
+
+		AddressInformation AddressInformationrmation;
+		memcpy(AddressInformationrmation.xpriv, node.private_key, XPRIV_BYTE_SIZE);
+		hdnode_fill_public_key(&node);
+		memcpy(AddressInformationrmation.xpub, node.public_key, XPUB_BYTE_SIZE);
+
 		if (hdnode_get_address(&node, BITCOIN_ADDRESS_VERSION_BYTE, (char*)&btcAddress, BITCOIN_MAXIMUM_ADDRESS_LENGTH) != 0)
 			return string("Failed to generate address from HD node");
-		return btcAddress;
+		AddressInformationrmation.address = btcAddress;
+		return AddressInformationrmation;
 	}
 
-	std::string dogeAddressFromGlobalContext()
+	AddressInformation dogeAddressFromGlobalContext()
 	{
 		return dogeAddressFromSeedBits(CoreSystem::getCoreSystem().getContextData());
 	}
 
-	std::string dogeAddressFromSeedBits(const ContextData& data)
+	AddressInformation dogeAddressFromSeedBits(const ContextData& data)
 	{
 		return dogeAddressFromSeedBits(data.seed, data.seedSize);
 	}
 
-	std::string dogeAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize)
+	AddressInformation dogeAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize)
 	{
 		HDNode node;
 		if (hdnode_from_seed(seedBits, seedSize, BITCOIN_ELLIPTIC_CURVE, &node) != 1)
@@ -86,24 +93,30 @@ namespace RetroCrypto
 		hdnode_private_ckd_prime(&node, DOGE_PATH_PURPOSE);
 		hdnode_private_ckd_prime(&node, DOGE_PATH_COIN_TYPE);
 		hdnode_private_ckd_prime(&node, DOGE_PATH_ACCOUNT);
+
+		AddressInformation AddressInformationrmation;
+		memcpy(AddressInformationrmation.xpriv, node.private_key, XPRIV_BYTE_SIZE);
 		hdnode_fill_public_key(&node);
+		memcpy(AddressInformationrmation.xpub, node.public_key, XPUB_BYTE_SIZE);
+
 		char dogeAddress[BITCOIN_MAXIMUM_ADDRESS_LENGTH];
 		if (hdnode_get_address(&node, DOGE_ADDRESS_VERSION_BYTE, (char*)&dogeAddress, BITCOIN_MAXIMUM_ADDRESS_LENGTH) != 0)
 			return string("Failed to generate address from HD node");
-		return dogeAddress;
+		AddressInformationrmation.address = dogeAddress;
+		return AddressInformationrmation;
 	}
 
-	std::string ethereumClassicAddressFromGlobalContext()
+	AddressInformation ethereumClassicAddressFromGlobalContext()
 	{
 		return ethereumClassicAddressFromSeedBits(CoreSystem::getCoreSystem().getContextData());
 	}
 
-	std::string ethereumClassicAddressFromSeedBits(const ContextData& data)
+	AddressInformation ethereumClassicAddressFromSeedBits(const ContextData& data)
 	{
 		return ethereumClassicAddressFromSeedBits(data.seed, data.seedSize);
 	}
 
-	std::string ethereumClassicAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize)
+	AddressInformation ethereumClassicAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize)
 	{
 		if (seedSize != 16 && seedSize != 24 && seedSize != 32)
 			return string("Invalid seed bits size for this address.");
@@ -117,7 +130,12 @@ namespace RetroCrypto
 		hdnode_private_ckd_prime(&node, ETHEREUM_CLASSIC_PATH_PURPOSE);
 		hdnode_private_ckd_prime(&node, ETHEREUM_CLASSIC_PATH_COIN_TYPE);
 		hdnode_private_ckd_prime(&node, ETHEREUM_CLASSIC_PATH_ACCOUNT);
+
+		AddressInformation AddressInformationrmation;
+		memcpy(AddressInformationrmation.xpriv, node.private_key, XPRIV_BYTE_SIZE);
 		hdnode_fill_public_key(&node);
+		memcpy(AddressInformationrmation.xpub, node.public_key, XPUB_BYTE_SIZE);
+
 		uint8_t ethAddressBytes[ETHEREUM_CLASSIC_ADDRESS_BYTES] = { 0 };
 		if (hdnode_get_ethereum_pubkeyhash(&node, ethAddressBytes) != 1)
 			return string("Failed to generate address from HD node");
@@ -151,20 +169,21 @@ namespace RetroCrypto
 					ethAddress[2+2*i+j] = hexValue[j];
 			}
 		}
-		return ethAddress;
+		AddressInformationrmation.address = ethAddress;
+		return AddressInformationrmation;
 	}
 
-	std::string ethereumAddressFromGlobalContext()
+	AddressInformation ethereumAddressFromGlobalContext()
 	{
 		return ethereumAddressFromSeedBits(CoreSystem::getCoreSystem().getContextData());
 	}
 
-	std::string ethereumAddressFromSeedBits(const ContextData& data)
+	AddressInformation ethereumAddressFromSeedBits(const ContextData& data)
 	{
 		return ethereumAddressFromSeedBits(data.seed, data.seedSize);
 	}
 
-	std::string ethereumAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize)
+	AddressInformation ethereumAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize)
 	{
 		if (seedSize != 16 && seedSize != 24 && seedSize != 32)
 			return string("Invalid seed bits size for this address.");
@@ -178,7 +197,12 @@ namespace RetroCrypto
 		hdnode_private_ckd_prime(&node, ETHEREUM_PATH_PURPOSE);
 		hdnode_private_ckd_prime(&node, ETHEREUM_PATH_COIN_TYPE);
 		hdnode_private_ckd_prime(&node, ETHEREUM_PATH_ACCOUNT);
+
+		AddressInformation AddressInformationrmation;
+		memcpy(AddressInformationrmation.xpriv, node.private_key, XPRIV_BYTE_SIZE);
 		hdnode_fill_public_key(&node);
+		memcpy(AddressInformationrmation.xpub, node.public_key, XPUB_BYTE_SIZE);
+
 		uint8_t ethAddressBytes[ETHEREUM_ADDRESS_BYTES] = { 0 };
 		if (hdnode_get_ethereum_pubkeyhash(&node, ethAddressBytes) != 1)
 			return string("Failed to generate address from HD node");
@@ -212,20 +236,21 @@ namespace RetroCrypto
 					ethAddress[2+2*i+j] = hexValue[j];
 			}
 		}
-		return ethAddress;
+		AddressInformationrmation.address = ethAddress;
+		return AddressInformationrmation;
 	}
 
-	std::string nostrAddressFromGlobalContext()
+	AddressInformation nostrAddressFromGlobalContext()
 	{
 		return nostrAddressFromSeedBits(CoreSystem::getCoreSystem().getContextData());
 	}
 
-	std::string nostrAddressFromSeedBits(const ContextData& data)
+	AddressInformation nostrAddressFromSeedBits(const ContextData& data)
 	{
 		return nostrAddressFromSeedBits(data.seed, data.seedSize);
 	}
 
-	std::string nostrAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize)
+	AddressInformation nostrAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize)
 	{
 		if (seedSize != 16 && seedSize != 24 && seedSize != 32)
 			return string("Invalid seed bits size for this address.");
@@ -241,7 +266,12 @@ namespace RetroCrypto
 		hdnode_private_ckd_prime(&node, NOSTR_PATH_ACCOUNT);
 		hdnode_private_ckd(&node, NOSTR_PATH_CHANGE);
 		hdnode_private_ckd(&node, NOSTR_PATH_INDEX);
+
+		AddressInformation AddressInformationrmation;
+		memcpy(AddressInformationrmation.xpriv, node.private_key, XPRIV_BYTE_SIZE);
 		hdnode_fill_public_key(&node);
+		memcpy(AddressInformationrmation.xpub, node.public_key, XPUB_BYTE_SIZE);
+
 		uint8_t data[NOSTR_PUBLIC_KEY_SIZE*8/5+1] = {0};
 
 		size_t dataLength = 0;
@@ -251,20 +281,21 @@ namespace RetroCrypto
 		char nostrAddress[NOSTR_PUBLIC_ADDRESS_HRP_SIZE+NOSTR_PUBLIC_KEY_SIZE*8/5+1+8] = { 0 };
 		if (bech32_encode(nostrAddress, nostrHrp, data, dataLength, BECH32_ENCODING_BECH32) != 1)
 			return string("Error encoding nostr public key.");
-		return string(nostrAddress);
+		AddressInformationrmation.address = nostrAddress;
+		return AddressInformationrmation;
 	}
 
-	std::string moneroAddressFromGlobalContext()
+	AddressInformation moneroAddressFromGlobalContext()
 	{
 		return moneroAddressFromSeed(CoreSystem::getCoreSystem().getContextData());
 	}
 
-	std::string moneroAddressFromSeed(const ContextData& data)
+	AddressInformation moneroAddressFromSeed(const ContextData& data)
 	{
 		return moneroAddressFromSeed(data.seed, data.seedSize);
 	}
 
-	std::string moneroAddressFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	AddressInformation moneroAddressFromSeed(const uint8_t* seed, const uint8_t seedSize)
 	{
 		if (seedSize != MONERO_PRIVATE_SPEND_KEY_LENGTH)
 			return std::string("Invalid Seed Size.");

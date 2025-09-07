@@ -206,7 +206,7 @@ void VanityInputPage::tick()
 		shared_ptr<IRandomNumberGenerator> generator = CoreSystem::getCoreSystem().getRandomNumberGenerator();
 		for (uint8_t i = 0; i < DEFAULT_SEED_SIZE; i++)
 			generationData.seedData.seed[i] = generator->getRandom8();
-		generationData.address = cryptoAddressFromContextData(generationData.seedData);
+		generationData.address = cryptoAddressFromContextData(generationData.seedData).address;
 		generationData.currentAttempt++;
 		if (generationData.seedData.crypto == CryptoType::ETC || generationData.seedData.crypto == CryptoType::ETH)
 			for (uint8_t i = 0; i < generationData.address.size(); i++)

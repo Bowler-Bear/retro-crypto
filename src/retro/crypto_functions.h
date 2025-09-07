@@ -2,28 +2,55 @@
 
 #include "core_context.h"
 
+#define XPRIV_BYTE_SIZE 32
+#define XPUB_BYTE_SIZE 33
+
 namespace RetroCrypto
 {
-	std::string cryptoAddressFromContextData(const ContextData& data);
-	std::string cryptoAddressFromGlobalContext();
-	std::string bitcoinAddressFromGlobalContext();
-	std::string bitcoinAddressFromSeedBits(const ContextData& data);
-	std::string bitcoinAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize);
-	std::string dogeAddressFromGlobalContext();
-	std::string dogeAddressFromSeedBits(const ContextData& data);
-	std::string dogeAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize);
-	std::string ethereumClassicAddressFromGlobalContext();
-	std::string ethereumClassicAddressFromSeedBits(const ContextData& data);
-	std::string ethereumClassicAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize);
-	std::string ethereumAddressFromGlobalContext();
-	std::string ethereumAddressFromSeedBits(const ContextData& data);
-	std::string ethereumAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize);
-	std::string nostrAddressFromGlobalContext();
-	std::string nostrAddressFromSeedBits(const ContextData& data);
-	std::string nostrAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize);
-	std::string moneroAddressFromGlobalContext();
-	std::string moneroAddressFromSeed(const ContextData& data);
-	std::string moneroAddressFromSeed(const uint8_t* seed, const uint8_t seedSize);
+	struct AddressInformation
+	{
+		uint8_t xpriv[XPRIV_BYTE_SIZE];
+		uint8_t xpub[XPUB_BYTE_SIZE];
+		std::string address;
+
+		AddressInformation()
+		: xpriv{ 0 }, xpub{ 0 }, address("")
+		{
+		}
+
+		AddressInformation(std::string inAddress)
+		: AddressInformation()
+		{
+			address = inAddress;
+		}
+
+		~AddressInformation()
+		{
+			for (int i = 0; i < XPRIV_BYTE_SIZE; i++)
+				xpriv[i] = 0;
+		}
+	};
+
+	AddressInformation cryptoAddressFromContextData(const ContextData& data);
+	AddressInformation cryptoAddressFromGlobalContext();
+	AddressInformation bitcoinAddressFromGlobalContext();
+	AddressInformation bitcoinAddressFromSeedBits(const ContextData& data);
+	AddressInformation bitcoinAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize);
+	AddressInformation dogeAddressFromGlobalContext();
+	AddressInformation dogeAddressFromSeedBits(const ContextData& data);
+	AddressInformation dogeAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize);
+	AddressInformation ethereumClassicAddressFromGlobalContext();
+	AddressInformation ethereumClassicAddressFromSeedBits(const ContextData& data);
+	AddressInformation ethereumClassicAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize);
+	AddressInformation ethereumAddressFromGlobalContext();
+	AddressInformation ethereumAddressFromSeedBits(const ContextData& data);
+	AddressInformation ethereumAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize);
+	AddressInformation nostrAddressFromGlobalContext();
+	AddressInformation nostrAddressFromSeedBits(const ContextData& data);
+	AddressInformation nostrAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize);
+	AddressInformation moneroAddressFromGlobalContext();
+	AddressInformation moneroAddressFromSeed(const ContextData& data);
+	AddressInformation moneroAddressFromSeed(const uint8_t* seed, const uint8_t seedSize);
 	std::string mnemonicFromGlobalContext();
 	std::string bip39MnemonicFromGlobalContext();
 	std::string bip39MnemonicFromSeedBits(const ContextData& data);

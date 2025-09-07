@@ -1,6 +1,5 @@
 #include "address_page.h"
 #include "core_system.h"
-#include "crypto_functions.h"
 #include "crypto_definitions.h"
 
 #define STRING(s) #s
@@ -11,7 +10,6 @@ using namespace RetroCrypto;
 AddressPage::AddressPage()
 : Page()
 {
-	address = "";
 	addressTitle = "";
 	seedTitle = "";
 	seed = "";
@@ -33,9 +31,9 @@ void AddressPage::draw(shared_ptr<IDisplay> display)
 
 void AddressPage::onEnter()
 {
-	if (address == "")
+	if (addressInformation.address == "")
 	{
-		address = cryptoAddressFromGlobalContext();
+		addressInformation = cryptoAddressFromGlobalContext();
 	}
 	if (seed == "")
 	{
@@ -76,7 +74,6 @@ void AddressPage::onEnter()
 void AddressPage::onBackward()
 {
 	Page::onBackward();
-	address = "";
 	addressTitle = "";
 	seedTitle = "";
 	seed = "";
@@ -113,7 +110,7 @@ void AddressPage::drawAddress(shared_ptr<IDisplay> display)
 	addressTitleBox.setBold();
 	display->drawTextBox(addressTitleBox);
 
-	TextBox addressBox(address);
+	TextBox addressBox(addressInformation.address);
 	addressBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+8;
 	addressBox.xPosition = 2;
 	addressBox.width = BASE_BORDER_BOX_WIDTH-3;
