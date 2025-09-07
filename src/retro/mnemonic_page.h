@@ -11,6 +11,7 @@ namespace RetroCrypto
 	{
 	protected:
 		string mnemonic;
+		string mnemonicName;
 		string seed;
 
 	public:

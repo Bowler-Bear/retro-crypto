@@ -13,6 +13,7 @@ MnemonicPage::MnemonicPage()
 {
 	seed = "";
 	mnemonic = "";
+	mnemonicName = "";
 }
 
 MnemonicPage::MnemonicPage(string inTitle, std::shared_ptr<MenuTreeObject> inParent)
@@ -31,15 +32,21 @@ void MnemonicPage::draw(shared_ptr<IDisplay> display)
 
 void MnemonicPage::onEnter()
 {
-	if (seed == "")
+	ContextData contextData = CoreSystem::getCoreSystem().getContextData();
+	seed = contextData.getSeedAsHexString();
+	switch(contextData.mnemonicType)
 	{
-		ContextData contextData = CoreSystem::getCoreSystem().getContextData();
-		seed = contextData.getSeedAsHexString();
+	case RetroCrypto::MnemonicType::BIP39:
+		mnemonicName = std::string("BIP39(24 words)");
+		break;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO:
+		mnemonicName = std::string("English Legacy Monero Phrase");
+		break;
+	default:
+		mnemonicName = std::string("Seed Phrase");
+		break;
 	}
-	if (mnemonic == "")
-	{
-		mnemonic = mnemonicFromGlobalContext();
-	}
+	mnemonic = mnemonicFromGlobalContext();
 }
 
 void MnemonicPage::onBackward()
@@ -47,6 +54,7 @@ void MnemonicPage::onBackward()
 	Page::onBackward();
 	seed = "";
 	mnemonic = "";
+	mnemonicName = "";
 }
 
 void MnemonicPage::drawSeed(shared_ptr<IDisplay> display)
@@ -71,7 +79,7 @@ void MnemonicPage::drawSeed(shared_ptr<IDisplay> display)
 
 void MnemonicPage::drawMnemonic(shared_ptr<IDisplay> display)
 {
-	TextBox mnemonicTitleBox(string("Seed Phrase"));
+	TextBox mnemonicTitleBox(mnemonicName);
 	mnemonicTitleBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+5;
 	mnemonicTitleBox.xPosition = (BASE_BORDER_BOX_WIDTH-mnemonicTitleBox.text.size())/2;
 	mnemonicTitleBox.width = mnemonicTitleBox.text.size();
