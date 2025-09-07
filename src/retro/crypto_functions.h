@@ -66,6 +66,7 @@ namespace RetroCrypto
 	AddressInformation nostrAddressFromGlobalContext();
 	AddressInformation nostrAddressFromSeedBits(const ContextData& data);
 	AddressInformation nostrAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize);
+	std::string nsecFromXpriv(const uint8_t* xpriv);
 	AddressInformation moneroAddressFromGlobalContext();
 	AddressInformation moneroAddressFromSeed(const ContextData& data);
 	AddressInformation moneroAddressFromSeed(const uint8_t* seed, const uint8_t seedSize);

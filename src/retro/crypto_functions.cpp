@@ -285,6 +285,20 @@ namespace RetroCrypto
 		return AddressInformationrmation;
 	}
 
+	std::string nsecFromXpriv(const uint8_t* xpriv)
+	{
+		uint8_t data[NOSTR_PUBLIC_KEY_SIZE*8/5+1] = {0};
+
+		size_t dataLength = 0;
+		if (convert_bits_wrapper(data, &dataLength, 5, xpriv, NOSTR_PRIVATE_KEY_SIZE, 8, 1) != 1)
+			return std::string("Failed to convert private key from 8 bit array to 5 bit array.");
+		const char nsecHrp[NOSTR_SECRET_ADDRESS_HRP_SIZE] =  "nsec\0";
+		char nsec[NOSTR_SECRET_ADDRESS_HRP_SIZE+NOSTR_PRIVATE_KEY_SIZE*8/5+1+8] = { 0 };
+		if (bech32_encode(nsec, nsecHrp, data, dataLength, BECH32_ENCODING_BECH32) != 1)
+			return string("Error encoding nostr secret key.");
+		return nsec;
+	}
+
 	AddressInformation moneroAddressFromGlobalContext()
 	{
 		return moneroAddressFromSeed(CoreSystem::getCoreSystem().getContextData());

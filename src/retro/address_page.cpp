@@ -42,7 +42,7 @@ void AddressPage::onEnter()
 		switch(contextData.crypto)
 		{
 		case RetroCrypto::CryptoType::NOSTR:
-			//TODO: convert xpriv to nsec using crypto function
+			xpriv = nsecFromXpriv(addressInformation.xpriv);
 			break;
 		case RetroCrypto::CryptoType::XMR:
 			break;
