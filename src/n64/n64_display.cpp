@@ -24,8 +24,8 @@
 #define FG_COLOR_BLUE DEFAULT_FG_COLOR_BLUE
 #endif
 
-#define CHARACTER_PIXEL_WIDTH 8+1
-#define CHARACTER_PIXEL_HEIGHT 8+1
+#define CHARACTER_PIXEL_WIDTH 8
+#define CHARACTER_PIXEL_HEIGHT 8
 
 #define BLINK_EVERY_X_FRAMES 50
 #define BLINK_FOR_X_FRAMES 10
@@ -84,4 +84,20 @@ void N64Display::drawTextBox(const TextBox& textBox)
 	if (textBox.isBordered())
 		drawBox(textBox);
 	graphics_draw_text(currentFrame, (textBox.xPosition+1+(textBox.width-textBox.text.size())/2)*CHARACTER_PIXEL_WIDTH, (textBox.yPosition+textBox.height/2)*CHARACTER_PIXEL_HEIGHT,textBox.text.c_str());
+}
+
+void N64Display::drawQrBox(const QrBox& qrBox)
+{
+	const uint32_t foregroundColor = graphics_make_color(FG_COLOR_RED, FG_COLOR_GREEN, FG_COLOR_BLUE, 255);
+	for (int y = 0; y < qrBox.height; y++)
+	{
+		for (int x = 0; x < qrBox.width; x++)
+		{
+			if (!qrBox.qrCode.getModule(x, y))
+				continue;
+			for (int j = 0; j < CHARACTER_PIXEL_HEIGHT; j++)
+				for (int i = 0; i < CHARACTER_PIXEL_WIDTH; i++)
+					graphics_draw_pixel(currentFrame, (qrBox.xPosition+x)*CHARACTER_PIXEL_WIDTH+i, (qrBox.yPosition+y)*CHARACTER_PIXEL_HEIGHT+j, foregroundColor);
+		}
+	}
 }

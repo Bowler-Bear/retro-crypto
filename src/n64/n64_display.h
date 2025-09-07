@@ -19,5 +19,6 @@ public:
 	virtual void clear() override;
 	virtual void drawBox(const Box& box) override;
 	virtual void drawTextBox(const TextBox& textBox) override;
+	virtual void drawQrBox(const QrBox& qrBox) override;
 };
 #endif

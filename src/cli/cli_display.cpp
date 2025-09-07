@@ -84,3 +84,19 @@ void CLIDisplay::drawTextBox(const TextBox& textBox)
 	ControlSequences::sendText(textBox);
 	ControlSequences::flush();
 }
+
+void CLIDisplay::drawQrBox(const QrBox& qrBox)
+{
+	for (int y = 0; y < qrBox.height; y++)
+	{
+		for (int x = 0; x < qrBox.width; x++)
+		{
+			TextBox blockBox(qrBox.qrCode.getModule(x, y) ? "#" : " ");
+			blockBox.yPosition = qrBox.yPosition+y;
+			blockBox.xPosition = qrBox.xPosition+x;
+			blockBox.width = 1;
+			blockBox.height = 1;
+			drawTextBox(blockBox);
+		}
+	}
+}

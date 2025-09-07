@@ -5,6 +5,7 @@
 #include <string>
 
 #include "drawable.h"
+#include "qrcodegen.hpp"
 
 namespace RetroCrypto
 {
@@ -103,6 +104,16 @@ namespace RetroCrypto
 		}
 	};
 
+	struct QrBox : public Box
+	{
+		qrcodegen::QrCode qrCode;
+
+		QrBox(qrcodegen::QrCode inCode)
+		: qrCode(inCode)
+		{
+		}
+	};
+
 	class IDisplay: public IDrawable
 	{
 	public:
@@ -112,6 +123,7 @@ namespace RetroCrypto
 		virtual void redraw() override = 0;
 		virtual void drawBox(const Box& box) = 0;
 		virtual void drawTextBox(const TextBox& textBox) = 0;
+		virtual void drawQrBox(const QrBox& qrBox) = 0;
 		virtual void clear() override = 0;
 	};
 }
