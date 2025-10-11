@@ -5,6 +5,7 @@
 extern "C"
 {
 #include "monero/monero.h"
+#include "base58.h"
 #include "bip32.h"
 #include "bip39.h"
 #include "segwit_addr.h"
@@ -73,6 +74,13 @@ namespace RetroCrypto
 			return string("Failed to generate address from HD node");
 		AddressInformationrmation.address = btcAddress;
 		return AddressInformationrmation;
+	}
+
+	std::string privateKeyAsBitcoinWIF(const uint8_t* privateKey)
+	{
+		char wif[MAX_WIF_SIZE];
+		ecdsa_get_wif(privateKey, BITCOIN_WIF_VERSION_BYTE, HASHER_SHA2D, wif, MAX_WIF_SIZE);
+               return wif;
 	}
 
 	AddressInformation dogeAddressFromGlobalContext()
