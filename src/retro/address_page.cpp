@@ -164,24 +164,26 @@ void AddressPage::drawPrivateKey(shared_ptr<IDisplay> display)
 	keyBox.setBordered();
 	display->drawTextBox(keyBox);
 
-	if (CoreSystem::getCoreSystem().getContextData().crypto == RetroCrypto::CryptoType::BTC)
+	switch(CoreSystem::getCoreSystem().getContextData().crypto)
 	{
+	case RetroCrypto::CryptoType::BTC:
+		keyBox.text = privateKeyAsBitcoinWIF(addressInformation.privateKey);
+		goto wif;
+	case RetroCrypto::CryptoType::DOGE:
+		keyBox.text = privateKeyAsDogeImportKey(addressInformation.privateKey);
+		goto wif;
+	wif:
 		titleBox.text = string("Private Key(Wallet Import Format/WIF)");
 		titleBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+21;
 		titleBox.xPosition = (BASE_BORDER_BOX_WIDTH-titleBox.text.size())/2;
 		titleBox.width = titleBox.text.size();
-		titleBox.height = 3;
-		titleBox.setUnderlined();
-		titleBox.setBold();
 		display->drawTextBox(titleBox);
 
-		keyBox.text = privateKeyAsBitcoinWIF(addressInformation.privateKey);
 		keyBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+23;
-		keyBox.xPosition = 2;
-		keyBox.width = BASE_BORDER_BOX_WIDTH-3;
-		keyBox.height = 3;
-		keyBox.setBordered();
 		display->drawTextBox(keyBox);
+		break;
+	default:
+		break;
 	}
 }
 
