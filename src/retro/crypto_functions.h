@@ -58,6 +58,7 @@ namespace RetroCrypto
 	AddressInformation dogeAddressFromGlobalContext();
 	AddressInformation dogeAddressFromSeedBits(const ContextData& data);
 	AddressInformation dogeAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize);
+	std::string privateKeyAsDogeImportKey(const uint8_t privateKey[PRIVATE_KEY_BYTE_SIZE]);
 	AddressInformation ethereumClassicAddressFromGlobalContext();
 	AddressInformation ethereumClassicAddressFromSeedBits(const ContextData& data);
 	AddressInformation ethereumClassicAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize);

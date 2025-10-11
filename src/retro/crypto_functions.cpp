@@ -114,6 +114,13 @@ namespace RetroCrypto
 		return AddressInformationrmation;
 	}
 
+	std::string privateKeyAsDogeImportKey(const uint8_t* privateKey)
+	{
+		char wif[MAX_WIF_SIZE];
+		ecdsa_get_wif(privateKey, DOGE_SECRET_KEY_VERSION_BYTE, HASHER_SHA2D, wif, MAX_WIF_SIZE);
+               return wif;
+	}
+
 	AddressInformation ethereumClassicAddressFromGlobalContext()
 	{
 		return ethereumClassicAddressFromSeedBits(CoreSystem::getCoreSystem().getContextData());
