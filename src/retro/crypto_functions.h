@@ -2,19 +2,19 @@
 
 #include "core_context.h"
 
-#define XPRIV_BYTE_SIZE 32
-#define XPUB_BYTE_SIZE 33
+#define PRIVATE_KEY_BYTE_SIZE 32
+#define PUBLIC_KEY_BYTE_SIZE 33
 
 namespace RetroCrypto
 {
 	struct AddressInformation
 	{
-		uint8_t xpriv[XPRIV_BYTE_SIZE];
-		uint8_t xpub[XPUB_BYTE_SIZE];
+		uint8_t privateKey[PRIVATE_KEY_BYTE_SIZE];
+		uint8_t publicKey[PUBLIC_KEY_BYTE_SIZE];
 		std::string address;
 
 		AddressInformation()
-		: xpriv{ 0 }, xpub{ 0 }, address("")
+		: privateKey{ 0 }, publicKey{ 0 }, address("")
 		{
 		}
 
@@ -26,26 +26,26 @@ namespace RetroCrypto
 
 		~AddressInformation()
 		{
-			for (int i = 0; i < XPRIV_BYTE_SIZE; i++)
-				xpriv[i] = 0;
+			for (int i = 0; i < PRIVATE_KEY_BYTE_SIZE; i++)
+				privateKey[i] = 0;
 		}
 
 		std::string getKeyAsHexString(const uint8_t* keyArray, uint8_t keySize)
 		{
-			char hexString[2*XPUB_BYTE_SIZE];
+			char hexString[2*PUBLIC_KEY_BYTE_SIZE];
 			for(int i = 0; i < keySize; i++)
 				sprintf(hexString+i*2, "%02x", keyArray[i]);
 			return std::string(hexString);
 		}
 
-		std::string getXprivAsHexString()
+		std::string getPrivateKeyAsHexString()
 		{
-			return getKeyAsHexString(xpriv, XPRIV_BYTE_SIZE);
+			return getKeyAsHexString(privateKey, PRIVATE_KEY_BYTE_SIZE);
 		}
 
-		std::string getXpubAsHexString()
+		std::string getPublicKeyAsHexString()
 		{
-			return getKeyAsHexString(xpub, XPUB_BYTE_SIZE);
+			return getKeyAsHexString(publicKey, PUBLIC_KEY_BYTE_SIZE);
 		}
 	};
 
@@ -66,7 +66,7 @@ namespace RetroCrypto
 	AddressInformation nostrAddressFromGlobalContext();
 	AddressInformation nostrAddressFromSeedBits(const ContextData& data);
 	AddressInformation nostrAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize);
-	std::string nsecFromXpriv(const uint8_t* xpriv);
+	std::string nsecFromPrivateKey(const uint8_t* privateKey);
 	AddressInformation moneroAddressFromGlobalContext();
 	AddressInformation moneroAddressFromSeed(const ContextData& data);
 	AddressInformation moneroAddressFromSeed(const uint8_t* seed, const uint8_t seedSize);

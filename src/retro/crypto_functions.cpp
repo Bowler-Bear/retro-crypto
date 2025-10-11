@@ -65,9 +65,9 @@ namespace RetroCrypto
 		hdnode_private_ckd_prime(&node, BITCOIN_PATH_ACCOUNT);
 
 		AddressInformation AddressInformationrmation;
-		memcpy(AddressInformationrmation.xpriv, node.private_key, XPRIV_BYTE_SIZE);
+		memcpy(AddressInformationrmation.privateKey, node.private_key, PRIVATE_KEY_BYTE_SIZE);
 		hdnode_fill_public_key(&node);
-		memcpy(AddressInformationrmation.xpub, node.public_key, XPUB_BYTE_SIZE);
+		memcpy(AddressInformationrmation.publicKey, node.public_key, PUBLIC_KEY_BYTE_SIZE);
 
 		if (hdnode_get_address(&node, BITCOIN_ADDRESS_VERSION_BYTE, (char*)&btcAddress, BITCOIN_MAXIMUM_ADDRESS_LENGTH) != 0)
 			return string("Failed to generate address from HD node");
@@ -95,9 +95,9 @@ namespace RetroCrypto
 		hdnode_private_ckd_prime(&node, DOGE_PATH_ACCOUNT);
 
 		AddressInformation AddressInformationrmation;
-		memcpy(AddressInformationrmation.xpriv, node.private_key, XPRIV_BYTE_SIZE);
+		memcpy(AddressInformationrmation.privateKey, node.private_key, PRIVATE_KEY_BYTE_SIZE);
 		hdnode_fill_public_key(&node);
-		memcpy(AddressInformationrmation.xpub, node.public_key, XPUB_BYTE_SIZE);
+		memcpy(AddressInformationrmation.publicKey, node.public_key, PUBLIC_KEY_BYTE_SIZE);
 
 		char dogeAddress[BITCOIN_MAXIMUM_ADDRESS_LENGTH];
 		if (hdnode_get_address(&node, DOGE_ADDRESS_VERSION_BYTE, (char*)&dogeAddress, BITCOIN_MAXIMUM_ADDRESS_LENGTH) != 0)
@@ -132,9 +132,9 @@ namespace RetroCrypto
 		hdnode_private_ckd_prime(&node, ETHEREUM_CLASSIC_PATH_ACCOUNT);
 
 		AddressInformation AddressInformationrmation;
-		memcpy(AddressInformationrmation.xpriv, node.private_key, XPRIV_BYTE_SIZE);
+		memcpy(AddressInformationrmation.privateKey, node.private_key, PRIVATE_KEY_BYTE_SIZE);
 		hdnode_fill_public_key(&node);
-		memcpy(AddressInformationrmation.xpub, node.public_key, XPUB_BYTE_SIZE);
+		memcpy(AddressInformationrmation.publicKey, node.public_key, PUBLIC_KEY_BYTE_SIZE);
 
 		uint8_t ethAddressBytes[ETHEREUM_CLASSIC_ADDRESS_BYTES] = { 0 };
 		if (hdnode_get_ethereum_pubkeyhash(&node, ethAddressBytes) != 1)
@@ -199,9 +199,9 @@ namespace RetroCrypto
 		hdnode_private_ckd_prime(&node, ETHEREUM_PATH_ACCOUNT);
 
 		AddressInformation AddressInformationrmation;
-		memcpy(AddressInformationrmation.xpriv, node.private_key, XPRIV_BYTE_SIZE);
+		memcpy(AddressInformationrmation.privateKey, node.private_key, PRIVATE_KEY_BYTE_SIZE);
 		hdnode_fill_public_key(&node);
-		memcpy(AddressInformationrmation.xpub, node.public_key, XPUB_BYTE_SIZE);
+		memcpy(AddressInformationrmation.publicKey, node.public_key, PUBLIC_KEY_BYTE_SIZE);
 
 		uint8_t ethAddressBytes[ETHEREUM_ADDRESS_BYTES] = { 0 };
 		if (hdnode_get_ethereum_pubkeyhash(&node, ethAddressBytes) != 1)
@@ -268,9 +268,9 @@ namespace RetroCrypto
 		hdnode_private_ckd(&node, NOSTR_PATH_INDEX);
 
 		AddressInformation AddressInformationrmation;
-		memcpy(AddressInformationrmation.xpriv, node.private_key, XPRIV_BYTE_SIZE);
+		memcpy(AddressInformationrmation.privateKey, node.private_key, PRIVATE_KEY_BYTE_SIZE);
 		hdnode_fill_public_key(&node);
-		memcpy(AddressInformationrmation.xpub, node.public_key, XPUB_BYTE_SIZE);
+		memcpy(AddressInformationrmation.publicKey, node.public_key, PUBLIC_KEY_BYTE_SIZE);
 
 		uint8_t data[NOSTR_PUBLIC_KEY_SIZE*8/5+1] = {0};
 
@@ -285,12 +285,12 @@ namespace RetroCrypto
 		return AddressInformationrmation;
 	}
 
-	std::string nsecFromXpriv(const uint8_t* xpriv)
+	std::string nsecFromPrivateKey(const uint8_t* privateKey)
 	{
 		uint8_t data[NOSTR_PUBLIC_KEY_SIZE*8/5+1] = {0};
 
 		size_t dataLength = 0;
-		if (convert_bits_wrapper(data, &dataLength, 5, xpriv, NOSTR_PRIVATE_KEY_SIZE, 8, 1) != 1)
+		if (convert_bits_wrapper(data, &dataLength, 5, privateKey, NOSTR_PRIVATE_KEY_SIZE, 8, 1) != 1)
 			return std::string("Failed to convert private key from 8 bit array to 5 bit array.");
 		const char nsecHrp[NOSTR_SECRET_ADDRESS_HRP_SIZE] =  "nsec\0";
 		char nsec[NOSTR_SECRET_ADDRESS_HRP_SIZE+NOSTR_PRIVATE_KEY_SIZE*8/5+1+8] = { 0 };

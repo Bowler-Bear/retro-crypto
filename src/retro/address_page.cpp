@@ -13,8 +13,8 @@ AddressPage::AddressPage()
 	addressTitle = "";
 	seedTitle = "";
 	seed = "";
-	xpriv = "";
-	xpub = "";
+	privateKey = "";
+	publicKey = "";
 }
 
 AddressPage::AddressPage(string inTitle, std::shared_ptr<MenuTreeObject> inParent)
@@ -29,8 +29,8 @@ void AddressPage::draw(shared_ptr<IDisplay> display)
 	Page::draw(display);
 	drawSeed(display);
 	drawAddress(display);
-	drawXpriv(display);
-	drawXpub(display);
+	drawPrivateKey(display);
+	drawPublicKey(display);
 }
 
 void AddressPage::onEnter()
@@ -42,13 +42,13 @@ void AddressPage::onEnter()
 		switch(contextData.crypto)
 		{
 		case RetroCrypto::CryptoType::NOSTR:
-			xpriv = nsecFromXpriv(addressInformation.xpriv);
+			privateKey = nsecFromPrivateKey(addressInformation.privateKey);
 			break;
 		case RetroCrypto::CryptoType::XMR:
 			break;
 		default:
-			xpriv = addressInformation.getXprivAsHexString();
-			xpub = addressInformation.getXpubAsHexString();
+			privateKey = addressInformation.getPrivateKeyAsHexString();
+			publicKey = addressInformation.getPublicKeyAsHexString();
 			break;
 		}
 	}
@@ -94,8 +94,8 @@ void AddressPage::onBackward()
 	addressTitle = "";
 	seedTitle = "";
 	seed = "";
-	xpriv = "";
-	xpub = "";
+	privateKey = "";
+	publicKey = "";
 }
 
 void AddressPage::drawSeed(shared_ptr<IDisplay> display)
@@ -138,7 +138,7 @@ void AddressPage::drawAddress(shared_ptr<IDisplay> display)
 	display->drawTextBox(addressBox);
 }
 
-void AddressPage::drawXpriv(shared_ptr<IDisplay> display)
+void AddressPage::drawPrivateKey(shared_ptr<IDisplay> display)
 {
 	switch(CoreSystem::getCoreSystem().getContextData().crypto)
 	{
@@ -147,7 +147,7 @@ void AddressPage::drawXpriv(shared_ptr<IDisplay> display)
 	default:
 		break;
 	}
-	TextBox titleBox(string("XPriv"));
+	TextBox titleBox(string("Private Key(Hex Format)"));
 	titleBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+11;
 	titleBox.xPosition = (BASE_BORDER_BOX_WIDTH-titleBox.text.size())/2;
 	titleBox.width = titleBox.text.size();
@@ -156,7 +156,7 @@ void AddressPage::drawXpriv(shared_ptr<IDisplay> display)
 	titleBox.setBold();
 	display->drawTextBox(titleBox);
 
-	TextBox keyBox(xpriv);
+	TextBox keyBox(privateKey);
 	keyBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+13;
 	keyBox.xPosition = 2;
 	keyBox.width = BASE_BORDER_BOX_WIDTH-3;
@@ -165,7 +165,7 @@ void AddressPage::drawXpriv(shared_ptr<IDisplay> display)
 	display->drawTextBox(keyBox);
 }
 
-void AddressPage::drawXpub(shared_ptr<IDisplay> display)
+void AddressPage::drawPublicKey(shared_ptr<IDisplay> display)
 {
 	switch(CoreSystem::getCoreSystem().getContextData().crypto)
 	{
@@ -175,7 +175,7 @@ void AddressPage::drawXpub(shared_ptr<IDisplay> display)
 	default:
 		break;
 	}
-	TextBox titleBox(string("XPub"));
+	TextBox titleBox(string("Public Key(Hex Format)"));
 	titleBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+16;
 	titleBox.xPosition = (BASE_BORDER_BOX_WIDTH-titleBox.text.size())/2;
 	titleBox.width = titleBox.text.size();
@@ -184,7 +184,7 @@ void AddressPage::drawXpub(shared_ptr<IDisplay> display)
 	titleBox.setBold();
 	display->drawTextBox(titleBox);
 
-	TextBox keyBox(xpub);
+	TextBox keyBox(publicKey);
 	keyBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+18;
 	keyBox.xPosition = 2;
 	keyBox.width = BASE_BORDER_BOX_WIDTH-3;
