@@ -1,4 +1,5 @@
 #include <stdexcept>
+#include <math.h>
 
 #include "menu.h"
 
@@ -46,11 +47,21 @@ void Menu::drawTitle(std::shared_ptr<IDisplay> display)
 void Menu::drawOptions(std::shared_ptr<IDisplay> display)
 {
 	const uint8_t optionCount = getOptionCount();
-	for(uint8_t i = 0; i < optionCount; i++)
+	const uint8_t startIndex = min(max(0, (int)selectedOptionIndex-MENU_MAX_OPTIONS_SHOWN/2), max(0, (int)optionCount-MENU_MAX_OPTIONS_SHOWN));
+	const uint8_t endIndex = min(startIndex + min(MENU_MAX_OPTIONS_SHOWN, (int)optionCount), (int)optionCount);
+	for(uint8_t i = startIndex; i < endIndex; i++)
 	{
 		const shared_ptr<MenuOption> option = options[i];
-		TextBox optionBox(i == selectedOptionIndex?"-> "+option->getLabel()+" <-":option->getLabel());
-		optionBox.yPosition = (MENU_TITLE_BOX_Y_POSITION+3)+2*i;
+		TextBox optionBox("");
+		if (i == selectedOptionIndex)
+			optionBox.text = "-> "+option->getLabel()+" <-";
+		else if (i == startIndex && startIndex != 0)
+			optionBox.text = "---Previous---";
+		else if (i == endIndex-1 && endIndex != optionCount)
+			optionBox.text = "---Next---";
+		else
+			optionBox.text = option->getLabel();
+		optionBox.yPosition = (MENU_TITLE_BOX_Y_POSITION+3)+2*(i-startIndex);
 		optionBox.xPosition = (MENU_BOX_WIDTH-optionBox.text.size())/2;
 		optionBox.width = optionBox.text.size()+3;
 		optionBox.height = 3;
