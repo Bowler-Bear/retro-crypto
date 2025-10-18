@@ -22,6 +22,28 @@ namespace RetroCrypto
 
 	void setLegacyMoneroEnglishMnemonicContext();
 
+	void setLegacyMoneroGermanMnemonicContext();
+
+	void setLegacyMoneroSpanishMnemonicContext();
+
+	void setLegacyMoneroFrenchMnemonicContext();
+
+	void setLegacyMoneroItalianMnemonicContext();
+
+	void setLegacyMoneroDutchMnemonicContext();
+
+	void setLegacyMoneroPortugueseMnemonicContext();
+
+	void setLegacyMoneroRussianMnemonicContext();
+
+	void setLegacyMoneroJapaneseMnemonicContext();
+
+	void setLegacyMoneroChineseMnemonicContext();
+
+	void setLegacyMoneroEsperantoMnemonicContext();
+
+	void setLegacyMoneroLojbanMnemonicContext();
+
 	void clearMnemonicContext();
 
 	void setMnemonicContext(std::string inMnemonic);

@@ -64,6 +64,61 @@ namespace RetroCrypto
 		setMnemonicTypeContext(MnemonicType::LEGACY_MONERO_ENGLISH);
 	}
 
+	void setLegacyMoneroGermanMnemonicContext()
+	{
+		setMnemonicTypeContext(MnemonicType::LEGACY_MONERO_GERMAN);
+	}
+
+	void setLegacyMoneroSpanishMnemonicContext()
+	{
+		setMnemonicTypeContext(MnemonicType::LEGACY_MONERO_SPANISH);
+	}
+
+	void setLegacyMoneroFrenchMnemonicContext()
+	{
+		setMnemonicTypeContext(MnemonicType::LEGACY_MONERO_FRENCH);
+	}
+
+	void setLegacyMoneroItalianMnemonicContext()
+	{
+		setMnemonicTypeContext(MnemonicType::LEGACY_MONERO_ITALIAN);
+	}
+
+	void setLegacyMoneroDutchMnemonicContext()
+	{
+		setMnemonicTypeContext(MnemonicType::LEGACY_MONERO_DUTCH);
+	}
+
+	void setLegacyMoneroPortugueseMnemonicContext()
+	{
+		setMnemonicTypeContext(MnemonicType::LEGACY_MONERO_PORTUGUESE);
+	}
+
+	void setLegacyMoneroRussianMnemonicContext()
+	{
+		setMnemonicTypeContext(MnemonicType::LEGACY_MONERO_RUSSIAN);
+	}
+
+	void setLegacyMoneroJapaneseMnemonicContext()
+	{
+		setMnemonicTypeContext(MnemonicType::LEGACY_MONERO_JAPANESE);
+	}
+
+	void setLegacyMoneroChineseMnemonicContext()
+	{
+		setMnemonicTypeContext(MnemonicType::LEGACY_MONERO_CHINESE);
+	}
+
+	void setLegacyMoneroEsperantoMnemonicContext()
+	{
+		setMnemonicTypeContext(MnemonicType::LEGACY_MONERO_ESPERANTO);
+	}
+
+	void setLegacyMoneroLojbanMnemonicContext()
+	{
+		setMnemonicTypeContext(MnemonicType::LEGACY_MONERO_LOJBAN);
+	}
+
 	void clearMnemonicContext()
 	{
 		CoreSystem::getCoreSystem().updateContextData(ContextUpdate::MNEMONIC, ContextData());
