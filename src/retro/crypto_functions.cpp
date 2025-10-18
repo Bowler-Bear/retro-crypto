@@ -396,4 +396,169 @@ namespace RetroCrypto
 		clear_legacy_monero_mnemonic();
 		return mnemonic;
 	}
+
+	std::string legacyMoneroGermanMnemonicFromGlobalContext()
+	{
+		return legacyMoneroGermanMnemonicFromSeed(CoreSystem::getCoreSystem().getContextData());
+	}
+
+	std::string legacyMoneroGermanMnemonicFromSeed(const ContextData& data)
+	{
+		return legacyMoneroGermanMnemonicFromSeed(data.seed, data.seedSize);
+	}
+
+	std::string legacyMoneroGermanMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	{
+		return std::string("This seed phrase is currently not supported.");
+	}
+
+	std::string legacyMoneroSpanishMnemonicFromGlobalContext()
+	{
+		return legacyMoneroSpanishMnemonicFromSeed(CoreSystem::getCoreSystem().getContextData());
+	}
+
+	std::string legacyMoneroSpanishMnemonicFromSeed(const ContextData& data)
+	{
+		return legacyMoneroSpanishMnemonicFromSeed(data.seed, data.seedSize);
+	}
+
+	std::string legacyMoneroSpanishMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	{
+		return std::string("This seed phrase is currently not supported.");
+	}
+
+	std::string legacyMoneroFrenchMnemonicFromGlobalContext()
+	{
+		return legacyMoneroFrenchMnemonicFromSeed(CoreSystem::getCoreSystem().getContextData());
+	}
+
+	std::string legacyMoneroFrenchMnemonicFromSeed(const ContextData& data)
+	{
+		return legacyMoneroFrenchMnemonicFromSeed(data.seed, data.seedSize);
+	}
+
+	std::string legacyMoneroFrenchMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	{
+		return std::string("This seed phrase is currently not supported.");
+	}
+
+	std::string legacyMoneroItalianMnemonicFromGlobalContext()
+	{
+		return legacyMoneroItalianMnemonicFromSeed(CoreSystem::getCoreSystem().getContextData());
+	}
+
+	std::string legacyMoneroItalianMnemonicFromSeed(const ContextData& data)
+	{
+		return legacyMoneroItalianMnemonicFromSeed(data.seed, data.seedSize);
+	}
+
+	std::string legacyMoneroItalianMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	{
+		return std::string("This seed phrase is currently not supported.");
+	}
+
+	std::string legacyMoneroDutchMnemonicFromGlobalContext()
+	{
+		return legacyMoneroDutchMnemonicFromSeed(CoreSystem::getCoreSystem().getContextData());
+	}
+
+	std::string legacyMoneroDutchMnemonicFromSeed(const ContextData& data)
+	{
+		return legacyMoneroDutchMnemonicFromSeed(data.seed, data.seedSize);
+	}
+
+	std::string legacyMoneroDutchMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	{
+		return std::string("This seed phrase is currently not supported.");
+	}
+
+	std::string legacyMoneroPortugueseMnemonicFromGlobalContext()
+	{
+		return legacyMoneroPortugueseMnemonicFromSeed(CoreSystem::getCoreSystem().getContextData());
+	}
+
+	std::string legacyMoneroPortugueseMnemonicFromSeed(const ContextData& data)
+	{
+		return legacyMoneroPortugueseMnemonicFromSeed(data.seed, data.seedSize);
+	}
+
+	std::string legacyMoneroPortugueseMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	{
+		return std::string("This seed phrase is currently not supported.");
+	}
+
+	std::string legacyMoneroRussianMnemonicFromGlobalContext()
+	{
+		return legacyMoneroRussianMnemonicFromSeed(CoreSystem::getCoreSystem().getContextData());
+	}
+
+	std::string legacyMoneroRussianMnemonicFromSeed(const ContextData& data)
+	{
+		return legacyMoneroRussianMnemonicFromSeed(data.seed, data.seedSize);
+	}
+
+	std::string legacyMoneroRussianMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	{
+		return std::string("This seed phrase is currently not supported.");
+	}
+
+	std::string legacyMoneroJapaneseMnemonicFromGlobalContext()
+	{
+		return legacyMoneroJapaneseMnemonicFromSeed(CoreSystem::getCoreSystem().getContextData());
+	}
+
+	std::string legacyMoneroJapaneseMnemonicFromSeed(const ContextData& data)
+	{
+		return legacyMoneroJapaneseMnemonicFromSeed(data.seed, data.seedSize);
+	}
+
+	std::string legacyMoneroJapaneseMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	{
+		return std::string("This seed phrase is currently not supported.");
+	}
+
+	std::string legacyMoneroChineseMnemonicFromGlobalContext()
+	{
+		return legacyMoneroChineseMnemonicFromSeed(CoreSystem::getCoreSystem().getContextData());
+	}
+
+	std::string legacyMoneroChineseMnemonicFromSeed(const ContextData& data)
+	{
+		return legacyMoneroChineseMnemonicFromSeed(data.seed, data.seedSize);
+	}
+
+	std::string legacyMoneroChineseMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	{
+		return std::string("This seed phrase is currently not supported.");
+	}
+
+	std::string legacyMoneroEsperantoMnemonicFromGlobalContext()
+	{
+		return legacyMoneroEsperantoMnemonicFromSeed(CoreSystem::getCoreSystem().getContextData());
+	}
+
+	std::string legacyMoneroEsperantoMnemonicFromSeed(const ContextData& data)
+	{
+		return legacyMoneroEsperantoMnemonicFromSeed(data.seed, data.seedSize);
+	}
+
+	std::string legacyMoneroEsperantoMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	{
+		return std::string("This seed phrase is currently not supported.");
+	}
+
+	std::string legacyMoneroLojbanMnemonicFromGlobalContext()
+	{
+		return legacyMoneroLojbanMnemonicFromSeed(CoreSystem::getCoreSystem().getContextData());
+	}
+
+	std::string legacyMoneroLojbanMnemonicFromSeed(const ContextData& data)
+	{
+		return legacyMoneroLojbanMnemonicFromSeed(data.seed, data.seedSize);
+	}
+
+	std::string legacyMoneroLojbanMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	{
+		return std::string("This seed phrase is currently not supported.");
+	}
 }
