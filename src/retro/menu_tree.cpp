@@ -91,7 +91,7 @@ MenuTree::MenuTree()
 					shared_ptr<MenuOption> showBIP39Option = make_shared<MenuOption>(showPhrasesMenu, "BIP-39", "Show Bitcoin Improvement Proposal 39 seed phrase for this seed(bits).");
 					showBIP39Option->setOnSelectedFunction(&setBIP39MnemonicContext);
 					shared_ptr<MenuOption> showMoneroPhraseOption = make_shared<MenuOption>(showPhrasesMenu, "Legacy Monero", "Show legacy monero seed phrase for this seed.");
-					showMoneroPhraseOption->setOnSelectedFunction(&setLegacyMoneroMnemonicContext);
+					showMoneroPhraseOption->setOnSelectedFunction(&setLegacyMoneroEnglishMnemonicContext);
 					showPhrasesMenu->addOption(showBIP39Option);
 					showPhrasesMenu->addOption(showMoneroPhraseOption);
 
@@ -149,7 +149,7 @@ MenuTree::MenuTree()
 		shared_ptr<MenuOption> restoreFromBIP39Option = make_shared<MenuOption>(pickPhraseTypeMenu, "BIP-39", "Restore seed bits from Bitcoin Improvement Proposal 39 seed phrase.");
 		restoreFromBIP39Option->setOnSelectedFunction(&setBIP39MnemonicContext);
 		shared_ptr<MenuOption> restoreFromLegacyMoneroPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero", "Restore seed bit from legacy monero seed phrase.");
-		restoreFromLegacyMoneroPhraseOption->setOnSelectedFunction(&setLegacyMoneroMnemonicContext);
+		restoreFromLegacyMoneroPhraseOption->setOnSelectedFunction(&setLegacyMoneroEnglishMnemonicContext);
 		pickPhraseTypeMenu->addOption(restoreFromBIP39Option);
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroPhraseOption);
 

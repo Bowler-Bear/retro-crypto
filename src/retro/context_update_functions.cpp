@@ -59,7 +59,7 @@ namespace RetroCrypto
 		setMnemonicTypeContext(MnemonicType::BIP39);
 	}
 
-	void setLegacyMoneroMnemonicContext()
+	void setLegacyMoneroEnglishMnemonicContext()
 	{
 		setMnemonicTypeContext(MnemonicType::LEGACY_MONERO_ENGLISH);
 	}

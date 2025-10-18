@@ -20,7 +20,7 @@ namespace RetroCrypto
 
 	void setBIP39MnemonicContext();
 
-	void setLegacyMoneroMnemonicContext();
+	void setLegacyMoneroEnglishMnemonicContext();
 
 	void clearMnemonicContext();
 
