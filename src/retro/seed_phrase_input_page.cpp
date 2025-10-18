@@ -34,6 +34,16 @@ SeedPhraseInputPage::SeedPhraseInputPage(string inTitle, std::shared_ptr<MenuTre
 	setUsedCharSet(alphabetCharSet);
 }
 
+MoneroLanguage getMoneroLanguage(ContextData data)
+{
+	switch(data.mnemonicType)
+	{
+	default:
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_ENGLISH:
+		return MoneroEnglish;
+	}
+}
+
 void SeedPhraseInputPage::updateSelectedOption(InputType input)
 {
 	InputPage::updateSelectedOption(input);
@@ -53,12 +63,16 @@ void SeedPhraseInputPage::updateSelectedOption(InputType input)
 	switch (contextData.mnemonicType)
 	{
 	case MnemonicType::LEGACY_MONERO_ENGLISH:
-		foundWord = get_monero_mnemonic_word_from_list(monero_mnemonic_find_word_index_allowing_partial_word(currentWord, MoneroEnglish, true), MoneroEnglish);
+	{
+		MoneroLanguage usedMoneroLanguage = getMoneroLanguage(contextData);
+		foundWord = get_monero_mnemonic_word_from_list(monero_mnemonic_find_word_index_allowing_partial_word(currentWord, usedMoneroLanguage, true), usedMoneroLanguage);
 		break;
+	}
 	case MnemonicType::BIP39:
+		foundWord = mnemonic_complete_word(currentWord, lastIndex);
+		break;
 	case MnemonicType::NONE:
 	default:
-		foundWord = mnemonic_complete_word(currentWord, lastIndex);
 		break;
 	}
 	if (foundWord)
@@ -109,7 +123,9 @@ bool SeedPhraseInputPage::consumeInput(InputType input)
 		switch (contextData.mnemonicType)
 		{
 		case MnemonicType::LEGACY_MONERO_ENGLISH:
-			foundWordIndex = monero_mnemonic_find_word_index(currentWord, MoneroEnglish);
+		{
+			MoneroLanguage usedMoneroLanguage = getMoneroLanguage(contextData);
+			foundWordIndex = monero_mnemonic_find_word_index(currentWord, usedMoneroLanguage);
 			if (foundWordIndex == -1)
 			{
 				description = "INVALID WORD ENTERED.";
@@ -122,10 +138,10 @@ bool SeedPhraseInputPage::consumeInput(InputType input)
 			contextData = CoreSystem::getCoreSystem().getContextData();
 			if (contextData.getMnemonicWordCount() >= 25)
 			{
-				if (legacy_monero_mnemonic_check(contextData.mnemonic.c_str(), MoneroEnglish) > 0)
+				if (legacy_monero_mnemonic_check(contextData.mnemonic.c_str(), usedMoneroLanguage) > 0)
 				{
 					contextData.seedSize = 32;
-					legacy_monero_mnemonic_to_seed(contextData.mnemonic.c_str(), contextData.seed, MoneroEnglish);
+					legacy_monero_mnemonic_to_seed(contextData.mnemonic.c_str(), contextData.seed, usedMoneroLanguage);
 					CoreSystem::getCoreSystem().updateContextData(ContextUpdate::SEED | ContextUpdate::SEED_SIZE, contextData);
 					return false;
 				}
@@ -137,9 +153,8 @@ bool SeedPhraseInputPage::consumeInput(InputType input)
 				}
 			}
 			break;
+		}
 		case MnemonicType::BIP39:
-		case MnemonicType::NONE:
-		default:
 			foundWordIndex = mnemonic_find_word(currentWord);
 			if (foundWordIndex == -1)
 			{
@@ -168,6 +183,9 @@ bool SeedPhraseInputPage::consumeInput(InputType input)
 				}
 			}
 			break;
+		case MnemonicType::NONE:
+		default:
+			return true;
 		}
 		previousWord = currentWord;
 		InputPage::reset();
