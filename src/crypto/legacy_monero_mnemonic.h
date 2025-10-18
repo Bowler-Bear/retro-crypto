@@ -13,6 +13,11 @@
 
 #define MONERO_MAXIMUM_PREFIX_LENGTH 4
 #define MONERO_ENGLISH_PREFIX_LENGTH 3
+#define MONERO_FRENCH_PREFIX_LENGTH 4
+#define MONERO_ITALIAN_PREFIX_LENGTH 4
+#define MONERO_DUTCH_PREFIX_LENGTH 4
+#define MONERO_PORTUGUESE_PREFIX_LENGTH 4
+#define MONERO_ESPERANTO_PREFIX_LENGTH 4
 
 #define IDENT32(x) ((uint32_t) (x))
 
@@ -31,7 +36,12 @@
 
 enum MoneroLanguage {
     MoneroLanguageNone = 0,
-    MoneroEnglish = 1
+    MoneroEnglish = 1,
+    MoneroFrench = 3,
+    MoneroItalian = 4,
+    MoneroDutch = 5,
+    MoneroPortuguese = 6,
+    MoneroEsperanto = 10
 };
 
 const char* legacy_monero_mnemonic_from_seed(const uint8_t* seed, uint32_t length, enum MoneroLanguage language);

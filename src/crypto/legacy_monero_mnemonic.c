@@ -3,6 +3,11 @@
 
 #include "legacy_monero_mnemonic.h"
 #include "monero_english_words.h"
+#include "monero_french_words.h"
+#include "monero_italian_words.h"
+#include "monero_dutch_words.h"
+#include "monero_portuguese_words.h"
+#include "monero_esperanto_words.h"
 #include "memzero.h"
 #include "crc.h"
 
@@ -12,6 +17,16 @@ const char** legacy_monero_mnemonic_get_word_list(enum MoneroLanguage language) 
     switch(language) {
     case MoneroEnglish:
         return monero_english_words;
+    case MoneroFrench:
+        return monero_french_words;
+    case MoneroItalian:
+        return monero_italian_words;
+    case MoneroDutch:
+        return monero_dutch_words;
+    case MoneroPortuguese:
+        return monero_portuguese_words;
+    case MoneroEsperanto:
+        return monero_esperanto_words;
     default:
         return 0;
     }
@@ -21,6 +36,16 @@ uint8_t legacy_monero_mnemonic_language_prefix_length(enum MoneroLanguage langua
     switch(language) {
     case MoneroEnglish:
         return MONERO_ENGLISH_PREFIX_LENGTH;
+    case MoneroFrench:
+        return MONERO_FRENCH_PREFIX_LENGTH;
+    case MoneroItalian:
+        return MONERO_ITALIAN_PREFIX_LENGTH;
+    case MoneroDutch:
+        return MONERO_DUTCH_PREFIX_LENGTH;
+    case MoneroPortuguese:
+        return MONERO_PORTUGUESE_PREFIX_LENGTH;
+    case MoneroEsperanto:
+        return MONERO_ESPERANTO_PREFIX_LENGTH;
     default:
         return 0;
     }
