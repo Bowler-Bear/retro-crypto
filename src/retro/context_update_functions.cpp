@@ -61,7 +61,7 @@ namespace RetroCrypto
 
 	void setLegacyMoneroMnemonicContext()
 	{
-		setMnemonicTypeContext(MnemonicType::LEGACY_MONERO);
+		setMnemonicTypeContext(MnemonicType::LEGACY_MONERO_ENGLISH);
 	}
 
 	void clearMnemonicContext()

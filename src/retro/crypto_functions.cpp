@@ -356,7 +356,7 @@ namespace RetroCrypto
 		{
 		case RetroCrypto::MnemonicType::BIP39:
 			return bip39MnemonicFromGlobalContext();
-		case RetroCrypto::MnemonicType::LEGACY_MONERO:
+		case RetroCrypto::MnemonicType::LEGACY_MONERO_ENGLISH:
 			return legacyMoneroMnemonicFromGlobalContext();
 		default:
 			return std::string("This seed phrase is currently not supported.");

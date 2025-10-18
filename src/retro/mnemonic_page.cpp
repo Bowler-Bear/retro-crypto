@@ -39,7 +39,7 @@ void MnemonicPage::onEnter()
 	case RetroCrypto::MnemonicType::BIP39:
 		mnemonicName = std::string("BIP39(24 words)");
 		break;
-	case RetroCrypto::MnemonicType::LEGACY_MONERO:
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_ENGLISH:
 		mnemonicName = std::string("English Legacy Monero Phrase");
 		break;
 	default:

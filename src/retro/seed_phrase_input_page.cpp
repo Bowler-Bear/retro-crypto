@@ -52,7 +52,7 @@ void SeedPhraseInputPage::updateSelectedOption(InputType input)
 	ContextData contextData = CoreSystem::getCoreSystem().getContextData();
 	switch (contextData.mnemonicType)
 	{
-	case MnemonicType::LEGACY_MONERO:
+	case MnemonicType::LEGACY_MONERO_ENGLISH:
 		foundWord = get_monero_mnemonic_word_from_list(monero_mnemonic_find_word_index_allowing_partial_word(currentWord, MoneroEnglish, true), MoneroEnglish);
 		break;
 	case MnemonicType::BIP39:
@@ -108,7 +108,7 @@ bool SeedPhraseInputPage::consumeInput(InputType input)
 		ContextData contextData = CoreSystem::getCoreSystem().getContextData();
 		switch (contextData.mnemonicType)
 		{
-		case MnemonicType::LEGACY_MONERO:
+		case MnemonicType::LEGACY_MONERO_ENGLISH:
 			foundWordIndex = monero_mnemonic_find_word_index(currentWord, MoneroEnglish);
 			if (foundWordIndex == -1)
 			{
