@@ -357,7 +357,7 @@ namespace RetroCrypto
 		case RetroCrypto::MnemonicType::BIP39:
 			return bip39MnemonicFromGlobalContext();
 		case RetroCrypto::MnemonicType::LEGACY_MONERO_ENGLISH:
-			return legacyMoneroMnemonicFromGlobalContext();
+			return legacyMoneroEnglishMnemonicFromGlobalContext();
 		default:
 			return std::string("This seed phrase is currently not supported.");
 		}
@@ -380,17 +380,17 @@ namespace RetroCrypto
 		return mnemonic;
 	}
 
-	std::string legacyMoneroMnemonicFromGlobalContext()
+	std::string legacyMoneroEnglishMnemonicFromGlobalContext()
 	{
-		return legacyMoneroMnemonicFromSeed(CoreSystem::getCoreSystem().getContextData());
+		return legacyMoneroEnglishMnemonicFromSeed(CoreSystem::getCoreSystem().getContextData());
 	}
 
-	std::string legacyMoneroMnemonicFromSeed(const ContextData& data)
+	std::string legacyMoneroEnglishMnemonicFromSeed(const ContextData& data)
 	{
-		return legacyMoneroMnemonicFromSeed(data.seed, data.seedSize);
+		return legacyMoneroEnglishMnemonicFromSeed(data.seed, data.seedSize);
 	}
 
-	std::string legacyMoneroMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize)
+	std::string legacyMoneroEnglishMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize)
 	{
 		std::string mnemonic(legacy_monero_mnemonic_from_seed(seed, seedSize, MoneroEnglish));
 		clear_legacy_monero_mnemonic();

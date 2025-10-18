@@ -76,7 +76,7 @@ namespace RetroCrypto
 	std::string bip39MnemonicFromGlobalContext();
 	std::string bip39MnemonicFromSeedBits(const ContextData& data);
 	std::string bip39MnemonicFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize);
-	std::string legacyMoneroMnemonicFromGlobalContext();
-	std::string legacyMoneroMnemonicFromSeed(const ContextData& data);
-	std::string legacyMoneroMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize);
+	std::string legacyMoneroEnglishMnemonicFromGlobalContext();
+	std::string legacyMoneroEnglishMnemonicFromSeed(const ContextData& data);
+	std::string legacyMoneroEnglishMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize);
 }
