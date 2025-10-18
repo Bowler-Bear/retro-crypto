@@ -40,7 +40,40 @@ void MnemonicPage::onEnter()
 		mnemonicName = std::string("BIP39(24 words)");
 		break;
 	case RetroCrypto::MnemonicType::LEGACY_MONERO_ENGLISH:
-		mnemonicName = std::string("English Legacy Monero Phrase");
+		mnemonicName = std::string("Legacy Monero English Phrase");
+		break;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_GERMAN:
+		mnemonicName = std::string("Legacy Monero German Phrase");
+		break;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_SPANISH:
+		mnemonicName = std::string("Legacy Monero Spanish Phrase");
+		break;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_FRENCH:
+		mnemonicName = std::string("Legacy Monero French Phrase");
+		break;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_ITALIAN:
+		mnemonicName = std::string("Legacy Monero Italian Phrase");
+		break;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_DUTCH:
+		mnemonicName = std::string("Legacy Monero Dutch Phrase");
+		break;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_PORTUGUESE:
+		mnemonicName = std::string("Legacy Monero Portuguese Phrase");
+		break;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_RUSSIAN:
+		mnemonicName = std::string("Legacy Monero Russian Phrase");
+		break;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_JAPANESE:
+		mnemonicName = std::string("Legacy Monero Japanese Phrase");
+		break;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_CHINESE:
+		mnemonicName = std::string("Legacy Monero Chinese Phrase");
+		break;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_ESPERANTO:
+		mnemonicName = std::string("Legacy Monero Esperanto Phrase");
+		break;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_LOJBAN:
+		mnemonicName = std::string("Legacy Monero Lojban Phrase");
 		break;
 	default:
 		mnemonicName = std::string("Seed Phrase");
