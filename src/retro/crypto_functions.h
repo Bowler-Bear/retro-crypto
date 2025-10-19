@@ -1,6 +1,7 @@
 #include <string>
 
 #include "core_context.h"
+#include "crypto_definitions.h"
 
 #define PRIVATE_KEY_BYTE_SIZE 32
 #define PUBLIC_KEY_BYTE_SIZE 33
@@ -9,8 +10,16 @@ namespace RetroCrypto
 {
 	struct AddressInformation
 	{
-		uint8_t privateKey[PRIVATE_KEY_BYTE_SIZE];
-		uint8_t publicKey[PUBLIC_KEY_BYTE_SIZE];
+		union
+		{
+			uint8_t privateKey[PRIVATE_KEY_BYTE_SIZE];
+			uint8_t privateSpendKey[MONERO_PRIVATE_SPEND_KEY_LENGTH];
+		};
+		union
+		{
+			uint8_t publicKey[PUBLIC_KEY_BYTE_SIZE];
+			uint8_t privateViewKey[MONERO_PRIVATE_VIEW_KEY_LENGTH];
+		};
 		std::string address;
 
 		AddressInformation()
