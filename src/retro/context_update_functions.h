@@ -1,3 +1,6 @@
+#ifndef CONTEXT_UPDATE_FUNCTIONS_H
+#define CONTEXT_UPDATE_FUNCTIONS_H
+
 #include <stdint.h>
 
 #include "core_context.h"
@@ -64,3 +67,5 @@ namespace RetroCrypto
 
 	void setMoneroContext();
 }
+
+#endif

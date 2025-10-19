@@ -1,3 +1,6 @@
+#ifndef CRYPTO_FUNCTIONS_H
+#define CRYPTO_FUNCTIONS_H
+
 #include <string>
 
 #include "core_context.h"
@@ -132,3 +135,5 @@ namespace RetroCrypto
 	std::string legacyMoneroLojbanMnemonicFromSeed(const ContextData& data);
 	std::string legacyMoneroLojbanMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize);
 }
+
+#endif
