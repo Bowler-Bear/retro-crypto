@@ -41,6 +41,16 @@ MoneroLanguage getMoneroLanguage(ContextData data)
 	default:
 	case RetroCrypto::MnemonicType::LEGACY_MONERO_ENGLISH:
 		return MoneroEnglish;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_FRENCH:
+		return MoneroFrench;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_ITALIAN:
+		return MoneroItalian;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_DUTCH:
+		return MoneroDutch;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_PORTUGUESE:
+		return MoneroPortuguese;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_ESPERANTO:
+		return MoneroEsperanto;
 	}
 }
 
@@ -63,6 +73,11 @@ void SeedPhraseInputPage::updateSelectedOption(InputType input)
 	switch (contextData.mnemonicType)
 	{
 	case MnemonicType::LEGACY_MONERO_ENGLISH:
+	case MnemonicType::LEGACY_MONERO_FRENCH:
+	case MnemonicType::LEGACY_MONERO_ITALIAN:
+	case MnemonicType::LEGACY_MONERO_DUTCH:
+	case MnemonicType::LEGACY_MONERO_PORTUGUESE:
+	case MnemonicType::LEGACY_MONERO_ESPERANTO:
 	{
 		MoneroLanguage usedMoneroLanguage = getMoneroLanguage(contextData);
 		foundWord = get_monero_mnemonic_word_from_list(monero_mnemonic_find_word_index_allowing_partial_word(currentWord, usedMoneroLanguage, true), usedMoneroLanguage);
@@ -123,6 +138,11 @@ bool SeedPhraseInputPage::consumeInput(InputType input)
 		switch (contextData.mnemonicType)
 		{
 		case MnemonicType::LEGACY_MONERO_ENGLISH:
+		case MnemonicType::LEGACY_MONERO_FRENCH:
+		case MnemonicType::LEGACY_MONERO_ITALIAN:
+		case MnemonicType::LEGACY_MONERO_DUTCH:
+		case MnemonicType::LEGACY_MONERO_PORTUGUESE:
+		case MnemonicType::LEGACY_MONERO_ESPERANTO:
 		{
 			MoneroLanguage usedMoneroLanguage = getMoneroLanguage(contextData);
 			foundWordIndex = monero_mnemonic_find_word_index(currentWord, usedMoneroLanguage);
