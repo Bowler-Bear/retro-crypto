@@ -328,14 +328,18 @@ namespace RetroCrypto
 	{
 		if (seedSize != MONERO_PRIVATE_SPEND_KEY_LENGTH)
 			return std::string("Invalid Seed Size.");
+		AddressInformation addressInformation;
 		bignum256modm seedAsBigNum;
 		expand256_modm(seedAsBigNum, seed, MONERO_PRIVATE_SPEND_KEY_LENGTH);
+		reduce256_modm(seedAsBigNum);
+		contract256_modm(addressInformation.privateSpendKey, seedAsBigNum);
 
 		ge25519 publicSpendKey;
 		ge25519_scalarmult_base_wrapper(&publicSpendKey, seedAsBigNum);
 
 		bignum256modm viewSecretAsBigNum;
-		xmr_hash_to_scalar(viewSecretAsBigNum, seed, MONERO_PRIVATE_SPEND_KEY_LENGTH);
+		xmr_hash_to_scalar(viewSecretAsBigNum, addressInformation.privateSpendKey, MONERO_PRIVATE_SPEND_KEY_LENGTH);
+		contract256_modm(addressInformation.privateViewKey, viewSecretAsBigNum);
 
 		ge25519 publicViewKey;
 		ge25519_scalarmult_base_wrapper(&publicViewKey, viewSecretAsBigNum);
@@ -344,9 +348,10 @@ namespace RetroCrypto
 		ge25519_pack(publicBytes, &publicSpendKey);
 		ge25519_pack(publicBytes + MONERO_PUBLIC_SPEND_KEY_LENGTH, &publicViewKey);
 
-		char xmrAddress[MONERO_MAXIMUM_ADDRESS_LENGTH];
+		char xmrAddress[MONERO_MAXIMUM_ADDRESS_LENGTH] = {0};
 		xmr_base58_addr_encode_check(MONERO_MAINNET_MAGIC_BYTE, publicBytes, MONERO_PUBLIC_KEYS_LENGTH, (char*)&xmrAddress, MONERO_MAXIMUM_ADDRESS_LENGTH);
-		return std::string(xmrAddress);
+		addressInformation.address = xmrAddress;
+		return addressInformation;
 	}
 
 	std::string mnemonicFromGlobalContext()
