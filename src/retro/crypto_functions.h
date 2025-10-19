@@ -56,6 +56,16 @@ namespace RetroCrypto
 		{
 			return getKeyAsHexString(publicKey, PUBLIC_KEY_BYTE_SIZE);
 		}
+
+		std::string getPrivateSpendKeyAsHexString()
+		{
+			return getKeyAsHexString(privateSpendKey, MONERO_PRIVATE_SPEND_KEY_LENGTH);
+		}
+
+		std::string getPrivateViewKeyAsHexString()
+		{
+			return getKeyAsHexString(privateViewKey, MONERO_PRIVATE_VIEW_KEY_LENGTH);
+		}
 	};
 
 	AddressInformation cryptoAddressFromContextData(const ContextData& data);
