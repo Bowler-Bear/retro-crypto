@@ -146,7 +146,7 @@ MenuTree::MenuTree()
 		generateETCAddressOption->setOnSelectedFunction(&setEthereumClassicContext);
 		shared_ptr<MenuOption> generateDOGEAddressOption = make_shared<MenuOption>(generateAddressMenu, "DOGE", "Generate a DOGE public address.");
 		generateDOGEAddressOption->setOnSelectedFunction(&setDogeContext);
-		shared_ptr<MenuOption> generateNostrAddressOption = make_shared<MenuOption>(generateAddressMenu, "Nostr", "Generate a Nostr public keys.");
+		shared_ptr<MenuOption> generateNostrAddressOption = make_shared<MenuOption>(generateAddressMenu, "Nostr", "Generate a Nostr public key.");
 		generateNostrAddressOption->setOnSelectedFunction(&setNostrContext);
 		generateAddressMenu->addOption(generateXMRAddressOption);
 		generateAddressMenu->addOption(generateBTCAddressOption);
