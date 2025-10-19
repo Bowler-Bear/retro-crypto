@@ -45,6 +45,8 @@ void AddressPage::onEnter()
 			privateKey = nsecFromPrivateKey(addressInformation.privateKey);
 			break;
 		case RetroCrypto::CryptoType::XMR:
+			privateKey = addressInformation.getPrivateSpendKeyAsHexString();
+			publicKey = addressInformation.getPrivateViewKeyAsHexString();
 			break;
 		default:
 			privateKey = addressInformation.getPrivateKeyAsHexString();
@@ -78,7 +80,7 @@ void AddressPage::onEnter()
 			addressTitle = "Nostr m/" S(NOSTR_PATH_PURPOSE) "'/" S(NOSTR_PATH_COIN_TYPE) "'/" S(NOSTR_PATH_ACCOUNT) "'/" S(NOSTR_PATH_CHANGE) "/" S(NOSTR_PATH_INDEX) " ";
 			break;
 		case RetroCrypto::CryptoType::XMR:
-			seedTitle = "Private Spend Key";
+			seedTitle = "Seed";
 			addressTitle = "Monero Primary ";
 			break;
 		default:
@@ -140,17 +142,13 @@ void AddressPage::drawAddress(shared_ptr<IDisplay> display)
 
 void AddressPage::drawPrivateKey(shared_ptr<IDisplay> display)
 {
-	switch(CoreSystem::getCoreSystem().getContextData().crypto)
-	{
-	case RetroCrypto::CryptoType::XMR:
-		return;
-	default:
-		break;
-	}
 	TextBox titleBox(string("Private Key(Hex Format)"));
 	if (CoreSystem::getCoreSystem().getContextData().crypto == RetroCrypto::CryptoType::NOSTR)
 	{
 		titleBox.text = string("Private Key(Bech32 Format)");
+	} else if (CoreSystem::getCoreSystem().getContextData().crypto == RetroCrypto::CryptoType::XMR)
+	{
+		titleBox.text = string("Private Spend Key(Hex Format)");
 	}
 	titleBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+11;
 	titleBox.xPosition = (BASE_BORDER_BOX_WIDTH-titleBox.text.size())/2;
@@ -196,12 +194,15 @@ void AddressPage::drawPublicKey(shared_ptr<IDisplay> display)
 	switch(CoreSystem::getCoreSystem().getContextData().crypto)
 	{
 	case RetroCrypto::CryptoType::NOSTR:
-	case RetroCrypto::CryptoType::XMR:
 		return;
 	default:
 		break;
 	}
 	TextBox titleBox(string("Public Key(Hex Format)"));
+	if (CoreSystem::getCoreSystem().getContextData().crypto == RetroCrypto::CryptoType::XMR)
+	{
+		titleBox.text = string("Private View Key(Hex Format)");
+	}
 	titleBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+16;
 	titleBox.xPosition = (BASE_BORDER_BOX_WIDTH-titleBox.text.size())/2;
 	titleBox.width = titleBox.text.size();
