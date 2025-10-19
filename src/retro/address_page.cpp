@@ -148,6 +148,10 @@ void AddressPage::drawPrivateKey(shared_ptr<IDisplay> display)
 		break;
 	}
 	TextBox titleBox(string("Private Key(Hex Format)"));
+	if (CoreSystem::getCoreSystem().getContextData().crypto == RetroCrypto::CryptoType::NOSTR)
+	{
+		titleBox.text = string("Private Key(Bech32 Format)");
+	}
 	titleBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+11;
 	titleBox.xPosition = (BASE_BORDER_BOX_WIDTH-titleBox.text.size())/2;
 	titleBox.width = titleBox.text.size();
