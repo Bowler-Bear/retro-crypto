@@ -104,6 +104,9 @@ uint32_t load_into_static_monero_mnemonic(const char* words, char* mnemonic_bloc
              if (*searchPointer == ' ' || *searchPointer == '\0') {
                  break;
              }
+             if (i*(MONERO_MAXIMUM_WORD_LENGTH+2)+j >= MONERO_MNEMONIC_MAXIMUM_LENGTH) {
+               return 0;
+             }
              mnemonic_blocks[i][j] = *searchPointer;
              searchPointer++;
          }
