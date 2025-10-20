@@ -193,13 +193,40 @@ void clear_legacy_monero_mnemonic(void) {
 }
 
 int32_t monero_mnemonic_find_word_index_allowing_partial_word(const char* word, enum MoneroLanguage language, uint8_t allow_partial_word) {
-    if (!word || strlen(word) < 3) return -1;
+    if (!word) return -1;
+
+    uint8_t word_length = strlen(word);
+    uint8_t minPrefixLength = legacy_monero_mnemonic_language_prefix_length(language);
+    if (word_length < minPrefixLength) return -1;
 
     const char** word_list = legacy_monero_mnemonic_get_word_list(language);
     if (!word_list) return -1;
 
+    if (language == MoneroPortuguese)
+    {
+        if ((allow_partial_word && strncmp("botina", word, word_length) == 0) || strcmp("botina", word) == 0)
+        {
+            return 209;
+        }
+        else if ((allow_partial_word && strncmp("boquiaberto", word, word_length) == 0) || strcmp("boquiaberto", word) == 0)
+        {
+            return 210;
+        }
+        else if ((allow_partial_word && strncmp("glaucio", word, word_length) == 0) || strcmp("glaucio", word) == 0)
+        {
+            return 628;
+        }
+        else if ((allow_partial_word && strncmp("grelhado", word, word_length) == 0) || strcmp("grelhado", word) == 0)
+        {
+            return 660;
+        }
+        else if ((allow_partial_word && strncmp("respeito", word, word_length) == 0) || strcmp("respeito", word) == 0)
+        {
+            return 1282;
+        }
+    }
+
     uint32_t lower = 0, upper = MONERO_WORDLIST_WORD_COUNT - 1;
-    uint8_t word_length = strlen(word);
     int32_t comparison_result = 0;
     while (upper >= lower) {
         uint32_t tested_midpoint = (upper-lower)/2 + lower;
