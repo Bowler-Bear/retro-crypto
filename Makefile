@@ -10,6 +10,10 @@ CRYPTO_DIR = crypto/
 
 CRYPTO_SRC = $(BASE_SOURCE_DIR)$(CRYPTO_DIR)
 
+TESTS_DIR = tests/
+
+TESTS_SRC = $(TESTS_DIR)
+
 CLI_DIR = cli/
 
 CLI_SRC = $(BASE_SOURCE_DIR)$(CLI_DIR)
@@ -56,6 +60,9 @@ LIB_SOURCES = $(shell find $(LIB_SRC) -type f -iname '*.cpp')
 LIB_SOURCES += $(BASE_SOURCE_DIR)qr/qrcodegen.cpp
 LIB_OBJECTS = $(foreach x, $(basename $(LIB_SOURCES)), $(BASE_BUILD_DIR)$(patsubst $(BASE_SOURCE_DIR)%,%,$(x).o))
 
+TESTS_SOURCES = $(shell find $(TESTS_SRC) -type f -iname '*.cpp')
+TESTS_OBJECTS = $(foreach x, $(basename $(TESTS_SOURCES)), $(BASE_BUILD_DIR)$(patsubst $(BASE_SOURCE_DIR)%,%,$(x).o))
+
 CRYPTO_SOURCES = $(shell find $(CRYPTO_SRC) -type f -iname '*.c')
 CRYPTO_OBJECTS = $(foreach x, $(basename $(CRYPTO_SOURCES)), $(BASE_BUILD_DIR)$(patsubst $(BASE_SOURCE_DIR)%,%,$(x).o))
 
@@ -74,11 +81,20 @@ ifeq ($(N64_TARGET), n64)
 	include $(N64_INST)/include/n64.mk
 endif
 
+tests: clean $(CRYPTO_OBJECTS) $(LIB_OBJECTS) $(TESTS_OBJECTS)
+	@mkdir -p "$(BINARY_DIR)"
+	@$(CXX) $(CXXFLAGS) $(CRYPTO_OBJECTS) $(LIB_OBJECTS) $(TESTS_OBJECTS) -o $(BINARY_DIR)tests
+	@$(BINARY_DIR)tests
+
 $(BASE_BUILD_DIR)qr/%.o: $(BASE_SOURCE_DIR)qr/%.cpp
 	@mkdir -p "$(dir $@)"
 	@$(CXX) $(CXXFLAGS) -c $^ -o $@
 
 $(BASE_BUILD_DIR)$(LIB_DIR)%.o: $(LIB_SRC)%.cpp
+	@mkdir -p "$(dir $@)"
+	@$(CXX) $(CXXFLAGS) -c $^ -o $@
+
+$(BASE_BUILD_DIR)$(TESTS_DIR)%.o: $(TESTS_SRC)%.cpp
 	@mkdir -p "$(dir $@)"
 	@$(CXX) $(CXXFLAGS) -c $^ -o $@
 
