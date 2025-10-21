@@ -69,20 +69,26 @@ The color scheme can be updated by modifying the existing DEFAULT_\*G_COLOR_\* d
 ## Screenshots ##
 <img width="903" height="631" alt="main_menu" src="https://github.com/user-attachments/assets/06af3524-d9e4-4fec-bb37-9c61132e26fe" />
 <img width="903" height="627" alt="dir_inputs" src="https://github.com/user-attachments/assets/f347f840-cd52-412d-b85a-96eceb4e9a68" />
+<img width="900" height="625" alt="dice_input" src="https://github.com/user-attachments/assets/539c026a-4afc-4d7b-9e4f-41b0b28f5651" />
 <img width="905" height="627" alt="seed_options_menu" src="https://github.com/user-attachments/assets/1bdf5a69-314e-434c-b950-3d5658263a35" />
 <img width="904" height="627" alt="addresses_menu" src="https://github.com/user-attachments/assets/3acfd05c-85eb-4a63-83e0-e45cd1fd1f6e" />
-<img width="901" height="625" alt="btc_address" src="https://github.com/user-attachments/assets/fc49bba2-86e6-48e4-b3a6-95af5afba45a" />
-<img width="901" height="625" alt="doge_address" src="https://github.com/user-attachments/assets/8d24455a-3393-4879-93a6-acde47d972ab" />
-<img width="900" height="625" alt="etc_address" src="https://github.com/user-attachments/assets/f6494bc0-5741-45a2-a4b5-73918acb0ebb" />
-<img width="900" height="625" alt="eth_address" src="https://github.com/user-attachments/assets/826ba319-cacd-44ac-aca7-eee06a5d929d" />
-<img width="900" height="625" alt="nostr_address" src="https://github.com/user-attachments/assets/56d02e7f-0a72-4766-9d83-d451011e35bd" />
-<img width="900" height="625" alt="xmr_address" src="https://github.com/user-attachments/assets/6c2cb493-3cc5-4ab6-9723-377d75a5e841" />
-<img width="902" height="625" alt="phrases" src="https://github.com/user-attachments/assets/018cd768-b750-4112-94fc-53cbbd9b839d" />
-<img width="903" height="624" alt="bip39-24_output" src="https://github.com/user-attachments/assets/c3d18afc-48af-4805-a226-295f97a2a058" />
-<img width="904" height="627" alt="english_legacy_monero_phrase" src="https://github.com/user-attachments/assets/46fcea60-d454-4bf9-9e41-8ba3ca9e2e28" />
-<img width="903" height="625" alt="qr_code" src="https://github.com/user-attachments/assets/16606427-3d4e-4e76-9d19-d5ddaac9890c" />
+<img width="900" height="625" alt="btc_address" src="https://github.com/user-attachments/assets/cfe74d31-5d9e-4310-846a-dff44620981f" />
+<img width="900" height="625" alt="doge_address" src="https://github.com/user-attachments/assets/7ec670ed-9ef9-407f-b879-102259a26cab" />
+<img width="900" height="625" alt="etc_address" src="https://github.com/user-attachments/assets/761064bc-d043-41bc-8a9f-477c319465d7" />
+<img width="900" height="625" alt="eth_address" src="https://github.com/user-attachments/assets/645a5d74-f973-4622-99ca-1d7dcee24a78" />
+<img width="900" height="625" alt="nostr_address" src="https://github.com/user-attachments/assets/ab4afd36-b12f-448c-8375-8f7541efefff" />
+<img width="900" height="625" alt="xmr_address" src="https://github.com/user-attachments/assets/e0293a3a-e6de-4c85-baea-995472ceb009" />
+<img width="900" height="625" alt="output_phrases" src="https://github.com/user-attachments/assets/93f50884-7b4f-47c3-8eff-eb21319aa68c" />
+<img width="900" height="625" alt="bip39_24_output" src="https://github.com/user-attachments/assets/066268c2-a3d6-4f90-9490-5ad1ce589e66" />
+<img width="900" height="625" alt="english_xmr_phrase_output" src="https://github.com/user-attachments/assets/4c7e39b9-7db9-4afa-9814-794a4c66cd96" />
+<img width="900" height="625" alt="french_xmr_phrase_output" src="https://github.com/user-attachments/assets/1e49cb22-efa9-4394-bc5a-cad90d4c5c5d" />
+<img width="900" height="625" alt="italian_xmr_phrase_output" src="https://github.com/user-attachments/assets/6151904e-b227-45a2-bfa2-45e27b92e3f8" />
+<img width="900" height="625" alt="dutch_xmr_phrase_output" src="https://github.com/user-attachments/assets/758943c2-1f9c-4781-bacc-f0808abc89da" />
+<img width="900" height="625" alt="portuguese_xmr_phrase_output" src="https://github.com/user-attachments/assets/36de1c05-d9f2-45f2-aba2-aec6c821d5a2" />
+<img width="900" height="625" alt="esperanto_xmr_phrase_output" src="https://github.com/user-attachments/assets/f3976f48-7410-4cfd-b23b-693df36d11f1" />
+<img width="900" height="625" alt="qr_code" src="https://github.com/user-attachments/assets/b23926f4-be17-4c9a-9f01-8874e99f433a" />
 <img width="902" height="626" alt="vanity_address" src="https://github.com/user-attachments/assets/33d94753-93e6-4590-9b16-dc8f58a59629" />
-<img width="902" height="628" alt="phrase_input" src="https://github.com/user-attachments/assets/f287b5f7-43b8-4c80-b9ff-e379c25970c9" />
+<img width="900" height="625" alt="input_phrases" src="https://github.com/user-attachments/assets/10402816-4770-4c7d-a1e8-ce1e3864d13c" />
 
 
 ## Donations ##
