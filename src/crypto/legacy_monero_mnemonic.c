@@ -80,17 +80,30 @@ int32_t legacy_monero_mnemonic_get_checksum_index(const char** mnemonic, enum Mo
     const uint8_t unique_prefix_length = legacy_monero_mnemonic_language_prefix_length(language);
     if (unique_prefix_length <= 0) return -1;
 
-    uint32_t trimmed_words_length = unique_prefix_length*MONERO_MNEMONIC_WORDS_COUNT;
-    char trimmed_words[MONERO_MAXIMUM_PREFIX_LENGTH*MONERO_MNEMONIC_WORDS_COUNT] = { '\0' };
+    char trimmed_words[4*MONERO_MAXIMUM_PREFIX_LENGTH*MONERO_MNEMONIC_WORDS_COUNT] = { '\0' };
 
     for (uint32_t i = 0; i < MONERO_MNEMONIC_WORDS_COUNT; i++) {
-        //strncat not available for arm-none-eabi
-        //strncat(trimmed_words, mnemonic[i], unique_prefix_length);
-        for (uint32_t j = 0; j < unique_prefix_length; j++) {
-            trimmed_words[unique_prefix_length*i+j] = mnemonic[i][j];
+        uint8_t character_count = 0;
+        for (uint32_t j = 0; j < strlen(mnemonic[i]) && character_count < unique_prefix_length; j++) {
+            uint8_t code_point_count = 0;
+            if ((mnemonic[i][j] & 0x80) == 0) {
+                code_point_count = 0;
+            } else if((mnemonic[i][j] & 0xe0) == 0xc0) {
+                code_point_count = 1;
+            } else if((mnemonic[i][j] & 0xf0) == 0xe0) {
+                code_point_count = 2;
+            } else if((mnemonic[i][j] & 0xf8) == 0xf0) {
+                code_point_count = 3;
+            }
+            for (uint32_t k = 0; k < code_point_count+1; k++) {
+                if (strlen(trimmed_words) < 4*MONERO_MAXIMUM_PREFIX_LENGTH*MONERO_MNEMONIC_WORDS_COUNT)
+                    trimmed_words[strlen(trimmed_words)] = mnemonic[i][j+k];
+            }
+            j += code_point_count;
+            character_count += 1;
         }
     }
-    uint32_t index = (checksum_crc32(trimmed_words, trimmed_words_length, 0xffffffff) ^ 0xffffffff) % MONERO_MNEMONIC_WORDS_COUNT;
+    uint32_t index = (checksum_crc32(trimmed_words, strlen(trimmed_words), 0xffffffff) ^ 0xffffffff) % MONERO_MNEMONIC_WORDS_COUNT;
 
     memzero(trimmed_words, sizeof(trimmed_words));
     return index;
