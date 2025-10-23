@@ -1,4 +1,5 @@
 #include "english_monero_mnemonic_tests.h"
+#include "spanish_monero_mnemonic_tests.h"
 #include "french_monero_mnemonic_tests.h"
 #include "italian_monero_mnemonic_tests.h"
 #include "dutch_monero_mnemonic_tests.h"
