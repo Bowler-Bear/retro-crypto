@@ -241,28 +241,33 @@ int32_t monero_mnemonic_find_word_index_allowing_partial_word(const char* word, 
     const char** word_list = legacy_monero_mnemonic_get_word_list(language);
     if (!word_list) return -1;
 
-    if (language == MoneroPortuguese)
-    {
-        if ((allow_partial_word && strncmp("botina", word, word_length) == 0) || strcmp("botina", word) == 0)
-        {
+    if (language == MoneroPortuguese) {
+        if ((allow_partial_word && strncmp("botina", word, word_length) == 0) || strcmp("botina", word) == 0) {
             return 209;
         }
-        else if ((allow_partial_word && strncmp("boquiaberto", word, word_length) == 0) || strcmp("boquiaberto", word) == 0)
-        {
+        else if ((allow_partial_word && strncmp("boquiaberto", word, word_length) == 0) || strcmp("boquiaberto", word) == 0) {
             return 210;
         }
-        else if ((allow_partial_word && strncmp("glaucio", word, word_length) == 0) || strcmp("glaucio", word) == 0)
-        {
+        else if ((allow_partial_word && strncmp("glaucio", word, word_length) == 0) || strcmp("glaucio", word) == 0) {
             return 628;
         }
-        else if ((allow_partial_word && strncmp("grelhado", word, word_length) == 0) || strcmp("grelhado", word) == 0)
-        {
+        else if ((allow_partial_word && strncmp("grelhado", word, word_length) == 0) || strcmp("grelhado", word) == 0) {
             return 660;
         }
-        else if ((allow_partial_word && strncmp("respeito", word, word_length) == 0) || strcmp("respeito", word) == 0)
-        {
+        else if ((allow_partial_word && strncmp("respeito", word, word_length) == 0) || strcmp("respeito", word) == 0) {
             return 1282;
         }
+    } else if (language == MoneroJapanese) {
+        for (int i = 0; i < 1626; i++) {
+            if (allow_partial_word) {
+                if(strncmp(word_list[i], word, word_length) == 0) {
+                    return i;
+                }
+            } else if(strcmp(word_list[i], word) == 0) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     uint32_t lower = 0, upper = MONERO_WORDLIST_WORD_COUNT - 1;
