@@ -9,6 +9,7 @@
 #include "monero_portuguese_words.h"
 #include "monero_russian_words.h"
 #include "monero_japanese_words.h"
+#include "monero_chinese_words.h"
 #include "monero_esperanto_words.h"
 #include "memzero.h"
 #include "crc.h"
@@ -34,7 +35,7 @@ const char** legacy_monero_mnemonic_get_word_list(enum MoneroLanguage language) 
     case MoneroJapanese:
         return monero_japanese_words;
     case MoneroChinese:
-        return 0;
+        return monero_chinese_words;
     case MoneroEsperanto:
         return monero_esperanto_words;
     case MoneroLojban:
@@ -257,7 +258,7 @@ int32_t monero_mnemonic_find_word_index_allowing_partial_word(const char* word, 
         else if ((allow_partial_word && strncmp("respeito", word, word_length) == 0) || strcmp("respeito", word) == 0) {
             return 1282;
         }
-    } else if (language == MoneroJapanese) {
+    } else if (language == MoneroJapanese || language == MoneroChinese) {
         for (int i = 0; i < 1626; i++) {
             if (allow_partial_word) {
                 if(strncmp(word_list[i], word, word_length) == 0) {
