@@ -3,6 +3,7 @@
 
 #include "legacy_monero_mnemonic.h"
 #include "monero_english_words.h"
+#include "monero_spanish_words.h"
 #include "monero_french_words.h"
 #include "monero_italian_words.h"
 #include "monero_dutch_words.h"
@@ -22,7 +23,7 @@ const char** legacy_monero_mnemonic_get_word_list(enum MoneroLanguage language) 
     case MoneroEnglish:
         return monero_english_words;
     case MoneroSpanish:
-        return 0;
+        return monero_spanish_words;
     case MoneroFrench:
         return monero_french_words;
     case MoneroItalian:
@@ -238,7 +239,7 @@ int32_t monero_mnemonic_find_word_index_allowing_partial_word(const char* word, 
 
     uint8_t word_length = strlen(word);
     uint8_t minPrefixLength = legacy_monero_mnemonic_language_prefix_length(language);
-    if (word_length < minPrefixLength) return -1;
+    if ((word_length < minPrefixLength && language != MoneroSpanish) || (language == MoneroSpanish && word_length < 3)) return -1;
 
     const char** word_list = legacy_monero_mnemonic_get_word_list(language);
     if (!word_list) return -1;
@@ -259,7 +260,7 @@ int32_t monero_mnemonic_find_word_index_allowing_partial_word(const char* word, 
         else if ((allow_partial_word && strncmp("respeito", word, word_length) == 0) || strcmp("respeito", word) == 0) {
             return 1282;
         }
-    } else if (language == MoneroJapanese || language == MoneroChinese || language == MoneroLojban) {
+    } else if (language == MoneroSpanish || language == MoneroJapanese || language == MoneroChinese || language == MoneroLojban) {
         for (int i = 0; i < 1626; i++) {
             if (allow_partial_word) {
                 if(strncmp(word_list[i], word, word_length) == 0) {
