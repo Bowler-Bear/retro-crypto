@@ -121,13 +121,15 @@ BOOST_AUTO_TEST_CASE( find_null_pointer_word )
 	BOOST_TEST( index == -1 );
 }
 
-BOOST_AUTO_TEST_CASE( find_word_under_3_chars )
+BOOST_AUTO_TEST_CASE( find_word_under_4_chars )
 {
 	int32_t index = monero_mnemonic_find_word_index_allowing_partial_word("", MoneroEsperanto, true);
 	BOOST_TEST( index == -1 );
 	index = monero_mnemonic_find_word_index_allowing_partial_word("a", MoneroEsperanto, true);
 	BOOST_TEST( index == -1 );
-	index = monero_mnemonic_find_word_index_allowing_partial_word("aa", MoneroEsperanto, true);
+	index = monero_mnemonic_find_word_index_allowing_partial_word("ab", MoneroEsperanto, true);
+	BOOST_TEST( index == -1 );
+	index = monero_mnemonic_find_word_index_allowing_partial_word("aba", MoneroEsperanto, true);
 	BOOST_TEST( index == -1 );
 }
 
