@@ -17,6 +17,8 @@ const char** legacy_monero_mnemonic_get_word_list(enum MoneroLanguage language) 
     switch(language) {
     case MoneroEnglish:
         return monero_english_words;
+    case MoneroSpanish:
+        return 0;
     case MoneroFrench:
         return monero_french_words;
     case MoneroItalian:
@@ -25,8 +27,18 @@ const char** legacy_monero_mnemonic_get_word_list(enum MoneroLanguage language) 
         return monero_dutch_words;
     case MoneroPortuguese:
         return monero_portuguese_words;
+    case MoneroRussian:
+        return 0;
+    case MoneroJapanese:
+        return 0;
+    case MoneroChinese:
+        return 0;
     case MoneroEsperanto:
         return monero_esperanto_words;
+    case MoneroLojban:
+        return 0;
+    case MoneroGerman:
+        return 0;
     default:
         return 0;
     }
@@ -36,6 +48,8 @@ uint8_t legacy_monero_mnemonic_language_prefix_length(enum MoneroLanguage langua
     switch(language) {
     case MoneroEnglish:
         return MONERO_ENGLISH_PREFIX_LENGTH;
+    case MoneroSpanish:
+        return MONERO_SPANISH_PREFIX_LENGTH;
     case MoneroFrench:
         return MONERO_FRENCH_PREFIX_LENGTH;
     case MoneroItalian:
@@ -44,8 +58,18 @@ uint8_t legacy_monero_mnemonic_language_prefix_length(enum MoneroLanguage langua
         return MONERO_DUTCH_PREFIX_LENGTH;
     case MoneroPortuguese:
         return MONERO_PORTUGUESE_PREFIX_LENGTH;
+    case MoneroRussian:
+        return MONERO_RUSSIAN_PREFIX_LENGTH;
+    case MoneroJapanese:
+        return MONERO_JAPANESE_PREFIX_LENGTH;
+    case MoneroChinese:
+        return MONERO_CHINESE_PREFIX_LENGTH;
     case MoneroEsperanto:
         return MONERO_ESPERANTO_PREFIX_LENGTH;
+    case MoneroLojban:
+        return MONERO_LOJBAN_PREFIX_LENGTH;
+    case MoneroGerman:
+        return MONERO_GERMAN_PREFIX_LENGTH;
     default:
         return 0;
     }
