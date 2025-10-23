@@ -53,7 +53,8 @@ static const char* validMnemonics[] = {
 
 BOOST_AUTO_TEST_CASE( check_valid_mnemonics )
 {
-	for (int i = 0; i < sizeof(validMnemonics)/sizeof(char*); i++) {
+	for (int i = 0; i < sizeof(validMnemonics)/sizeof(char*); i++)
+	{
 		uint8_t valid = legacy_monero_mnemonic_check(validMnemonics[i], MoneroItalian);
 		BOOST_TEST( valid == 1 );
 	}
@@ -61,7 +62,8 @@ BOOST_AUTO_TEST_CASE( check_valid_mnemonics )
 
 BOOST_AUTO_TEST_CASE( valid_mnemonics_to_seeds_and_back )
 {
-	for (int i = 0; i < sizeof(validMnemonics)/sizeof(char*); i++) {
+	for (int i = 0; i < sizeof(validMnemonics)/sizeof(char*); i++)
+	{
 		uint8_t seed[32] = { 0x00 };
 		uint8_t success = legacy_monero_mnemonic_to_seed(validMnemonics[i], seed, MoneroItalian);
 		BOOST_TEST( success != 0 );
@@ -83,7 +85,8 @@ BOOST_AUTO_TEST_CASE( invalid_mnemonics )
 		//more than 25 words
 		"abbinare abbonato abisso abitare abominio accadere accesso acciaio accordo accumulo acido acqua acrobata acustico adattare addetto addio addome adeguato aderire adorare adottare adozione adulto abitare abitare"
         };
-	for (int i = 0; i < sizeof(invalidMnemonics)/sizeof(char*); i++) {
+	for (int i = 0; i < sizeof(invalidMnemonics)/sizeof(char*); i++)
+	{
 		uint8_t seed[32] = { 0x00 };
 		uint8_t success = legacy_monero_mnemonic_to_seed(invalidMnemonics[i], seed, MoneroItalian);
 		BOOST_TEST( success == 0 );
@@ -105,7 +108,7 @@ BOOST_AUTO_TEST_CASE( bad_seed_sizes )
 BOOST_AUTO_TEST_CASE( invalid_word_indices )
 {
 	int32_t indices[] = { -2, -1, 1627, 1628 };
-	for(int i = 0; i < sizeof(indices); i++)
+	for(int i = 0; i < 4; i++)
 	{
 		const char* word = get_monero_mnemonic_word_from_list(indices[i], MoneroItalian);
 		BOOST_TEST( word == nullptr );

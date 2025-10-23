@@ -53,7 +53,8 @@ static const char* validMnemonics[] = {
 
 BOOST_AUTO_TEST_CASE( check_valid_mnemonics )
 {
-	for (int i = 0; i < sizeof(validMnemonics)/sizeof(char*); i++) {
+	for (int i = 0; i < sizeof(validMnemonics)/sizeof(char*); i++)
+	{
 		uint8_t valid = legacy_monero_mnemonic_check(validMnemonics[i], MoneroDutch);
 		BOOST_TEST( valid == 1 );
 	}
@@ -61,7 +62,8 @@ BOOST_AUTO_TEST_CASE( check_valid_mnemonics )
 
 BOOST_AUTO_TEST_CASE( valid_mnemonics_to_seeds_and_back )
 {
-	for (int i = 0; i < sizeof(validMnemonics)/sizeof(char*); i++) {
+	for (int i = 0; i < sizeof(validMnemonics)/sizeof(char*); i++)
+	{
 		uint8_t seed[32] = { 0x00 };
 		uint8_t success = legacy_monero_mnemonic_to_seed(validMnemonics[i], seed, MoneroDutch);
 		BOOST_TEST( success != 0 );
@@ -79,11 +81,12 @@ BOOST_AUTO_TEST_CASE( invalid_mnemonics )
 		//'invalid' not a word in the word list
 		"invalid aalscholver aambeeld aangeef aanlandig aanvaard aanwakker aapmens aarten abdicatie abnormaal abrikoos accu acuut adjudant admiraal advies afbidding afdracht affaire affiche afgang afkick afknap afknap",
 		//less than 24 words
-		"aalglad aalscholver aambeeld aangeef aanlandig aanvaard aanwakker aapmens aarten abdicatie abnormaal abrikoos accu acuut adjudant admiraal advies afbidding afdracht affaire affiche afgang afkick"
+		"aalglad aalscholver aambeeld aangeef aanlandig aanvaard aanwakker aapmens aarten abdicatie abnormaal abrikoos accu acuut adjudant admiraal advies afbidding afdracht affaire affiche afgang afkick",
 		//more than 25 words
 		"aalglad aalscholver aambeeld aangeef aanlandig aanvaard aanwakker aapmens aarten abdicatie abnormaal abrikoos accu acuut adjudant admiraal advies afbidding afdracht affaire affiche afgang afkick afknap afknap afknap"
         };
-	for (int i = 0; i < sizeof(invalidMnemonics)/sizeof(char*); i++) {
+	for (int i = 0; i < sizeof(invalidMnemonics)/sizeof(char*); i++)
+	{
 		uint8_t seed[32] = { 0x00 };
 		uint8_t success = legacy_monero_mnemonic_to_seed(invalidMnemonics[i], seed, MoneroDutch);
 		BOOST_TEST( success == 0 );
@@ -105,7 +108,7 @@ BOOST_AUTO_TEST_CASE( bad_seed_sizes )
 BOOST_AUTO_TEST_CASE( invalid_word_indices )
 {
 	int32_t indices[] = { -2, -1, 1627, 1628 };
-	for(int i = 0; i < sizeof(indices); i++)
+	for(int i = 0; i < 4; i++)
 	{
 		const char* word = get_monero_mnemonic_word_from_list(indices[i], MoneroDutch);
 		BOOST_TEST( word == nullptr );
