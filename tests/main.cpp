@@ -4,4 +4,5 @@
 #include "dutch_monero_mnemonic_tests.h"
 #include "portuguese_monero_mnemonic_tests.h"
 #include "russian_monero_mnemonic_tests.h"
+#include "japanese_monero_mnemonic_tests.h"
 #include "esperanto_monero_mnemonic_tests.h"
