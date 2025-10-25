@@ -363,6 +363,10 @@ namespace RetroCrypto
 			return bip39MnemonicFromGlobalContext();
 		case RetroCrypto::MnemonicType::LEGACY_MONERO_ENGLISH:
 			return legacyMoneroEnglishMnemonicFromGlobalContext();
+		case RetroCrypto::MnemonicType::LEGACY_MONERO_GERMAN:
+			return legacyMoneroGermanMnemonicFromGlobalContext();
+		case RetroCrypto::MnemonicType::LEGACY_MONERO_SPANISH:
+			return legacyMoneroSpanishMnemonicFromGlobalContext();
 		case RetroCrypto::MnemonicType::LEGACY_MONERO_FRENCH:
 			return legacyMoneroFrenchMnemonicFromGlobalContext();
 		case RetroCrypto::MnemonicType::LEGACY_MONERO_ITALIAN:
@@ -371,8 +375,16 @@ namespace RetroCrypto
 			return legacyMoneroDutchMnemonicFromGlobalContext();
 		case RetroCrypto::MnemonicType::LEGACY_MONERO_PORTUGUESE:
 			return legacyMoneroPortugueseMnemonicFromGlobalContext();
+		case RetroCrypto::MnemonicType::LEGACY_MONERO_RUSSIAN:
+			return legacyMoneroRussianMnemonicFromGlobalContext();
+		case RetroCrypto::MnemonicType::LEGACY_MONERO_JAPANESE:
+			return legacyMoneroJapaneseMnemonicFromGlobalContext();
+		case RetroCrypto::MnemonicType::LEGACY_MONERO_CHINESE:
+			return legacyMoneroChineseMnemonicFromGlobalContext();
 		case RetroCrypto::MnemonicType::LEGACY_MONERO_ESPERANTO:
 			return legacyMoneroEsperantoMnemonicFromGlobalContext();
+		case RetroCrypto::MnemonicType::LEGACY_MONERO_LOJBAN:
+			return legacyMoneroLojbanMnemonicFromGlobalContext();
 		default:
 			return std::string("This seed phrase is currently not supported.");
 		}
@@ -424,7 +436,9 @@ namespace RetroCrypto
 
 	std::string legacyMoneroGermanMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize)
 	{
-		return std::string("This seed phrase is currently not supported.");
+		std::string mnemonic(legacy_monero_mnemonic_from_seed(seed, seedSize, MoneroGerman));
+		clear_legacy_monero_mnemonic();
+		return mnemonic;
 	}
 
 	std::string legacyMoneroSpanishMnemonicFromGlobalContext()
@@ -439,7 +453,9 @@ namespace RetroCrypto
 
 	std::string legacyMoneroSpanishMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize)
 	{
-		return std::string("This seed phrase is currently not supported.");
+		std::string mnemonic(legacy_monero_mnemonic_from_seed(seed, seedSize, MoneroSpanish));
+		clear_legacy_monero_mnemonic();
+		return mnemonic;
 	}
 
 	std::string legacyMoneroFrenchMnemonicFromGlobalContext()
@@ -522,7 +538,9 @@ namespace RetroCrypto
 
 	std::string legacyMoneroRussianMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize)
 	{
-		return std::string("This seed phrase is currently not supported.");
+		std::string mnemonic(legacy_monero_mnemonic_from_seed(seed, seedSize, MoneroRussian));
+		clear_legacy_monero_mnemonic();
+		return mnemonic;
 	}
 
 	std::string legacyMoneroJapaneseMnemonicFromGlobalContext()
@@ -537,7 +555,9 @@ namespace RetroCrypto
 
 	std::string legacyMoneroJapaneseMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize)
 	{
-		return std::string("This seed phrase is currently not supported.");
+		std::string mnemonic(legacy_monero_mnemonic_from_seed(seed, seedSize, MoneroJapanese));
+		clear_legacy_monero_mnemonic();
+		return mnemonic;
 	}
 
 	std::string legacyMoneroChineseMnemonicFromGlobalContext()
@@ -552,7 +572,9 @@ namespace RetroCrypto
 
 	std::string legacyMoneroChineseMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize)
 	{
-		return std::string("This seed phrase is currently not supported.");
+		std::string mnemonic(legacy_monero_mnemonic_from_seed(seed, seedSize, MoneroChinese));
+		clear_legacy_monero_mnemonic();
+		return mnemonic;
 	}
 
 	std::string legacyMoneroEsperantoMnemonicFromGlobalContext()
@@ -584,6 +606,8 @@ namespace RetroCrypto
 
 	std::string legacyMoneroLojbanMnemonicFromSeed(const uint8_t* seed, const uint8_t seedSize)
 	{
-		return std::string("This seed phrase is currently not supported.");
+		std::string mnemonic(legacy_monero_mnemonic_from_seed(seed, seedSize, MoneroLojban));
+		clear_legacy_monero_mnemonic();
+		return mnemonic;
 	}
 }
