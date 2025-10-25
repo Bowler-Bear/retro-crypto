@@ -9,3 +9,4 @@
 #include "chinese_monero_mnemonic_tests.h"
 #include "esperanto_monero_mnemonic_tests.h"
 #include "lojban_monero_mnemonic_tests.h"
+#include "german_monero_mnemonic_tests.h"
