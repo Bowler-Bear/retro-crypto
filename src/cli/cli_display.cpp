@@ -80,7 +80,12 @@ void CLIDisplay::drawTextBox(const TextBox& textBox)
 		ControlSequences::sendSetSlowBlink();
 	if (textBox.isBordered())
 		drawBox(textBox);
-	ControlSequences::sendSetCursorPostion(textBox.yPosition+1+textBox.height/2, textBox.xPosition+1+(textBox.width-textBox.text.size())/2);
+	if ((textBox.text[0] & 0xe0) == 0xc0 || (textBox.text[0] & 0xf8) == 0xf0)
+		ControlSequences::sendSetCursorPostion(textBox.yPosition+1+textBox.height/2, textBox.xPosition+1+(textBox.width-(textBox.text.length()/2))/2);
+	else if((textBox.text[0] & 0xf0) == 0xe0)
+		ControlSequences::sendSetCursorPostion(textBox.yPosition+1+textBox.height/2, textBox.xPosition+1+(textBox.width-(2*textBox.text.length()/3))/2);
+	else
+		ControlSequences::sendSetCursorPostion(textBox.yPosition+1+textBox.height/2, textBox.xPosition+1+(textBox.width-textBox.text.length())/2);
 	ControlSequences::sendText(textBox);
 	ControlSequences::flush();
 }

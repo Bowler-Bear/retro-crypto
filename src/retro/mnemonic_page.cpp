@@ -121,8 +121,8 @@ void MnemonicPage::drawMnemonic(shared_ptr<IDisplay> display)
 	mnemonicTitleBox.setBold();
 	display->drawTextBox(mnemonicTitleBox);
 
-	uint32_t splitPoints[] = { 0, 0, 0, 0 };
-	const uint8_t lines = sizeof(splitPoints)/sizeof(uint32_t);
+	uint32_t splitPoints[4] = { 0, 0, 0, 0 };
+	const uint8_t lines = 4;
 	const uint8_t phraseWordsCount = 24;
 	const uint8_t wordsPerLine = phraseWordsCount/lines;
 	uint8_t spaceCount = 0;
@@ -132,7 +132,7 @@ void MnemonicPage::drawMnemonic(shared_ptr<IDisplay> display)
 		{
 			spaceCount++;
 			if (spaceCount % wordsPerLine == 0)
-				splitPoints[spaceCount/wordsPerLine] = i;
+				splitPoints[spaceCount/wordsPerLine] = i+1;
 			if (spaceCount >= 3*wordsPerLine)
 				break;
 		}
