@@ -23,6 +23,7 @@ namespace RetroCrypto
 		virtual void reset() override;
 		virtual void onEnter() override;
 		void drawPredictedWord(shared_ptr<IDisplay> display);
+		void loadCurrentInputWord(char* currentWord, bool onlyUpToCursor = true);
 	};
 }
 #endif

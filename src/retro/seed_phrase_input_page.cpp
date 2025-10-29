@@ -8,13 +8,41 @@ extern "C"
 {
 #include "bip39.h"
 #include "legacy_monero_mnemonic.h"
+#include "monero_chinese_words.h"
 }
 
-#define MAXIMUM_WORD_LENGTH 20
+#define MAXIMUM_WORD_LENGTH MONERO_MAXIMUM_WORD_LENGTH
 
 static const char* alphabetCharSet = "abcdefghijklmnopqrstuvwxyz";
+static const char* germanCharSet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYZÄÖÜäöüß";
+static const char* spanishCharSet = "abcdefghijklmnopqrstuvwxyzáíéóúñ";
+static const char* russianCharSet = "абвьыъгдежзийклюмнопрстуфхцчшщэя";
+static const char* japaneseCharSet = "あいぃえおうかがきぎけげこごくぐさざしじせぜそぞすずただちつづってでとどなにねのぬまみめもむらりれろるはばぱひびぴへべぺほぼぽふぶぷやゃゆゅよょんわ";
+static char chineseCharSet[3*MONERO_WORDLIST_WORD_COUNT] = { '\0' };
+static const char* lojbanCharSet = "abcdefghijklmnopqrstuvwxyz\'";
 
 using namespace RetroCrypto;
+
+int32_t getCharacterIndex(char utf8Character[4], const char* usedCharSet)
+{
+	uint32_t charactersToCompare = strlen(utf8Character);
+	for (uint32_t i = 0; i < strlen(usedCharSet); i++)
+	{
+		for (uint32_t j = 0; j < charactersToCompare; j++)
+		{
+			if (i+j >= strlen(usedCharSet))
+				break;
+			if (usedCharSet[i+j] == utf8Character[j])
+			{
+				if (j == charactersToCompare-1)
+					return i;
+				continue;
+			}
+			break;
+		}
+	}
+	return -1;
+}
 
 SeedPhraseInputPage::SeedPhraseInputPage()
 : InputPage()
@@ -41,6 +69,10 @@ MoneroLanguage getMoneroLanguage(ContextData data)
 	default:
 	case RetroCrypto::MnemonicType::LEGACY_MONERO_ENGLISH:
 		return MoneroEnglish;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_GERMAN:
+		return MoneroGerman;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_SPANISH:
+		return MoneroSpanish;
 	case RetroCrypto::MnemonicType::LEGACY_MONERO_FRENCH:
 		return MoneroFrench;
 	case RetroCrypto::MnemonicType::LEGACY_MONERO_ITALIAN:
@@ -49,8 +81,16 @@ MoneroLanguage getMoneroLanguage(ContextData data)
 		return MoneroDutch;
 	case RetroCrypto::MnemonicType::LEGACY_MONERO_PORTUGUESE:
 		return MoneroPortuguese;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_RUSSIAN:
+		return MoneroRussian;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_JAPANESE:
+		return MoneroJapanese;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_CHINESE:
+		return MoneroChinese;
 	case RetroCrypto::MnemonicType::LEGACY_MONERO_ESPERANTO:
 		return MoneroEsperanto;
+	case RetroCrypto::MnemonicType::LEGACY_MONERO_LOJBAN:
+		return MoneroLojban;
 	}
 }
 
@@ -63,28 +103,30 @@ void SeedPhraseInputPage::updateSelectedOption(InputType input)
 		return;
 	}
 	char currentWord[MAXIMUM_WORD_LENGTH] = { '\0' };
-	uint8_t lastIndex = selectedOptionIndex + (inputString[selectedOptionIndex] == -1 ? 0 : 1);
-	for (uint8_t i = 0; i < lastIndex; i++)
-	{
-		currentWord[i] = usedCharSet[inputString[i]];
-	}
+	loadCurrentInputWord(currentWord);
 	const char* foundWord = nullptr;
 	ContextData contextData = CoreSystem::getCoreSystem().getContextData();
 	switch (contextData.mnemonicType)
 	{
 	case MnemonicType::LEGACY_MONERO_ENGLISH:
+	case MnemonicType::LEGACY_MONERO_GERMAN:
+	case MnemonicType::LEGACY_MONERO_SPANISH:
 	case MnemonicType::LEGACY_MONERO_FRENCH:
 	case MnemonicType::LEGACY_MONERO_ITALIAN:
 	case MnemonicType::LEGACY_MONERO_DUTCH:
 	case MnemonicType::LEGACY_MONERO_PORTUGUESE:
+	case MnemonicType::LEGACY_MONERO_RUSSIAN:
+	case MnemonicType::LEGACY_MONERO_JAPANESE:
+	case MnemonicType::LEGACY_MONERO_CHINESE:
 	case MnemonicType::LEGACY_MONERO_ESPERANTO:
+	case MnemonicType::LEGACY_MONERO_LOJBAN:
 	{
 		MoneroLanguage usedMoneroLanguage = getMoneroLanguage(contextData);
 		foundWord = get_monero_mnemonic_word_from_list(monero_mnemonic_find_word_index_allowing_partial_word(currentWord, usedMoneroLanguage, true), usedMoneroLanguage);
 		break;
 	}
 	case MnemonicType::BIP39:
-		foundWord = mnemonic_complete_word(currentWord, lastIndex);
+		foundWord = mnemonic_complete_word(currentWord, selectedOptionIndex + (inputString[selectedOptionIndex] == -1 ? 0 : 1));
 		break;
 	case MnemonicType::NONE:
 	default:
@@ -93,10 +135,33 @@ void SeedPhraseInputPage::updateSelectedOption(InputType input)
 	if (foundWord)
 	{
 		predictedWord = foundWord;
-		for (size_t i = selectedOptionIndex+1; i < std::strlen(foundWord); i++)
+		uint8_t characters = 0;
+		for (size_t i = 0; i < std::strlen(foundWord); i++)
+		{
 			if (usedCharSet == alphabetCharSet)
+			{
+				characters++;
+				if (i < selectedOptionIndex+1)
+					continue;
 				inputString[i] = foundWord[i]-0x61;
-		for (size_t i = std::strlen(foundWord); i < MAXIMUM_WORD_LENGTH; i++)
+				continue;
+			}
+			uint8_t codePoints = getCodePointCount(foundWord[i]);
+			if (characters < selectedOptionIndex+1)
+			{
+				characters++;
+				i += codePoints;
+				continue;
+			}
+			else
+			{
+				char currentCharacter[4] = { '\0' };
+				memcpy(currentCharacter, foundWord + i, codePoints+1);
+				inputString[characters++] = getCharacterIndex(currentCharacter, usedCharSet);
+				i += codePoints;
+			}
+		}
+		for (size_t i = characters; i < stringSize; i++)
 			inputString[i] = -1;
 	}
 	if (!previousWord.empty())
@@ -127,22 +192,22 @@ bool SeedPhraseInputPage::consumeInput(InputType input)
 		{
 		int32_t foundWordIndex = -1;
 		char currentWord[MAXIMUM_WORD_LENGTH] = { '\0' };
-		for (uint8_t i = 0; i < MAXIMUM_WORD_LENGTH; i++)
-		{
-			int32_t charIndex = inputString[i];
-			if (charIndex < 0)
-				break;
-			currentWord[i] = usedCharSet[charIndex];
-		}
+		loadCurrentInputWord(currentWord, false);
 		ContextData contextData = CoreSystem::getCoreSystem().getContextData();
 		switch (contextData.mnemonicType)
 		{
 		case MnemonicType::LEGACY_MONERO_ENGLISH:
+		case MnemonicType::LEGACY_MONERO_GERMAN:
+		case MnemonicType::LEGACY_MONERO_SPANISH:
 		case MnemonicType::LEGACY_MONERO_FRENCH:
 		case MnemonicType::LEGACY_MONERO_ITALIAN:
 		case MnemonicType::LEGACY_MONERO_DUTCH:
 		case MnemonicType::LEGACY_MONERO_PORTUGUESE:
+		case MnemonicType::LEGACY_MONERO_RUSSIAN:
+		case MnemonicType::LEGACY_MONERO_JAPANESE:
+		case MnemonicType::LEGACY_MONERO_CHINESE:
 		case MnemonicType::LEGACY_MONERO_ESPERANTO:
+		case MnemonicType::LEGACY_MONERO_LOJBAN:
 		{
 			MoneroLanguage usedMoneroLanguage = getMoneroLanguage(contextData);
 			foundWordIndex = monero_mnemonic_find_word_index(currentWord, usedMoneroLanguage);
@@ -205,6 +270,8 @@ bool SeedPhraseInputPage::consumeInput(InputType input)
 			break;
 		case MnemonicType::NONE:
 		default:
+			reset();
+			description = std::string("ERROR: INVALID MNEMONIC TYPE");
 			return true;
 		}
 		previousWord = currentWord;
@@ -257,6 +324,48 @@ void SeedPhraseInputPage::reset()
 void SeedPhraseInputPage::onEnter()
 {
 	reset();
+	switch (CoreSystem::getCoreSystem().getContextData().mnemonicType)
+	{
+	case MnemonicType::LEGACY_MONERO_GERMAN:
+		setStringSize(8);
+		setUsedCharSet(germanCharSet);
+		setCharWidth(1);
+		break;
+	case MnemonicType::LEGACY_MONERO_SPANISH:
+		setStringSize(8);
+		setUsedCharSet(spanishCharSet);
+		setCharWidth(1);
+		break;
+	case MnemonicType::LEGACY_MONERO_RUSSIAN:
+		setStringSize(8);
+		setUsedCharSet(russianCharSet);
+		setCharWidth(1);
+		break;
+	case MnemonicType::LEGACY_MONERO_JAPANESE:
+		setStringSize(7);
+		setUsedCharSet(japaneseCharSet);
+		setCharWidth(2);
+		break;
+	case MnemonicType::LEGACY_MONERO_CHINESE:
+		setStringSize(1);
+		setUsedCharSet(chineseCharSet);
+		setCharWidth(2);
+		for (uint32_t i = 0; i < MONERO_WORDLIST_WORD_COUNT; i++)
+		{
+			memcpy(&chineseCharSet[3*i], monero_chinese_words[i], 3);
+		}
+		break;
+	case MnemonicType::LEGACY_MONERO_LOJBAN:
+		setStringSize(13);
+		setUsedCharSet(lojbanCharSet);
+		setCharWidth(1);
+		break;
+	default:
+		setStringSize(MAXIMUM_WORD_LENGTH);
+		setUsedCharSet(alphabetCharSet);
+		setCharWidth(1);
+		break;
+	}
 }
 
 void SeedPhraseInputPage::drawPredictedWord(shared_ptr<IDisplay> display)
@@ -272,4 +381,24 @@ void SeedPhraseInputPage::drawPredictedWord(shared_ptr<IDisplay> display)
 	predictedWordBox.height = 5;
 	predictedWordBox.setBordered();
 	display->drawTextBox(predictedWordBox);
+}
+
+void SeedPhraseInputPage::loadCurrentInputWord(char* currentWord, bool onlyUpToCursor)
+{
+	uint8_t lastIndex = max(0, selectedOptionIndex + (inputString[selectedOptionIndex] == -1 ? -1 : 0));
+	if (!onlyUpToCursor)
+		for (uint8_t i = 0; i < inputString.size(); i++)
+			if (inputString[i] == -1)
+				break;
+			else
+				lastIndex = i;
+	for (uint8_t i = 0; i < lastIndex+1; i++)
+	{
+		uint8_t codePoints = getCodePointCount(usedCharSet[inputString[i]]);
+		for (uint8_t j = 0; j <= codePoints; j++)
+		{
+			if (inputString[i]+j >= 0 && inputString[i]+j < strlen(usedCharSet))
+				currentWord[strlen(currentWord)] = usedCharSet[inputString[i]+j];
+		}
+	}
 }

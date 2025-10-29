@@ -15,6 +15,7 @@ namespace RetroCrypto
 		uint8_t stringSize;
 		shared_ptr<MenuTreeObject> destination;
 		const char* usedCharSet;
+		uint8_t charWidth;
 	public:
 		InputPage();
 		InputPage(string inTitle, std::shared_ptr<MenuTreeObject> inParent = nullptr);
@@ -25,10 +26,13 @@ namespace RetroCrypto
 		void setUsedCharSet(const char* charSet);
 		void setDescription(string newDescription);
 		void setDestination(shared_ptr<MenuTreeObject> newDestination);
+		void setCharWidth(uint8_t newCharWidth);
 		virtual shared_ptr<MenuTreeObject> getDestination() override;
 		virtual void onEnter() override;
 		virtual void drawInput(shared_ptr<IDisplay> display);
 		virtual void drawDescription(shared_ptr<IDisplay> display);
 	};
+
+	uint8_t getCodePointCount(char startCharacter);
 }
 #endif

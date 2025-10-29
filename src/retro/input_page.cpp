@@ -10,6 +10,7 @@ InputPage::InputPage()
 {
 	description = "";
 	stringSize = 1;
+	charWidth = 1;
 	destination = nullptr;
 	usedCharSet = nullptr;
 }
@@ -19,6 +20,7 @@ InputPage::InputPage(string inTitle, std::shared_ptr<MenuTreeObject> inParent)
 {
 	description = "";
 	stringSize = 1;
+	charWidth = 1;
 	destination = nullptr;
 	usedCharSet = nullptr;
 }
@@ -30,18 +32,52 @@ void InputPage::updateSelectedOption(InputType input)
 	switch (input)
 	{
 	case InputType::UP:
+		{
+			int32_t charSetSize = std::strlen(usedCharSet);
+			int32_t startCheckIndex = inputString[selectedOptionIndex];
+			uint8_t codePoints = startCheckIndex == -1 ? 0 : getCodePointCount(usedCharSet[startCheckIndex]);
+			if (startCheckIndex == -1)
+			{
+				inputString[selectedOptionIndex] = 0;
+				break;
+			}
+			else if (startCheckIndex >= charSetSize-1 || (startCheckIndex == charSetSize-2 && codePoints == 1) || (startCheckIndex == charSetSize-3 && codePoints == 2) || (startCheckIndex == charSetSize-4 && codePoints == 3))
+			{
+				inputString[selectedOptionIndex] = -1;
+				break;
+			}
+			inputString[selectedOptionIndex] = startCheckIndex+codePoints+1;
+		}
+		break;
 	case InputType::DOWN:
 		{
 			int32_t charSetSize = std::strlen(usedCharSet);
-			if (inputString[selectedOptionIndex] == -1)
+			int32_t startCheckIndex = inputString[selectedOptionIndex];
+			if (startCheckIndex == -1)
 			{
-				inputString[selectedOptionIndex] = input == InputType::DOWN ? charSetSize-1 : 0;
+				startCheckIndex = charSetSize;
+			}
+			else if (startCheckIndex == 0)
+			{
+				inputString[selectedOptionIndex] = -1;
 				break;
 			}
-			int32_t nextValue = (inputString[selectedOptionIndex] + charSetSize + (input == InputType::DOWN ? -1 : 1)) % charSetSize;
-			if ((inputString[selectedOptionIndex] == 0 && nextValue == charSetSize-1) || (inputString[selectedOptionIndex] == charSetSize-1 && nextValue == 0))
-				nextValue = -1;
-			inputString[selectedOptionIndex] = nextValue;
+			if (startCheckIndex-1 >= 0 && (usedCharSet[startCheckIndex-1] & 0x80) == 0)
+			{
+				inputString[selectedOptionIndex] = startCheckIndex-1;
+			}
+			else if(startCheckIndex-2 >= 0 && (usedCharSet[startCheckIndex-2] & 0xe0) == 0xc0)
+			{
+				inputString[selectedOptionIndex] = startCheckIndex-2;
+			}
+			else if(startCheckIndex-3 >= 0 && (usedCharSet[startCheckIndex-3] & 0xf0) == 0xe0)
+			{
+				inputString[selectedOptionIndex] = startCheckIndex-3;
+			}
+			else if(startCheckIndex-4 >= 0 && (usedCharSet[startCheckIndex-4] & 0xf8) == 0xf0)
+			{
+				inputString[selectedOptionIndex] = startCheckIndex-4;
+			}
 		}
 		break;
 	case InputType::LEFT:
@@ -86,6 +122,7 @@ void InputPage::reset()
 void InputPage::setStringSize(uint8_t size)
 {
 	stringSize = size;
+	inputString.resize(stringSize, -1);
 }
 
 void InputPage::setUsedCharSet(const char* charSet)
@@ -101,6 +138,11 @@ void InputPage::setDescription(string newDescription)
 void InputPage::setDestination(shared_ptr<MenuTreeObject> newDestination)
 {
 	destination = newDestination;
+}
+
+void InputPage::setCharWidth(uint8_t newCharWidth)
+{
+	charWidth = newCharWidth;
 }
 
 shared_ptr<MenuTreeObject> InputPage::getDestination()
@@ -123,29 +165,35 @@ void InputPage::drawInput(shared_ptr<IDisplay> display)
 {
 	if (usedCharSet == nullptr)
 		return;
-	for(size_t i = 0; i < inputString.size(); i++)
+	std::string navSymbols = " ";
+	std::string currentInput = " ";
+	for (size_t i = 0; i < inputString.size(); i++)
 	{
-		int32_t charIndex = inputString[i];
-		TextBox inputBox;
-		inputBox.text = string(1, charIndex == -1 ? '-' : usedCharSet[charIndex]);
-		inputBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+8;
-		inputBox.xPosition = (BASE_BORDER_BOX_WIDTH-stringSize)/2+i;
-		inputBox.width = 1;
-		inputBox.height = 1;
+		uint8_t codePoints = getCodePointCount(usedCharSet[inputString[i]]);
+		if (inputString[i] == -1)
+			for (uint8_t j = 0; j < charWidth; j++)
+				currentInput += '-';
+		else
+			for (uint8_t j = 0; j < codePoints+1; j++)
+				currentInput += usedCharSet[inputString[i]+j];
 		if (i == selectedOptionIndex)
-		{
-			inputBox.setBold();
-			TextBox asteriskBox("*");
-			asteriskBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+8-1;
-			asteriskBox.xPosition = (BASE_BORDER_BOX_WIDTH-stringSize)/2+i;
-			asteriskBox.width = 1;
-			asteriskBox.height = 1;
-			display->drawTextBox(asteriskBox);
-			asteriskBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+8+1;
-			display->drawTextBox(asteriskBox);
-		}
-		display->drawTextBox(inputBox);
+			for (uint8_t j = 0; j < charWidth; j++)
+				navSymbols += "*";
+		else
+			for (uint8_t j = 0; j < charWidth; j++)
+				navSymbols += " ";
 	}
+	TextBox inputBox(currentInput);
+	inputBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+8;
+	inputBox.xPosition = 1;
+	inputBox.width = BASE_BORDER_BOX_WIDTH-3;
+	inputBox.height = 1;
+	display->drawTextBox(inputBox);
+	inputBox.text = navSymbols;
+	inputBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+8-1;
+	display->drawTextBox(inputBox);
+	inputBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+8+1;
+	display->drawTextBox(inputBox);
 }
 
 void InputPage::drawDescription(shared_ptr<IDisplay> display)
@@ -159,4 +207,25 @@ void InputPage::drawDescription(shared_ptr<IDisplay> display)
 	descriptionBox.height = 5;
 	descriptionBox.setBordered();
 	display->drawTextBox(descriptionBox);
+}
+
+uint8_t RetroCrypto::getCodePointCount(char startCharacter)
+{
+	if ((startCharacter & 0x80) == 0)
+	{
+		return 0;
+	}
+	else if ((startCharacter & 0xe0) == 0xc0)
+	{
+		return 1;
+	}
+	else if ((startCharacter & 0xf0) == 0xe0)
+	{
+		return 2;
+	}
+	else if ((startCharacter & 0xf8) == 0xf0)
+	{
+		return 3;
+	}
+	return 0;
 }

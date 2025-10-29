@@ -194,6 +194,10 @@ MenuTree::MenuTree()
 		restoreFromBIP39Option->setOnSelectedFunction(&setBIP39MnemonicContext);
 		shared_ptr<MenuOption> restoreFromLegacyMoneroEnglishPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero English", "Restore seed bit from legacy monero english seed phrase.");
 		restoreFromLegacyMoneroEnglishPhraseOption->setOnSelectedFunction(&setLegacyMoneroEnglishMnemonicContext);
+		shared_ptr<MenuOption> restoreFromLegacyMoneroGermanPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero German", "Restore seed bit from legacy monero german seed phrase.");
+		restoreFromLegacyMoneroGermanPhraseOption->setOnSelectedFunction(&setLegacyMoneroGermanMnemonicContext);
+		shared_ptr<MenuOption> restoreFromLegacyMoneroSpanishPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero Spanish", "Restore seed bit from legacy monero spanish seed phrase.");
+		restoreFromLegacyMoneroSpanishPhraseOption->setOnSelectedFunction(&setLegacyMoneroSpanishMnemonicContext);
 		shared_ptr<MenuOption> restoreFromLegacyMoneroFrenchPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero French", "Restore seed bit from legacy monero french seed phrase.");
 		restoreFromLegacyMoneroFrenchPhraseOption->setOnSelectedFunction(&setLegacyMoneroFrenchMnemonicContext);
 		shared_ptr<MenuOption> restoreFromLegacyMoneroItalianPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero Italian", "Restore seed bit from legacy monero italian seed phrase.");
@@ -202,26 +206,46 @@ MenuTree::MenuTree()
 		restoreFromLegacyMoneroDutchPhraseOption->setOnSelectedFunction(&setLegacyMoneroDutchMnemonicContext);
 		shared_ptr<MenuOption> restoreFromLegacyMoneroPortuguesePhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero Portuguese", "Restore seed bit from legacy monero portuguese seed phrase.");
 		restoreFromLegacyMoneroPortuguesePhraseOption->setOnSelectedFunction(&setLegacyMoneroPortugueseMnemonicContext);
+		shared_ptr<MenuOption> restoreFromLegacyMoneroRussianPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero Russian", "Restore seed bit from legacy monero russian seed phrase.");
+		restoreFromLegacyMoneroRussianPhraseOption->setOnSelectedFunction(&setLegacyMoneroRussianMnemonicContext);
+		shared_ptr<MenuOption> restoreFromLegacyMoneroJapanesePhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero Japanese", "Restore seed bit from legacy monero japanese seed phrase.");
+		restoreFromLegacyMoneroJapanesePhraseOption->setOnSelectedFunction(&setLegacyMoneroJapaneseMnemonicContext);
+		shared_ptr<MenuOption> restoreFromLegacyMoneroChinesePhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero Chinese", "Restore seed bit from legacy monero chinese seed phrase.");
+		restoreFromLegacyMoneroChinesePhraseOption->setOnSelectedFunction(&setLegacyMoneroChineseMnemonicContext);
 		shared_ptr<MenuOption> restoreFromLegacyMoneroEsperantoPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero Esperanto", "Restore seed bit from legacy monero esperanto seed phrase.");
 		restoreFromLegacyMoneroEsperantoPhraseOption->setOnSelectedFunction(&setLegacyMoneroEsperantoMnemonicContext);
+		shared_ptr<MenuOption> restoreFromLegacyMoneroLojbanPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero Lojban", "Restore seed bit from legacy monero lojban seed phrase.");
+		restoreFromLegacyMoneroLojbanPhraseOption->setOnSelectedFunction(&setLegacyMoneroLojbanMnemonicContext);
 		pickPhraseTypeMenu->addOption(restoreFromBIP39Option);
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroEnglishPhraseOption);
+		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroGermanPhraseOption);
+		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroSpanishPhraseOption);
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroFrenchPhraseOption);
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroItalianPhraseOption);
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroDutchPhraseOption);
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroPortuguesePhraseOption);
+		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroRussianPhraseOption);
+		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroJapanesePhraseOption);
+		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroChinesePhraseOption);
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroEsperantoPhraseOption);
+		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroLojbanPhraseOption);
 
 			shared_ptr<SeedPhraseInputPage> seedPhraseInputPage = make_shared<SeedPhraseInputPage>("Input Seed Phrase", pickPhraseTypeMenu);
 			seedPhraseInputPage->setDestination(static_pointer_cast<MenuTreeObject>(showSeedOptionsMenu));
 			seedPhraseInputPage->setBackwardAction(&clearMnemonicTypeContext);
 			restoreFromBIP39Option->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
 			restoreFromLegacyMoneroEnglishPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
+			restoreFromLegacyMoneroGermanPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
+			restoreFromLegacyMoneroSpanishPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
 			restoreFromLegacyMoneroFrenchPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
 			restoreFromLegacyMoneroItalianPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
 			restoreFromLegacyMoneroDutchPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
 			restoreFromLegacyMoneroPortuguesePhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
+			restoreFromLegacyMoneroRussianPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
+			restoreFromLegacyMoneroJapanesePhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
+			restoreFromLegacyMoneroChinesePhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
 			restoreFromLegacyMoneroEsperantoPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
+			restoreFromLegacyMoneroLojbanPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
 }
 
 shared_ptr<MenuTreeObject> MenuTree::getRoot()
