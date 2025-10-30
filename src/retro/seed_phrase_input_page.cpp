@@ -136,7 +136,7 @@ void SeedPhraseInputPage::updateSelectedOption(InputType input)
 	{
 		predictedWord = foundWord;
 		uint8_t characters = 0;
-		for (size_t i = 0; i < std::strlen(foundWord); i++)
+		for (uint8_t i = 0; i < std::strlen(foundWord); i++)
 		{
 			if (usedCharSet == alphabetCharSet)
 			{
@@ -387,17 +387,19 @@ void SeedPhraseInputPage::loadCurrentInputWord(char* currentWord, bool onlyUpToC
 {
 	uint8_t lastIndex = max(0, selectedOptionIndex + (inputString[selectedOptionIndex] == -1 ? -1 : 0));
 	if (!onlyUpToCursor)
+	{
 		for (uint8_t i = 0; i < inputString.size(); i++)
 			if (inputString[i] == -1)
 				break;
 			else
 				lastIndex = i;
+	}
 	for (uint8_t i = 0; i < lastIndex+1; i++)
 	{
 		uint8_t codePoints = getCodePointCount(usedCharSet[inputString[i]]);
 		for (uint8_t j = 0; j <= codePoints; j++)
 		{
-			if (inputString[i]+j >= 0 && inputString[i]+j < strlen(usedCharSet))
+			if (inputString[i]+j >= 0 && inputString[i]+j < (int32_t)strlen(usedCharSet))
 				currentWord[strlen(currentWord)] = usedCharSet[inputString[i]+j];
 		}
 	}
