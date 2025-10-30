@@ -68,6 +68,7 @@ The color scheme can be updated by modifying the existing DEFAULT_\*G_COLOR_\* d
 
 ## Screenshots ##
 <img width="903" height="631" alt="main_menu" src="https://github.com/user-attachments/assets/06af3524-d9e4-4fec-bb37-9c61132e26fe" />
+<img width="900" height="625" alt="generate_seed" src="https://github.com/user-attachments/assets/24940e0a-2c95-43b8-bee7-b813b0139bec" />
 <img width="903" height="627" alt="dir_inputs" src="https://github.com/user-attachments/assets/f347f840-cd52-412d-b85a-96eceb4e9a68" />
 <img width="900" height="625" alt="dice_input" src="https://github.com/user-attachments/assets/539c026a-4afc-4d7b-9e4f-41b0b28f5651" />
 <img width="905" height="627" alt="seed_options_menu" src="https://github.com/user-attachments/assets/1bdf5a69-314e-434c-b950-3d5658263a35" />
@@ -78,18 +79,25 @@ The color scheme can be updated by modifying the existing DEFAULT_\*G_COLOR_\* d
 <img width="900" height="625" alt="eth_address" src="https://github.com/user-attachments/assets/645a5d74-f973-4622-99ca-1d7dcee24a78" />
 <img width="900" height="625" alt="nostr_address" src="https://github.com/user-attachments/assets/ab4afd36-b12f-448c-8375-8f7541efefff" />
 <img width="900" height="625" alt="xmr_address" src="https://github.com/user-attachments/assets/e0293a3a-e6de-4c85-baea-995472ceb009" />
-<img width="900" height="625" alt="output_phrases" src="https://github.com/user-attachments/assets/93f50884-7b4f-47c3-8eff-eb21319aa68c" />
+<img width="900" height="625" alt="output_phrases_0" src="https://github.com/user-attachments/assets/28f71d10-bd06-433f-bcc3-9d280c405ce4" />
+<img width="900" height="625" alt="output_phrases_1" src="https://github.com/user-attachments/assets/8f70be61-1c5a-4740-b739-3ce7838ef28b" />
 <img width="900" height="625" alt="bip39_24_output" src="https://github.com/user-attachments/assets/066268c2-a3d6-4f90-9490-5ad1ce589e66" />
 <img width="900" height="625" alt="english_xmr_phrase_output" src="https://github.com/user-attachments/assets/4c7e39b9-7db9-4afa-9814-794a4c66cd96" />
+<img width="900" height="625" alt="german_xmr_phrase_output" src="https://github.com/user-attachments/assets/c8749d90-494b-451f-8d99-69782fbe9b4c" />
+<img width="900" height="625" alt="spanish_xmr_phrase_output" src="https://github.com/user-attachments/assets/e30bf723-006f-404a-8a22-9b9d78d862c6" />
 <img width="900" height="625" alt="french_xmr_phrase_output" src="https://github.com/user-attachments/assets/1e49cb22-efa9-4394-bc5a-cad90d4c5c5d" />
 <img width="900" height="625" alt="italian_xmr_phrase_output" src="https://github.com/user-attachments/assets/6151904e-b227-45a2-bfa2-45e27b92e3f8" />
 <img width="900" height="625" alt="dutch_xmr_phrase_output" src="https://github.com/user-attachments/assets/758943c2-1f9c-4781-bacc-f0808abc89da" />
 <img width="900" height="625" alt="portuguese_xmr_phrase_output" src="https://github.com/user-attachments/assets/36de1c05-d9f2-45f2-aba2-aec6c821d5a2" />
+<img width="900" height="625" alt="russian_xmr_phrase_output" src="https://github.com/user-attachments/assets/be441cfe-e994-41aa-aadd-05a348ba1949" />
+<img width="900" height="625" alt="japanese_xmr_phrase_output" src="https://github.com/user-attachments/assets/016cffe2-37cd-42a1-ad36-a695ea6b99d3" />
+<img width="900" height="625" alt="chinese_xmr_phrase_output" src="https://github.com/user-attachments/assets/f090c82a-fde9-4c7c-8b52-046f007c9654" />
 <img width="900" height="625" alt="esperanto_xmr_phrase_output" src="https://github.com/user-attachments/assets/f3976f48-7410-4cfd-b23b-693df36d11f1" />
+<img width="900" height="625" alt="lojban_xmr_phrase_output" src="https://github.com/user-attachments/assets/e2162806-ebfd-4d0a-b7f7-9971822c668e" />
 <img width="900" height="625" alt="qr_code" src="https://github.com/user-attachments/assets/b23926f4-be17-4c9a-9f01-8874e99f433a" />
 <img width="902" height="626" alt="vanity_address" src="https://github.com/user-attachments/assets/33d94753-93e6-4590-9b16-dc8f58a59629" />
-<img width="900" height="625" alt="input_phrases" src="https://github.com/user-attachments/assets/10402816-4770-4c7d-a1e8-ce1e3864d13c" />
-
+<img width="900" height="625" alt="input_phrases_0" src="https://github.com/user-attachments/assets/baa4c710-6fad-4297-b384-cedfb5344c36" />
+<img width="900" height="625" alt="input_phrases_1" src="https://github.com/user-attachments/assets/1e26b6e2-dfbe-42f3-8e65-102af637f38f" />
 
 ## Donations ##
 If you found this project interesting or want to help fund it's continued development, consider donating. Donations can be sent to 85rkddSoYqwN4neAAgjJTFYYgyfU6pwT9dYquNyBzdtqBnr8QZCU1qoR6kjwMWEF6EMd2aGtrCuuA19irjWbTbKSKKF5yuv.
