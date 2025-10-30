@@ -53,7 +53,7 @@ CCFLAGS = $(INCLUDE) -DUSE_MONERO=1 -DUSE_KECCAK=1 $(BYTE_ORDER)
 
 CLI_TARGET = $(findstring $(MAKECMDGOALS), cli)
 ifeq ($(CLI_TARGET), cli)
-	CXXFLAGS += -std=c++11 -pthread
+	CXXFLAGS += -std=c++11 -pthread -DUTF8_COMPAT_BUILD=1
 endif
 
 LIB_SOURCES = $(shell find $(LIB_SRC) -type f -iname '*.cpp')
