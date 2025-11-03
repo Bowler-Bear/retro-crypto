@@ -80,12 +80,45 @@ void CLIDisplay::drawTextBox(const TextBox& textBox)
 		ControlSequences::sendSetSlowBlink();
 	if (textBox.isBordered())
 		drawBox(textBox);
-	if ((textBox.text[0] & 0xe0) == 0xc0 || (textBox.text[0] & 0xf8) == 0xf0)
-		ControlSequences::sendSetCursorPostion(textBox.yPosition+1+textBox.height/2, textBox.xPosition+1+(textBox.width-(textBox.text.length()/2))/2);
-	else if((textBox.text[0] & 0xf0) == 0xe0)
-		ControlSequences::sendSetCursorPostion(textBox.yPosition+1+textBox.height/2, textBox.xPosition+1+(textBox.width-(2*textBox.text.length()/3))/2);
-	else
-		ControlSequences::sendSetCursorPostion(textBox.yPosition+1+textBox.height/2, textBox.xPosition+1+(textBox.width-textBox.text.length())/2);
+	int displayedCharacters = 0;
+	for (int i = 0; i < textBox.text.length(); i++)
+	{
+		int codePoints = 0;
+		if ((textBox.text[i] & 0x80) == 0)
+		{
+			codePoints = 0;
+		}
+		else if ((textBox.text[i] & 0xe0) == 0xc0)
+		{
+			codePoints = 1;
+		}
+		else if ((textBox.text[i] & 0xf0) == 0xe0)
+		{
+			codePoints = 2;
+		}
+		else if ((textBox.text[i] & 0xf8) == 0xf0)
+		{
+			codePoints = 3;
+		}
+		int validCodePoints = 0;
+		int finalIndex = i+1+codePoints;
+		for (int j = i+1; j < finalIndex; j++)
+		{
+			if (j < textBox.text.length() && (textBox.text[j] & 0xc0) == 0x80)
+			{
+				i++;
+				validCodePoints++;
+				continue;
+			}
+			break;
+		}
+		if (codePoints != validCodePoints)
+		{
+			displayedCharacters += (1 + validCodePoints);
+		}
+		displayedCharacters += (codePoints + 2)/2;
+	}
+	ControlSequences::sendSetCursorPostion(textBox.yPosition+1+textBox.height/2, textBox.xPosition+1+(textBox.width-displayedCharacters)/2);
 	ControlSequences::sendText(textBox);
 	ControlSequences::flush();
 }
