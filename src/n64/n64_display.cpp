@@ -3,7 +3,7 @@
 
 #include "n64_display.h"
 
-#define DISPLAY_BUFFERS 4
+#define DISPLAY_BUFFERS 2
 
 #ifndef BG_COLOR_RED
 #define BG_COLOR_RED DEFAULT_BG_COLOR_RED
