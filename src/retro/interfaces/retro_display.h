@@ -125,6 +125,10 @@ namespace RetroCrypto
 		virtual void drawTextBox(const TextBox& textBox) = 0;
 		virtual void drawQrBox(const QrBox& qrBox) = 0;
 		virtual void clear() override = 0;
+		virtual bool isPositionVisible(const int x, const int y)
+		{
+			return true;
+		}
 	};
 }
 #endif

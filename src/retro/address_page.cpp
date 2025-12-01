@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include "address_page.h"
 #include "core_system.h"
 #include "crypto_definitions.h"
@@ -113,8 +115,8 @@ void AddressPage::drawSeed(shared_ptr<IDisplay> display)
 
 	TextBox seedBox(seed);
 	seedBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+3;
-	seedBox.xPosition = 2;
-	seedBox.width = BASE_BORDER_BOX_WIDTH-3;
+	seedBox.xPosition = seedBox.text.length() > BASE_BORDER_BOX_WIDTH-3 ? (BASE_BORDER_BOX_WIDTH-(int)seedBox.text.length())/2 : 2;
+	seedBox.width = max(BASE_BORDER_BOX_WIDTH-3, (int)seedBox.text.length());
 	seedBox.height = 3;
 	seedBox.setBordered();
 	display->drawTextBox(seedBox);
@@ -133,8 +135,8 @@ void AddressPage::drawAddress(shared_ptr<IDisplay> display)
 
 	TextBox addressBox(addressInformation.address);
 	addressBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+8;
-	addressBox.xPosition = 2;
-	addressBox.width = BASE_BORDER_BOX_WIDTH-3;
+	addressBox.xPosition = addressBox.text.length() > BASE_BORDER_BOX_WIDTH-3 ? (BASE_BORDER_BOX_WIDTH-(int)addressBox.text.length())/2 : 2;
+	addressBox.width = max(BASE_BORDER_BOX_WIDTH-3, (int)addressBox.text.length());
 	addressBox.height = 3;
 	addressBox.setBordered();
 	display->drawTextBox(addressBox);
@@ -160,8 +162,8 @@ void AddressPage::drawPrivateKey(shared_ptr<IDisplay> display)
 
 	TextBox keyBox(privateKey);
 	keyBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+13;
-	keyBox.xPosition = 2;
-	keyBox.width = BASE_BORDER_BOX_WIDTH-3;
+	keyBox.xPosition = keyBox.text.length() > BASE_BORDER_BOX_WIDTH-3 ? (BASE_BORDER_BOX_WIDTH-(int)keyBox.text.length())/2 : 2;
+	keyBox.width = max(BASE_BORDER_BOX_WIDTH-3, (int)keyBox.text.length());
 	keyBox.height = 3;
 	keyBox.setBordered();
 	display->drawTextBox(keyBox);
@@ -177,7 +179,7 @@ void AddressPage::drawPrivateKey(shared_ptr<IDisplay> display)
 	wif:
 		titleBox.text = string("Private Key(Wallet Import Format/WIF)");
 		titleBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+21;
-		titleBox.xPosition = (BASE_BORDER_BOX_WIDTH-titleBox.text.size())/2;
+		titleBox.xPosition = (BASE_BORDER_BOX_WIDTH-(int)titleBox.text.size())/2;
 		titleBox.width = titleBox.text.size();
 		display->drawTextBox(titleBox);
 
@@ -213,8 +215,8 @@ void AddressPage::drawPublicKey(shared_ptr<IDisplay> display)
 
 	TextBox keyBox(publicKey);
 	keyBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+18;
-	keyBox.xPosition = 2;
-	keyBox.width = BASE_BORDER_BOX_WIDTH-3;
+	keyBox.xPosition = keyBox.text.length() > BASE_BORDER_BOX_WIDTH-3 ? (BASE_BORDER_BOX_WIDTH-(int)keyBox.text.length())/2 : 2;
+	keyBox.width = max(BASE_BORDER_BOX_WIDTH-3, (int)keyBox.text.length());
 	keyBox.height = 3;
 	keyBox.setBordered();
 	display->drawTextBox(keyBox);

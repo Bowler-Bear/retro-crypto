@@ -24,15 +24,33 @@
 #define FG_COLOR_BLUE DEFAULT_FG_COLOR_BLUE
 #endif
 
-#define CHARACTER_PIXEL_WIDTH 8
-#define CHARACTER_PIXEL_HEIGHT 8
+#ifndef N64_CHARACTER_PIXEL_WIDTH
+#define N64_CHARACTER_PIXEL_WIDTH 8
+#endif
+#ifndef N64_CHARACTER_PIXEL_HEIGHT
+#define N64_CHARACTER_PIXEL_HEIGHT 8
+#endif
 
 #define BLINK_EVERY_X_FRAMES 50
 #define BLINK_FOR_X_FRAMES 10
 
+#ifndef N64_RESOLUTION_WIDTH
+#define N64_RESOLUTION_WIDTH 640
+#endif
+#ifndef N64_RESOLUTION_HEIGHT
+#define N64_RESOLUTION_HEIGHT 480
+#endif
+
+#ifndef BASE_BORDER_BOX_WIDTH
+#define BASE_BORDER_BOX_WIDTH ((N64_RESOLUTION_WIDTH / N64_CHARACTER_PIXEL_WIDTH) - 1)
+#endif
+#ifndef BASE_BORDER_BOX_HEIGHT
+#define BASE_BORDER_BOX_HEIGHT ((N64_RESOLUTION_HEIGHT / N64_CHARACTER_PIXEL_HEIGHT) - 1)
+#endif
+
 N64Display::N64Display()
 {
-	display_init({640, 480, false}, DEPTH_32_BPP, DISPLAY_BUFFERS, GAMMA_NONE, FILTERS_DISABLED);
+	display_init({N64_RESOLUTION_WIDTH, N64_RESOLUTION_HEIGHT, false}, DEPTH_32_BPP, DISPLAY_BUFFERS, GAMMA_NONE, FILTERS_DISABLED);
 	uint32_t background(color_to_packed32(RGBA32(BG_COLOR_RED, BG_COLOR_GREEN, BG_COLOR_BLUE, 255)));
 	uint32_t foreground(color_to_packed32(RGBA32(FG_COLOR_RED, FG_COLOR_GREEN, FG_COLOR_BLUE, 255)));
 	graphics_set_color(foreground, background);
@@ -68,12 +86,15 @@ void N64Display::drawBox(const Box& box)
 		{
 			for (int x = box.xPosition; x < box.xPosition+box.width+1; x++)
 			{
-				graphics_draw_character(currentFrame, x*CHARACTER_PIXEL_WIDTH, y*CHARACTER_PIXEL_HEIGHT, borderChar);
+				if (isPositionVisible(x, y))
+					graphics_draw_character(currentFrame, x*N64_CHARACTER_PIXEL_WIDTH, y*N64_CHARACTER_PIXEL_HEIGHT, borderChar);
 			}
 			continue;
 		}
-		graphics_draw_character(currentFrame, box.xPosition*CHARACTER_PIXEL_WIDTH, y*CHARACTER_PIXEL_HEIGHT, borderChar);
-		graphics_draw_character(currentFrame, (box.xPosition+box.width)*CHARACTER_PIXEL_WIDTH, y*CHARACTER_PIXEL_HEIGHT, borderChar);
+		if (isPositionVisible(box.xPosition, y))
+			graphics_draw_character(currentFrame, box.xPosition*N64_CHARACTER_PIXEL_WIDTH, y*N64_CHARACTER_PIXEL_HEIGHT, borderChar);
+		if (isPositionVisible(box.xPosition+box.width, y))
+			graphics_draw_character(currentFrame, (box.xPosition+box.width)*N64_CHARACTER_PIXEL_WIDTH, y*N64_CHARACTER_PIXEL_HEIGHT, borderChar);
 	}
 }
 
@@ -83,21 +104,36 @@ void N64Display::drawTextBox(const TextBox& textBox)
 		return;
 	if (textBox.isBordered())
 		drawBox(textBox);
-	graphics_draw_text(currentFrame, (textBox.xPosition+1+(textBox.width-textBox.text.size())/2)*CHARACTER_PIXEL_WIDTH, (textBox.yPosition+textBox.height/2)*CHARACTER_PIXEL_HEIGHT,textBox.text.c_str());
+	for (int i = 0; i < (int)textBox.text.length(); i++)
+	{
+		int x = textBox.xPosition+1+i+(textBox.width-(int)textBox.text.length())/2;
+		int y = textBox.yPosition+textBox.height/2;
+		if (isPositionVisible(x, y))
+			graphics_draw_character(currentFrame, x*N64_CHARACTER_PIXEL_WIDTH, y*N64_CHARACTER_PIXEL_HEIGHT, textBox.text[i]);
+	}
 }
 
 void N64Display::drawQrBox(const QrBox& qrBox)
 {
 	const uint32_t foregroundColor = graphics_make_color(FG_COLOR_RED, FG_COLOR_GREEN, FG_COLOR_BLUE, 255);
+	const int squareWidth = (BASE_BORDER_BOX_HEIGHT-1)*N64_CHARACTER_PIXEL_HEIGHT/qrBox.height;
+	const int startX = (BASE_BORDER_BOX_WIDTH*N64_CHARACTER_PIXEL_WIDTH-squareWidth*qrBox.width)/2;
+	const int startY = (BASE_BORDER_BOX_HEIGHT*N64_CHARACTER_PIXEL_HEIGHT-squareWidth*qrBox.height)/2;
 	for (int y = 0; y < qrBox.height; y++)
 	{
 		for (int x = 0; x < qrBox.width; x++)
 		{
 			if (!qrBox.qrCode.getModule(x, y))
 				continue;
-			for (int j = 0; j < CHARACTER_PIXEL_HEIGHT; j++)
-				for (int i = 0; i < CHARACTER_PIXEL_WIDTH; i++)
-					graphics_draw_pixel(currentFrame, (qrBox.xPosition+x)*CHARACTER_PIXEL_WIDTH+i, (qrBox.yPosition+y)*CHARACTER_PIXEL_HEIGHT+j, foregroundColor);
+			for (int j = 0; j < squareWidth; j++)
+				for (int i = 0; i < squareWidth; i++)
+					if (isPositionVisible((startX+x*squareWidth+i)/N64_CHARACTER_PIXEL_WIDTH, (startY+y*squareWidth+j)/N64_CHARACTER_PIXEL_HEIGHT))
+						graphics_draw_pixel(currentFrame, startX+x*squareWidth+i, startY+y*squareWidth+j, foregroundColor);
 		}
 	}
+}
+
+bool N64Display::isPositionVisible(const int x, const int y)
+{
+	return x >= 0 && y >= 0 && x <= BASE_BORDER_BOX_WIDTH && y < BASE_BORDER_BOX_HEIGHT;
 }
