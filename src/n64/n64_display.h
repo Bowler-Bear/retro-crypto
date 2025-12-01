@@ -21,5 +21,6 @@ public:
 	virtual void drawTextBox(const TextBox& textBox) override;
 	virtual void drawQrBox(const QrBox& qrBox) override;
 	virtual bool isPositionVisible(const int x, const int y) override;
+	void drawCharacter(const int x, const int y, const char character);
 };
 #endif

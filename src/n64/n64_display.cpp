@@ -86,15 +86,12 @@ void N64Display::drawBox(const Box& box)
 		{
 			for (int x = box.xPosition; x < box.xPosition+box.width+1; x++)
 			{
-				if (isPositionVisible(x, y))
-					graphics_draw_character(currentFrame, x*N64_CHARACTER_PIXEL_WIDTH, y*N64_CHARACTER_PIXEL_HEIGHT, borderChar);
+				drawCharacter(x, y, borderChar);
 			}
 			continue;
 		}
-		if (isPositionVisible(box.xPosition, y))
-			graphics_draw_character(currentFrame, box.xPosition*N64_CHARACTER_PIXEL_WIDTH, y*N64_CHARACTER_PIXEL_HEIGHT, borderChar);
-		if (isPositionVisible(box.xPosition+box.width, y))
-			graphics_draw_character(currentFrame, (box.xPosition+box.width)*N64_CHARACTER_PIXEL_WIDTH, y*N64_CHARACTER_PIXEL_HEIGHT, borderChar);
+		drawCharacter(box.xPosition, y, borderChar);
+		drawCharacter(box.xPosition+box.width, y, borderChar);
 	}
 }
 
@@ -106,10 +103,7 @@ void N64Display::drawTextBox(const TextBox& textBox)
 		drawBox(textBox);
 	for (int i = 0; i < (int)textBox.text.length(); i++)
 	{
-		int x = textBox.xPosition+1+i+(textBox.width-(int)textBox.text.length())/2;
-		int y = textBox.yPosition+textBox.height/2;
-		if (isPositionVisible(x, y))
-			graphics_draw_character(currentFrame, x*N64_CHARACTER_PIXEL_WIDTH, y*N64_CHARACTER_PIXEL_HEIGHT, textBox.text[i]);
+		drawCharacter(textBox.xPosition+1+i+(textBox.width-(int)textBox.text.length())/2, textBox.yPosition+textBox.height/2, textBox.text[i]);
 	}
 }
 
@@ -136,4 +130,10 @@ void N64Display::drawQrBox(const QrBox& qrBox)
 bool N64Display::isPositionVisible(const int x, const int y)
 {
 	return x >= 0 && y >= 0 && x <= BASE_BORDER_BOX_WIDTH && y < BASE_BORDER_BOX_HEIGHT;
+}
+
+void N64Display::drawCharacter(const int x, const int y, const char character)
+{
+	if (isPositionVisible(x, y))
+			graphics_draw_character(currentFrame, x*N64_CHARACTER_PIXEL_WIDTH, y*N64_CHARACTER_PIXEL_HEIGHT, character);
 }
