@@ -116,6 +116,10 @@ namespace RetroCrypto
 
 	class IDisplay: public IDrawable
 	{
+	protected:
+		int viewportOffsetX;
+		int viewportOffsetY;
+
 	public:
 		IDisplay()
 		{

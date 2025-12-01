@@ -38,6 +38,8 @@ N64Display::N64Display()
 	graphics_set_color(foreground, background);
 	currentFrame = display_get();
 	blinkFrameCount = 0;
+	viewportOffsetX = 0;
+	viewportOffsetY = 0;
 	characterScale = 1;
 }
 
@@ -93,7 +95,7 @@ void N64Display::drawTextBox(const TextBox& textBox)
 void N64Display::drawQrBox(const QrBox& qrBox)
 {
 	const uint32_t foregroundColor = graphics_make_color(FG_COLOR_RED, FG_COLOR_GREEN, FG_COLOR_BLUE, 255);
-	const int squareWidth = (BASE_BORDER_BOX_HEIGHT-1)*characterScale*N64_CHARACTER_PIXEL_HEIGHT/qrBox.height;
+	const int squareWidth = (BASE_BORDER_BOX_HEIGHT-2)*characterScale*N64_CHARACTER_PIXEL_HEIGHT/qrBox.height;
 	const int startX = (BASE_BORDER_BOX_WIDTH*characterScale*N64_CHARACTER_PIXEL_WIDTH-squareWidth*qrBox.width)/2;
 	const int startY = (BASE_BORDER_BOX_HEIGHT*characterScale*N64_CHARACTER_PIXEL_HEIGHT-squareWidth*qrBox.height)/2;
 	for (int y = 0; y < qrBox.height; y++)
@@ -103,9 +105,15 @@ void N64Display::drawQrBox(const QrBox& qrBox)
 			if (!qrBox.qrCode.getModule(x, y))
 				continue;
 			for (int j = 0; j < squareWidth; j++)
+			{
 				for (int i = 0; i < squareWidth; i++)
-					if (isPositionVisible((startX+x*squareWidth+i)/(characterScale*N64_CHARACTER_PIXEL_WIDTH), (startY+y*squareWidth+j)/(characterScale*N64_CHARACTER_PIXEL_HEIGHT)))
-						graphics_draw_pixel(currentFrame, startX+x*squareWidth+i, startY+y*squareWidth+j, foregroundColor);
+				{
+					int pixelX = startX+x*squareWidth-viewportOffsetX*characterScale*N64_CHARACTER_PIXEL_WIDTH+i;
+					int pixelY = startY+y*squareWidth-viewportOffsetY*characterScale*N64_CHARACTER_PIXEL_HEIGHT+j;
+					if (pixelX >= 0 && pixelY >= 0 && pixelX < N64_RESOLUTION_WIDTH && pixelY < N64_RESOLUTION_HEIGHT)
+						graphics_draw_pixel(currentFrame, pixelX, pixelY, foregroundColor);
+				}
+			}
 		}
 	}
 }
@@ -117,9 +125,9 @@ bool N64Display::isPositionVisible(const int x, const int y)
 
 void N64Display::drawCharacter(const int x, const int y, const char character)
 {
-	if (isPositionVisible(x, y))
+	if (isPositionVisible(x-viewportOffsetX, y-viewportOffsetY))
 	{
-		graphics_draw_scaled_character(currentFrame, x*characterScale*N64_CHARACTER_PIXEL_WIDTH, y*characterScale*N64_CHARACTER_PIXEL_HEIGHT, character, characterScale);
+		graphics_draw_scaled_character(currentFrame, (x-viewportOffsetX)*characterScale*N64_CHARACTER_PIXEL_WIDTH, (y-viewportOffsetY)*characterScale*N64_CHARACTER_PIXEL_HEIGHT, character, characterScale);
 	}
 }
 
@@ -133,4 +141,20 @@ void N64Display::decreaseCharacterScale()
 {
 	if (characterScale > 1)
 		characterScale--;
+}
+
+void N64Display::resetViewPortOffsets()
+{
+	viewportOffsetX = 0;
+	viewportOffsetY = 0;
+}
+
+void N64Display::updateViewPortOffsetX(int addition)
+{
+	viewportOffsetX += addition;
+}
+
+void N64Display::updateViewPortOffsetY(int addition)
+{
+	viewportOffsetY += addition;
 }

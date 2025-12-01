@@ -39,19 +39,30 @@ InputType N64Capturer::getInput()
 		{
 			return InputType::RIGHT;
 		}
-		else if (data.c[i].C_up)
+		if (data.c[i].C_up && display)
 		{
-			if (display)
-				display->increaseCharacterScale();
-			return InputType::NONE;
+			display->increaseCharacterScale();
 		}
-		else if (data.c[i].C_down)
+		else if (data.c[i].C_down && display)
 		{
-			if (display)
-				display->decreaseCharacterScale();
-			return InputType::NONE;
+			display->decreaseCharacterScale();
 		}
-		
+		if (data.c[i].start && display)
+		{
+			display->resetViewPortOffsets();
+		}
+	}
+	data = get_keys_held();
+	for (uint8_t i = 0; i < maxControllerCount; i++)
+	{
+		if (data.c[i].x && display)
+		{
+			display->updateViewPortOffsetX(data.c[i].x > 0 ? 1 : -1);
+		}
+		else if (data.c[i].y && display)
+		{
+			display->updateViewPortOffsetY(data.c[i].y > 0 ? -1 : 1);
+		}
 	}
 	return InputType::NONE;
 }

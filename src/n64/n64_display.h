@@ -25,5 +25,8 @@ public:
 	void drawCharacter(const int x, const int y, const char character);
 	void increaseCharacterScale();
 	void decreaseCharacterScale();
+	void resetViewPortOffsets();
+	void updateViewPortOffsetX(int addition);
+	void updateViewPortOffsetY(int addition);
 };
 #endif
