@@ -12,6 +12,7 @@ class N64Display: public IDisplay
 private:
 	surface_t* currentFrame;
 	uint8_t blinkFrameCount;
+	uint8_t characterScale;
 public:
 	N64Display();
 	~N64Display();

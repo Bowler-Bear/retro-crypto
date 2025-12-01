@@ -2,27 +2,9 @@
 #include <graphics.h>
 
 #include "n64_display.h"
+#include "scaled_character_drawing.h"
 
 #define DISPLAY_BUFFERS 2
-
-#ifndef BG_COLOR_RED
-#define BG_COLOR_RED DEFAULT_BG_COLOR_RED
-#endif
-#ifndef BG_COLOR_GREEN
-#define BG_COLOR_GREEN DEFAULT_BG_COLOR_GREEN
-#endif
-#ifndef BG_COLOR_BLUE
-#define BG_COLOR_BLUE DEFAULT_BG_COLOR_BLUE
-#endif
-#ifndef FG_COLOR_RED
-#define FG_COLOR_RED DEFAULT_FG_COLOR_RED
-#endif
-#ifndef FG_COLOR_GREEN
-#define FG_COLOR_GREEN DEFAULT_FG_COLOR_GREEN
-#endif
-#ifndef FG_COLOR_BLUE
-#define FG_COLOR_BLUE DEFAULT_FG_COLOR_BLUE
-#endif
 
 #ifndef N64_CHARACTER_PIXEL_WIDTH
 #define N64_CHARACTER_PIXEL_WIDTH 8
@@ -56,6 +38,7 @@ N64Display::N64Display()
 	graphics_set_color(foreground, background);
 	currentFrame = display_get();
 	blinkFrameCount = 0;
+	characterScale = 1;
 }
 
 N64Display::~N64Display()
@@ -110,9 +93,9 @@ void N64Display::drawTextBox(const TextBox& textBox)
 void N64Display::drawQrBox(const QrBox& qrBox)
 {
 	const uint32_t foregroundColor = graphics_make_color(FG_COLOR_RED, FG_COLOR_GREEN, FG_COLOR_BLUE, 255);
-	const int squareWidth = (BASE_BORDER_BOX_HEIGHT-1)*N64_CHARACTER_PIXEL_HEIGHT/qrBox.height;
-	const int startX = (BASE_BORDER_BOX_WIDTH*N64_CHARACTER_PIXEL_WIDTH-squareWidth*qrBox.width)/2;
-	const int startY = (BASE_BORDER_BOX_HEIGHT*N64_CHARACTER_PIXEL_HEIGHT-squareWidth*qrBox.height)/2;
+	const int squareWidth = (BASE_BORDER_BOX_HEIGHT-1)*characterScale*N64_CHARACTER_PIXEL_HEIGHT/qrBox.height;
+	const int startX = (BASE_BORDER_BOX_WIDTH*characterScale*N64_CHARACTER_PIXEL_WIDTH-squareWidth*qrBox.width)/2;
+	const int startY = (BASE_BORDER_BOX_HEIGHT*characterScale*N64_CHARACTER_PIXEL_HEIGHT-squareWidth*qrBox.height)/2;
 	for (int y = 0; y < qrBox.height; y++)
 	{
 		for (int x = 0; x < qrBox.width; x++)
@@ -121,7 +104,7 @@ void N64Display::drawQrBox(const QrBox& qrBox)
 				continue;
 			for (int j = 0; j < squareWidth; j++)
 				for (int i = 0; i < squareWidth; i++)
-					if (isPositionVisible((startX+x*squareWidth+i)/N64_CHARACTER_PIXEL_WIDTH, (startY+y*squareWidth+j)/N64_CHARACTER_PIXEL_HEIGHT))
+					if (isPositionVisible((startX+x*squareWidth+i)/(characterScale*N64_CHARACTER_PIXEL_WIDTH), (startY+y*squareWidth+j)/(characterScale*N64_CHARACTER_PIXEL_HEIGHT)))
 						graphics_draw_pixel(currentFrame, startX+x*squareWidth+i, startY+y*squareWidth+j, foregroundColor);
 		}
 	}
@@ -129,11 +112,13 @@ void N64Display::drawQrBox(const QrBox& qrBox)
 
 bool N64Display::isPositionVisible(const int x, const int y)
 {
-	return x >= 0 && y >= 0 && x <= BASE_BORDER_BOX_WIDTH && y < BASE_BORDER_BOX_HEIGHT;
+	return x >= 0 && y >= 0 && x <= BASE_BORDER_BOX_WIDTH/characterScale && y < BASE_BORDER_BOX_HEIGHT/characterScale;
 }
 
 void N64Display::drawCharacter(const int x, const int y, const char character)
 {
 	if (isPositionVisible(x, y))
-			graphics_draw_character(currentFrame, x*N64_CHARACTER_PIXEL_WIDTH, y*N64_CHARACTER_PIXEL_HEIGHT, character);
+	{
+		graphics_draw_scaled_character(currentFrame, x*characterScale*N64_CHARACTER_PIXEL_WIDTH, y*characterScale*N64_CHARACTER_PIXEL_HEIGHT, character, characterScale);
+	}
 }
