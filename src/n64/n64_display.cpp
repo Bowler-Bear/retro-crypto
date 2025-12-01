@@ -122,3 +122,15 @@ void N64Display::drawCharacter(const int x, const int y, const char character)
 		graphics_draw_scaled_character(currentFrame, x*characterScale*N64_CHARACTER_PIXEL_WIDTH, y*characterScale*N64_CHARACTER_PIXEL_HEIGHT, character, characterScale);
 	}
 }
+
+void N64Display::increaseCharacterScale()
+{
+	if (characterScale < 8)
+		characterScale++;
+}
+
+void N64Display::decreaseCharacterScale()
+{
+	if (characterScale > 1)
+		characterScale--;
+}

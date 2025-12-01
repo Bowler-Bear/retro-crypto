@@ -5,6 +5,7 @@
 N64Capturer::N64Capturer()
 {
 	controller_init();
+	display = nullptr;
 }
 
 InputType N64Capturer::getInput()
@@ -38,7 +39,24 @@ InputType N64Capturer::getInput()
 		{
 			return InputType::RIGHT;
 		}
+		else if (data.c[i].C_up)
+		{
+			if (display)
+				display->increaseCharacterScale();
+			return InputType::NONE;
+		}
+		else if (data.c[i].C_down)
+		{
+			if (display)
+				display->decreaseCharacterScale();
+			return InputType::NONE;
+		}
 		
 	}
 	return InputType::NONE;
+}
+
+void N64Capturer::setDisplay(std::shared_ptr<N64Display> inDisplay)
+{
+	display = inDisplay;
 }
