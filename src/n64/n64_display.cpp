@@ -133,14 +133,14 @@ void N64Display::drawCharacter(const int x, const int y, const char character)
 
 void N64Display::increaseCharacterScale()
 {
-	if (characterScale < 8)
-		characterScale++;
+	if (characterScale < 16)
+		characterScale *= 2;
 }
 
 void N64Display::decreaseCharacterScale()
 {
 	if (characterScale > 1)
-		characterScale--;
+		characterScale /= 2;
 }
 
 void N64Display::resetViewPortOffsets()
