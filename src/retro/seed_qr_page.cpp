@@ -28,7 +28,7 @@ void SeedQRPage::onEnter()
 void SeedQRPage::drawQR(shared_ptr<IDisplay> display)
 {
 	QrBox qrBox(qr);
-	qrBox.yPosition = PAGE_TITLE_BOX_Y_POSITION-1;
+	qrBox.yPosition = BASE_BORDER_BOX_Y_POSITION+1;
 	qrBox.xPosition = (BASE_BORDER_BOX_WIDTH-qr.getSize())/2;
 	qrBox.width = qr.getSize();
 	qrBox.height = qr.getSize();

@@ -103,8 +103,8 @@ void MnemonicPage::drawSeed(shared_ptr<IDisplay> display)
 
 	TextBox seedBox(seed);
 	seedBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+3;
-	seedBox.xPosition = 2;
-	seedBox.width = BASE_BORDER_BOX_WIDTH-3;
+	seedBox.xPosition = BASE_BORDER_BOX_X_POSITION+1;
+	seedBox.width = BASE_BORDER_BOX_WIDTH-2;
 	seedBox.height = 3;
 	seedBox.setBordered();
 	display->drawTextBox(seedBox);
@@ -142,8 +142,8 @@ void MnemonicPage::drawMnemonic(shared_ptr<IDisplay> display)
 		uint32_t splitLength = (i < lines-1 ? splitPoints[i+1] : mnemonic.size())-splitPoints[i];
 		TextBox phraseBox(mnemonic.substr(splitPoints[i], splitLength));
 		phraseBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+8+2*i;
-		phraseBox.xPosition = 2;
-		phraseBox.width = BASE_BORDER_BOX_WIDTH-3;
+		phraseBox.xPosition = BASE_BORDER_BOX_X_POSITION+1;
+		phraseBox.width = BASE_BORDER_BOX_WIDTH-2;
 		phraseBox.height = 3;
 		phraseBox.setBordered();
 		display->drawTextBox(phraseBox);

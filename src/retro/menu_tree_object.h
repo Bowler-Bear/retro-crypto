@@ -8,8 +8,12 @@
 #include "retro_display.h"
 #include "input_capturer.h"
 
+#ifndef BASE_BORDER_BOX_X_POSITION
 #define BASE_BORDER_BOX_X_POSITION 0
+#endif
+#ifndef BASE_BORDER_BOX_Y_POSITION
 #define BASE_BORDER_BOX_Y_POSITION 0
+#endif
 #ifndef BASE_BORDER_BOX_WIDTH
 #define BASE_BORDER_BOX_WIDTH 100
 #endif

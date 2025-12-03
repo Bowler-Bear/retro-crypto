@@ -81,8 +81,8 @@ void Menu::drawDescription(std::shared_ptr<IDisplay> display)
 	{
 		TextBox descriptionBox(options[selectedOptionIndex]->getDescription());
 		descriptionBox.yPosition = MENU_BOX_HEIGHT-6;
-		descriptionBox.xPosition = 2;
-		descriptionBox.width = MENU_BOX_WIDTH-3;
+		descriptionBox.xPosition = MENU_BOX_X_POSITION+1;
+		descriptionBox.width = MENU_BOX_WIDTH-2;
 		descriptionBox.height = 5;
 		descriptionBox.setBordered();
 		display->drawTextBox(descriptionBox);

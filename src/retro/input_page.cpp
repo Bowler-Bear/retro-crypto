@@ -202,8 +202,8 @@ void InputPage::drawDescription(shared_ptr<IDisplay> display)
 		return;
 	TextBox descriptionBox(description);
 	descriptionBox.yPosition = BASE_BORDER_BOX_HEIGHT-6;
-	descriptionBox.xPosition = 2;
-	descriptionBox.width = BASE_BORDER_BOX_WIDTH-3;
+	descriptionBox.xPosition = BASE_BORDER_BOX_X_POSITION+1;
+	descriptionBox.width = BASE_BORDER_BOX_WIDTH-2;
 	descriptionBox.height = 5;
 	descriptionBox.setBordered();
 	display->drawTextBox(descriptionBox);
