@@ -2,6 +2,21 @@
 A multi coin crypto seed and address library meant to be easily ported to retro game systems. The idea for this project comes from [this post](https://habla.news/a/naddr1qvzqqqr4gupzqamkcvk5k8g730e2j6atadp6mxk7z4aaxc7cnwrlkclx79z4tzygqqxkwctdv4cxzerhv9kxcet5jlnqmv) by **whoever loves Digit**.
 
 
+## Controls ##
+|Control|CLI|N64|
+|-------|----|----|
+|UP|up arrow|up|
+|DOWN|down arrow|down|
+|LEFT|left arrow|left|
+|RIGHT|right arrow|right|
+|FORWARD|enter|A|
+|BACKWARD|backspace|B|
+|ZOOM IN|-|c up|
+|ZOOM OUT|-|c down|
+|MOVE VIEWPORT|-|analog stick|
+|CENTER VIEWPORT|-|start|
+
+
 ## Dependencies ##
 Install packages for compiling by running the following commands:
 
@@ -26,6 +41,14 @@ To build a binary for the **nintendo 64**, run:
 `make n64`
 
 The resulting z64 file will be in the bin folder.
+
+
+## Building with Docker ##
+To build the binaries for **command line interface** and **nintendo 64**, run:
+
+`docker build --tag 'retro-crypto' --output=./bin .`
+
+The resulting files will be in the bin folder.
 
 
 ### Importing Private Keys into [Bitcoin Core Wallet](https://github.com/bitcoin/bitcoin) ###

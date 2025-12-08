@@ -61,8 +61,8 @@ endif
 CXXFLAGS = $(INCLUDE) -DUSE_MONERO=1 -DUSE_KECCAK=1 $(COLOR_DEFS) $(DIMENSIONS_DEFS)
 CCFLAGS = $(INCLUDE) -DUSE_MONERO=1 -DUSE_KECCAK=1 $(BYTE_ORDER)
 
-CLI_TARGET = $(findstring $(MAKECMDGOALS), cli)
-ifeq ($(CLI_TARGET), cli)
+CLI_MAKE_TARGET = $(findstring $(MAKECMDGOALS), cli)
+ifeq ($(CLI_MAKE_TARGET), cli)
 	CXXFLAGS += -std=c++11 -pthread -DUTF8_COMPAT_BUILD=1
 endif
 
@@ -84,8 +84,8 @@ N64_OBJECTS = $(foreach x, $(basename $(N64_SOURCES)), $(BASE_BUILD_DIR)$(patsub
 N64_OBJECTS += $(LIB_OBJECTS)
 N64_OBJECTS += $(CRYPTO_OBJECTS)
 
-N64_TARGET = $(findstring $(MAKECMDGOALS), n64)
-ifeq ($(N64_TARGET), n64)
+N64_MAKE_TARGET = $(findstring $(MAKECMDGOALS), n64)
+ifeq ($(N64_MAKE_TARGET), n64)
 	SOURCE_DIR = $(BASE_SOURCE_DIR)$(N64_DIR)
 	BUILD_DIR = $(BASE_BUILD_DIR)$(N64_DIR)
 	include $(N64_INST)/include/n64.mk
@@ -131,5 +131,4 @@ $(BUILD_DIR)/retro-crypto-n64.elf: $(N64_OBJECTS)
 retro-crypto-n64.z64: N64_ROM_TITLE="Retro Crypto N64"
 
 clean:
-	rm -fR $(BASE_BUILD_DIR) $(BINARY_DIR)
-	rm -fr $(N64_DIR) retro-crypto-n64.z64
+	@rm -fR "$(BASE_BUILD_DIR)" "$(BINARY_DIR)" "$(N64_DIR)" retro-crypto-n64.z64
