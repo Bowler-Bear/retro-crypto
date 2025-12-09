@@ -12,6 +12,7 @@ class N64Capturer: public IInputCapturer
 {
 private:
 	std::shared_ptr<N64Display> display;
+	uint64_t lastViewportMovementMS;
 public:
 	N64Capturer();
 	virtual InputType getInput() override;
