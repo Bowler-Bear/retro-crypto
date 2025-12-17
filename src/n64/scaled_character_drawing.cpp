@@ -39,6 +39,11 @@ void graphics_draw_scaled_character( surface_t* disp, int x, int y, char ch, int
             for( int row = 0; row < 8; row++ )
             {
                 unsigned char c = __font_data[(ch * 8) + row];
+                if( ch == 'l' )
+                {
+                    if ( row == 6 )
+                        c = (~(0x1 << 6)) & c;
+                }
 
                 for( int col = 0; col < 8; col++ )
                 {
@@ -72,6 +77,11 @@ void graphics_draw_scaled_character( surface_t* disp, int x, int y, char ch, int
             for( int row = 0; row < 8; row++ )
             {
                 unsigned char c = __font_data[(ch * 8) + row];
+                if( ch == 'l' )
+                {
+                    if ( row == 6 )
+                        c = (~(0x1 << 6)) & c;
+                }
 
                 for( int col = 0; col < 8; col++ )
                 {
