@@ -4,9 +4,6 @@
 #include "core_system.h"
 #include "crypto_definitions.h"
 
-#define STRING(s) #s
-#define S(s) STRING(s)
-
 using namespace RetroCrypto;
 
 AddressPage::AddressPage()
@@ -63,27 +60,27 @@ void AddressPage::onEnter()
 		{
 		case RetroCrypto::CryptoType::BTC:
 			seedTitle = "Seed Bits";
-			addressTitle = "Bitcoin m/" S(BITCOIN_PATH_PURPOSE) "'/" S(BITCOIN_PATH_COIN_TYPE) "'/" S(BITCOIN_PATH_ACCOUNT) "' ";
+			addressTitle = "Bitcoin " BITCOIN_DEFAULT_PATH " Address";
 			break;
 		case RetroCrypto::CryptoType::DOGE:
 			seedTitle = "Seed Bits";
-			addressTitle = "Doge m/" S(DOGE_PATH_PURPOSE) "'/" S(DOGE_PATH_COIN_TYPE) "'/" S(DOGE_PATH_ACCOUNT) "' ";
+			addressTitle = "Doge " DOGE_DEFAULT_PATH " Address";
 			break;
 		case RetroCrypto::CryptoType::ETC:
 			seedTitle = "Seed Bits";
-			addressTitle = "Ethereum Classic m/" S(ETHEREUM_CLASSIC_PATH_PURPOSE) "'/" S(ETHEREUM_CLASSIC_PATH_COIN_TYPE) "'/" S(ETHEREUM_CLASSIC_PATH_ACCOUNT) "' ";
+			addressTitle = "Ethereum Classic " ETHEREUM_CLASSIC_DEFAULT_PATH " Address";
 			break;
 		case RetroCrypto::CryptoType::ETH:
 			seedTitle = "Seed Bits";
-			addressTitle = "Ethereum m/" S(ETHEREUM_PATH_PURPOSE) "'/" S(ETHEREUM_PATH_COIN_TYPE) "'/" S(ETHEREUM_PATH_ACCOUNT) "' ";
+			addressTitle = "Ethereum " ETHEREUM_DEFAULT_PATH " Address";
 			break;
 		case RetroCrypto::CryptoType::NOSTR:
 			seedTitle = "Seed Bits";
-			addressTitle = "Nostr m/" S(NOSTR_PATH_PURPOSE) "'/" S(NOSTR_PATH_COIN_TYPE) "'/" S(NOSTR_PATH_ACCOUNT) "'/" S(NOSTR_PATH_CHANGE) "/" S(NOSTR_PATH_INDEX) " ";
+			addressTitle = "Nostr " NOSTR_DEFAULT_PATH " Address";
 			break;
 		case RetroCrypto::CryptoType::XMR:
 			seedTitle = "Seed";
-			addressTitle = "Monero Primary ";
+			addressTitle = "Monero Primary Address";
 			break;
 		default:
 			break;
@@ -124,7 +121,7 @@ void AddressPage::drawSeed(shared_ptr<IDisplay> display)
 
 void AddressPage::drawAddress(shared_ptr<IDisplay> display)
 {
-	TextBox addressTitleBox(addressTitle+string("Address"));
+	TextBox addressTitleBox(addressTitle);
 	addressTitleBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT+6;
 	addressTitleBox.xPosition = (BASE_BORDER_BOX_WIDTH-addressTitleBox.text.size())/2;
 	addressTitleBox.width = addressTitleBox.text.size();
