@@ -82,33 +82,48 @@ namespace RetroCrypto
 	public:
 		AddressPath()
 		{
-			throw std::logic_error(std::string(__func__)+": Not Implemented.");
+			path = "";
+			headValue = -1;
+			nextSlashPosition = std::string::npos;
+			isValueHardened = false;
 		}
 
 		AddressPath(std::string inPath)
 		: AddressPath()
 		{
-			throw std::logic_error(std::string(__func__)+": Not Implemented.");
+			path = inPath;
+			nextSlashPosition = path.find('/');
+			if (nextSlashPosition == std::string::npos)
+				nextSlashPosition = path.length();
+			isValueHardened = nextSlashPosition-1 >= 0 && nextSlashPosition-1 < path.length() && path[nextSlashPosition-1] == '\'';
+			try
+			{
+				headValue = std::stoi(path.substr(0, nextSlashPosition-isValueHardened));
+			}
+			catch(std::exception)
+			{
+				headValue = -1;
+			}
 		}
 
 		AddressPath getSubPath()
 		{
-			throw std::logic_error(std::string(__func__)+": Not Implemented.");
+			return AddressPath(path.substr(nextSlashPosition+1, path.length()-(nextSlashPosition+1)));
 		}
 
 		bool hasSubPath()
 		{
-			throw std::logic_error(std::string(__func__)+": Not Implemented.");
+			return nextSlashPosition >= 0 && nextSlashPosition+1 < path.length();
 		}
 
 		int getHeadValue()
 		{
-			throw std::logic_error(std::string(__func__)+": Not Implemented.");
+			return headValue;
 		}
 
 		bool getIsValueHardened()
 		{
-			throw std::logic_error(std::string(__func__)+": Not Implemented.");
+			return isValueHardened;
 		}
 	};
 
