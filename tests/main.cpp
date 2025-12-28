@@ -10,3 +10,4 @@
 #include "esperanto_monero_mnemonic_tests.h"
 #include "lojban_monero_mnemonic_tests.h"
 #include "german_monero_mnemonic_tests.h"
+#include "crypto_functions_tests.h"
