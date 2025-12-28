@@ -50,7 +50,7 @@ namespace RetroCrypto
 		return bitcoinAddressFromSeedBits(data.seed, data.seedSize);
 	}
 
-	AddressInformation bitcoinAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize)
+	AddressInformation bitcoinAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize, std::string addressPath)
 	{
 		if (seedSize != 16 && seedSize != 24 && seedSize != 32)
 			return string("Invalid seed bits size for this address.");
@@ -93,7 +93,7 @@ namespace RetroCrypto
 		return dogeAddressFromSeedBits(data.seed, data.seedSize);
 	}
 
-	AddressInformation dogeAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize)
+	AddressInformation dogeAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize, std::string addressPath)
 	{
 		HDNode node;
 		if (hdnode_from_seed(seedBits, seedSize, BITCOIN_ELLIPTIC_CURVE, &node) != 1)
@@ -131,7 +131,7 @@ namespace RetroCrypto
 		return ethereumClassicAddressFromSeedBits(data.seed, data.seedSize);
 	}
 
-	AddressInformation ethereumClassicAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize)
+	AddressInformation ethereumClassicAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize, std::string addressPath)
 	{
 		if (seedSize != 16 && seedSize != 24 && seedSize != 32)
 			return string("Invalid seed bits size for this address.");
@@ -198,7 +198,7 @@ namespace RetroCrypto
 		return ethereumAddressFromSeedBits(data.seed, data.seedSize);
 	}
 
-	AddressInformation ethereumAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize)
+	AddressInformation ethereumAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize, std::string addressPath)
 	{
 		if (seedSize != 16 && seedSize != 24 && seedSize != 32)
 			return string("Invalid seed bits size for this address.");
@@ -265,7 +265,7 @@ namespace RetroCrypto
 		return nostrAddressFromSeedBits(data.seed, data.seedSize);
 	}
 
-	AddressInformation nostrAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize)
+	AddressInformation nostrAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize, std::string addressPath)
 	{
 		if (seedSize != 16 && seedSize != 24 && seedSize != 32)
 			return string("Invalid seed bits size for this address.");
