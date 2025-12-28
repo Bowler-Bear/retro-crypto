@@ -1,6 +1,7 @@
 #ifndef CRYPTO_FUNCTIONS_H
 #define CRYPTO_FUNCTIONS_H
 
+#include <stdexcept>
 #include <string>
 
 #include "core_context.h"
@@ -68,6 +69,46 @@ namespace RetroCrypto
 		std::string getPrivateViewKeyAsHexString()
 		{
 			return getKeyAsHexString(privateViewKey, MONERO_PRIVATE_VIEW_KEY_LENGTH);
+		}
+	};
+
+	class AddressPath
+	{
+	private:
+		std::string path;
+		int headValue;
+		std::string::size_type nextSlashPosition;
+		bool isValueHardened;
+	public:
+		AddressPath()
+		{
+			throw std::logic_error(std::string(__func__)+": Not Implemented.");
+		}
+
+		AddressPath(std::string inPath)
+		: AddressPath()
+		{
+			throw std::logic_error(std::string(__func__)+": Not Implemented.");
+		}
+
+		AddressPath getSubPath()
+		{
+			throw std::logic_error(std::string(__func__)+": Not Implemented.");
+		}
+
+		bool hasSubPath()
+		{
+			throw std::logic_error(std::string(__func__)+": Not Implemented.");
+		}
+
+		int getHeadValue()
+		{
+			throw std::logic_error(std::string(__func__)+": Not Implemented.");
+		}
+
+		bool getIsValueHardened()
+		{
+			throw std::logic_error(std::string(__func__)+": Not Implemented.");
 		}
 	};
 

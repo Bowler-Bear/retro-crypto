@@ -42,4 +42,96 @@ BOOST_AUTO_TEST_CASE( getPrivateViewKeyAsHexString )
 
 BOOST_AUTO_TEST_SUITE_END()
 
+BOOST_AUTO_TEST_SUITE( crypto_functions_AddressPath )
+
+BOOST_AUTO_TEST_CASE( defaultAddressPathConstructor )
+{
+	AddressPath path;
+	BOOST_REQUIRE( path.hasSubPath() == false );
+	BOOST_REQUIRE( path.getHeadValue() == -1 );
+	BOOST_REQUIRE( path.getIsValueHardened() == false );
+	path = path.getSubPath();
+	BOOST_REQUIRE( path.hasSubPath() == false );
+	BOOST_REQUIRE( path.getHeadValue() == -1 );
+	BOOST_REQUIRE( path.getIsValueHardened() == false );
+}
+
+BOOST_AUTO_TEST_CASE( stringAddressPathConstructor )
+{
+	AddressPath path("m/0/1'/2/3");
+	BOOST_REQUIRE( path.hasSubPath() == true );
+	BOOST_REQUIRE( path.getHeadValue() == -1 );
+	BOOST_REQUIRE( path.getIsValueHardened() == false );
+	path = path.getSubPath();
+	BOOST_REQUIRE( path.hasSubPath() == true );
+	BOOST_REQUIRE( path.getHeadValue() == 0 );
+	BOOST_REQUIRE( path.getIsValueHardened() == false );
+	path = path.getSubPath();
+	BOOST_REQUIRE( path.hasSubPath() == true );
+	BOOST_REQUIRE( path.getHeadValue() == 1 );
+	BOOST_REQUIRE( path.getIsValueHardened() == true );
+	path = path.getSubPath();
+	BOOST_REQUIRE( path.hasSubPath() == true );
+	BOOST_REQUIRE( path.getHeadValue() == 2 );
+	BOOST_REQUIRE( path.getIsValueHardened() == false );
+	path = path.getSubPath();
+	BOOST_REQUIRE( path.hasSubPath() == false );
+	BOOST_REQUIRE( path.getHeadValue() == 3 );
+	BOOST_REQUIRE( path.getIsValueHardened() == false );
+}
+
+BOOST_AUTO_TEST_CASE( masterOnlyAddressPath )
+{
+	AddressPath path("m");
+	BOOST_REQUIRE( path.hasSubPath() == false );
+	BOOST_REQUIRE( path.getHeadValue() == -1 );
+	BOOST_REQUIRE( path.getIsValueHardened() == false );
+}
+
+BOOST_AUTO_TEST_CASE( masterOnlyWithSlashAddressPath )
+{
+	AddressPath path("m/");
+	BOOST_REQUIRE( path.hasSubPath() == false );
+	BOOST_REQUIRE( path.getHeadValue() == -1 );
+	BOOST_REQUIRE( path.getIsValueHardened() == false );
+}
+
+BOOST_AUTO_TEST_CASE( endWithSlashAddressPath )
+{
+	AddressPath path("m/1/");
+	BOOST_REQUIRE( path.hasSubPath() == true );
+	BOOST_REQUIRE( path.getHeadValue() == -1 );
+	BOOST_REQUIRE( path.getIsValueHardened() == false );
+	path = path.getSubPath();
+	BOOST_REQUIRE( path.hasSubPath() == false );
+	BOOST_REQUIRE( path.getHeadValue() == 1 );
+	BOOST_REQUIRE( path.getIsValueHardened() == false );
+}
+
+BOOST_AUTO_TEST_CASE( endWithHardenedAddressPath )
+{
+	AddressPath path("m/1'");
+	BOOST_REQUIRE( path.hasSubPath() == true );
+	BOOST_REQUIRE( path.getHeadValue() == -1 );
+	BOOST_REQUIRE( path.getIsValueHardened() == false );
+	path = path.getSubPath();
+	BOOST_REQUIRE( path.hasSubPath() == false );
+	BOOST_REQUIRE( path.getHeadValue() == 1 );
+	BOOST_REQUIRE( path.getIsValueHardened() == true );
+}
+
+BOOST_AUTO_TEST_CASE( endWithHardenedSlashAddressPath )
+{
+	AddressPath path("m/1'/");
+	BOOST_REQUIRE( path.hasSubPath() == true );
+	BOOST_REQUIRE( path.getHeadValue() == -1 );
+	BOOST_REQUIRE( path.getIsValueHardened() == false );
+	path = path.getSubPath();
+	BOOST_REQUIRE( path.hasSubPath() == false );
+	BOOST_REQUIRE( path.getHeadValue() == 1 );
+	BOOST_REQUIRE( path.getIsValueHardened() == true );
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
 #endif
