@@ -87,6 +87,7 @@ namespace RetroCrypto
 		int headValue;
 		std::string::size_type nextSlashPosition;
 		bool isValueHardened;
+		bool isValidPath;
 	public:
 		AddressPath()
 		{
@@ -133,8 +134,12 @@ namespace RetroCrypto
 		{
 			return isValueHardened;
 		}
-	};
 
+		bool getIsValidPath()
+		{
+			return isValidPath;
+		}
+	};
 	AddressInformation cryptoAddressFromContextData(const ContextData& data);
 	AddressInformation cryptoAddressFromGlobalContext();
 	AddressInformation bitcoinAddressFromGlobalContext();
