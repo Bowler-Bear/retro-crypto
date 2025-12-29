@@ -95,23 +95,52 @@ namespace RetroCrypto
 			headValue = -1;
 			nextSlashPosition = std::string::npos;
 			isValueHardened = false;
+			isValidPath = false;
 		}
 
 		AddressPath(std::string inPath)
 		: AddressPath()
 		{
 			path = inPath;
-			nextSlashPosition = path.find('/');
+			for (int i = 0; i < path.length(); i++)
+			{
+				if ((path[i] >= 0x30 && path[i] <= 0x39) || (path[i] == 'm' && i == 0))
+				{
+					continue;
+				}
+				else if(path[i] == '/' && ((i+1 < path.length() && path[i+1] >= 0x30 && path[i+1] <= 0x39) || i+1 == path.length()))
+				{
+					if (nextSlashPosition == std::string::npos)
+					{
+						nextSlashPosition = i;
+					}
+					continue;
+				}
+				else if(path[i] == '\'' && ((i+1 < path.length() && path[i+1] == '/') || i+1 == path.length()))
+				{
+						continue;
+				}
+				nextSlashPosition = std::string::npos;
+				return;
+			}
+			isValidPath = true;
 			if (nextSlashPosition == std::string::npos)
 				nextSlashPosition = path.length();
 			isValueHardened = nextSlashPosition-1 >= 0 && nextSlashPosition-1 < path.length() && path[nextSlashPosition-1] == '\'';
 			try
 			{
 				headValue = std::stoi(path.substr(0, nextSlashPosition-isValueHardened));
+				if (headValue < 0)
+				{
+					headValue = -1;
+					isValidPath = false;
+				}
 			}
 			catch(std::exception)
 			{
 				headValue = -1;
+				if (inPath[0] != 'm')
+					isValidPath = false;
 			}
 		}
 
@@ -122,7 +151,7 @@ namespace RetroCrypto
 
 		bool hasSubPath()
 		{
-			return nextSlashPosition >= 0 && nextSlashPosition+1 < path.length();
+			return nextSlashPosition != std::string::npos && nextSlashPosition >= 0 && nextSlashPosition+1 < path.length();
 		}
 
 		int getHeadValue()
