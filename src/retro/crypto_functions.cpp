@@ -15,7 +15,45 @@ namespace RetroCrypto
 {
 	bool moveToSubNode(HDNode* node, std::string addressPath)
 	{
-		throw std::logic_error(std::string(__func__)+": Not Implemented.");
+		if(node == nullptr)
+			return false;
+		if (addressPath.length() == 0)
+			return true;
+		AddressPath path(addressPath);
+		if (path.getIsValidPath() == false)
+			return false;
+		if (addressPath[0] == 'm')
+		{
+			if (node->depth != 0)
+				return false;
+			if (!path.hasSubPath())
+				return true;
+		}
+		else
+		{
+			if (!path.hasSubPath())
+				return false;
+			if (path.getHeadValue() < 0)
+				return false;
+			if (path.getIsValueHardened())
+				hdnode_private_ckd_prime(node, path.getHeadValue());
+			else
+				hdnode_private_ckd(node, path.getHeadValue());
+		}
+		while(path.hasSubPath())
+		{
+			path = path.getSubPath();
+			if (path.getIsValidPath() == false)
+				return false;
+			if (path.getHeadValue() < 0)
+				return false;
+			if (path.getIsValueHardened())
+				hdnode_private_ckd_prime(node, path.getHeadValue());
+			else
+				hdnode_private_ckd(node, path.getHeadValue());
+		};
+		hdnode_fill_public_key(node);
+		return true;
 	}
 
 	AddressInformation cryptoAddressFromContextData(const ContextData& data)
