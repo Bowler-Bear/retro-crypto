@@ -6,7 +6,6 @@ extern "C"
 {
 #include "monero/monero.h"
 #include "base58.h"
-#include "bip32.h"
 #include "bip39.h"
 #include "segwit_addr.h"
 #include "legacy_monero_mnemonic.h"
@@ -14,6 +13,11 @@ extern "C"
 
 namespace RetroCrypto
 {
+	bool moveToSubNode(HDNode* node, std::string addressPath)
+	{
+		throw std::logic_error(std::string(__func__)+": Not Implemented.");
+	}
+
 	AddressInformation cryptoAddressFromContextData(const ContextData& data)
 	{
 		switch(data.crypto)

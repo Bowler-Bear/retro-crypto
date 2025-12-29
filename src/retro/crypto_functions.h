@@ -7,6 +7,11 @@
 #include "core_context.h"
 #include "crypto_definitions.h"
 
+extern "C"
+{
+#include "bip32.h"
+}
+
 #define PRIVATE_KEY_BYTE_SIZE 32
 #define PUBLIC_KEY_BYTE_SIZE 33
 
@@ -169,6 +174,7 @@ namespace RetroCrypto
 			return isValidPath;
 		}
 	};
+	bool moveToSubNode(HDNode* node, std::string addressPath);
 	AddressInformation cryptoAddressFromContextData(const ContextData& data);
 	AddressInformation cryptoAddressFromGlobalContext();
 	AddressInformation bitcoinAddressFromGlobalContext();
