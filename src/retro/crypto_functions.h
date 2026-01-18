@@ -142,7 +142,7 @@ namespace RetroCrypto
 					isValidPath = false;
 				}
 			}
-			catch(std::exception* e)
+			catch(std::exception& e)
 			{
 				headValue = -1;
 				if (inPath[0] != 'm')
