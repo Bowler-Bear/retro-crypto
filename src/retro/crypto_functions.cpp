@@ -295,6 +295,11 @@ namespace RetroCrypto
 		return addressInformation;
 	}
 
+	std::string ethereumAddressBytesToChecksumAddress(const uint8_t ethAddressBytes[ETHEREUM_ADDRESS_BYTES])
+	{
+		throw std::logic_error(std::string(__func__)+": Not Implemented.");
+	}
+
 	AddressInformation nostrAddressFromGlobalContext()
 	{
 		return nostrAddressFromSeedBits(CoreSystem::getCoreSystem().getContextData());

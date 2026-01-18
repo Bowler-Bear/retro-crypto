@@ -192,6 +192,7 @@ namespace RetroCrypto
 	AddressInformation ethereumAddressFromGlobalContext();
 	AddressInformation ethereumAddressFromSeedBits(const ContextData& data);
 	AddressInformation ethereumAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize, std::string addressPath = ETHEREUM_DEFAULT_PATH);
+	std::string ethereumAddressBytesToChecksumAddress(const uint8_t ethAddressBytes[ETHEREUM_ADDRESS_BYTES]);
 	AddressInformation nostrAddressFromGlobalContext();
 	AddressInformation nostrAddressFromSeedBits(const ContextData& data);
 	AddressInformation nostrAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize, std::string addressPath = NOSTR_DEFAULT_PATH);
