@@ -344,11 +344,6 @@ BOOST_AUTO_TEST_CASE( moveToSubNode_bip32TestVector1 )
 	BOOST_REQUIRE( expectedPublicBytes[1] == 0x88 );
 	BOOST_REQUIRE( expectedPublicBytes[2] == 0xb2 );
 	BOOST_REQUIRE( expectedPublicBytes[3] == 0x1e );
-	/*BOOST_TEST( information.publicKey[0] == expectedPublicBytes[45] );
-	for (int i = 0; i < PUBLIC_KEY_BYTE_SIZE; i++)
-	{
-		BOOST_TEST( masterNode.public_key[0+i] == expectedPublicBytes[45+i] );
-	}*/
 	BOOST_REQUIRE( memcmp(masterNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
 
 	uint8_t expectedPrivateBytes[78] = { 0x00 };
@@ -378,6 +373,15 @@ BOOST_AUTO_TEST_CASE( moveToSubNode_bip32TestVector1 )
 	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
 	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
 	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
 
 
 	memset(expectedPublicBytes, 0, 78);
@@ -397,6 +401,25 @@ BOOST_AUTO_TEST_CASE( moveToSubNode_bip32TestVector1 )
 	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
 	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
 	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'/1") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0'") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "1") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "1") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'/1") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
 	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
 
 
@@ -418,26 +441,34 @@ BOOST_AUTO_TEST_CASE( moveToSubNode_bip32TestVector1 )
 	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
 	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
 	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
-
-
-	memset(expectedPublicBytes, 0, 78);
-	memset(expectedPrivateBytes, 0, 78);
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'/1/2'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
 	testedSubNode = masterNode;
 	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0'") );
 	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "1/2'") );
-
-	base58_decode_check("xpub6D4BDPcP2GT577Vvch3R8wDkScZWzQzMMUm3PWbmWvVJrZwQY4VUNgqFJPMM3No2dFDFGTsxxpG5uJh7n7epu4trkrX7x7DogT5Uv6fcLW5", HASHER_SHA2D, expectedPublicBytes, 78);
-	BOOST_REQUIRE( expectedPublicBytes[0] == 0x04 );
-	BOOST_REQUIRE( expectedPublicBytes[1] == 0x88 );
-	BOOST_REQUIRE( expectedPublicBytes[2] == 0xb2 );
-	BOOST_REQUIRE( expectedPublicBytes[3] == 0x1e );
 	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
-
-	base58_decode_check("xprv9z4pot5VBttmtdRTWfWQmoH1taj2axGVzFqSb8C9xaxKymcFzXBDptWmT7FwuEzG3ryjH4ktypQSAewRiNMjANTtpgP4mLTj34bhnZX7UiM", HASHER_SHA2D, expectedPrivateBytes, 78);
-	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
-	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
-	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
-	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0'/1") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "1/2'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'/1") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'/1/2'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
 	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
 
 
@@ -459,26 +490,44 @@ BOOST_AUTO_TEST_CASE( moveToSubNode_bip32TestVector1 )
 	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
 	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
 	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
-
-
-	memset(expectedPublicBytes, 0, 78);
-	memset(expectedPrivateBytes, 0, 78);
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'/1/2'/2") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0'") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "1/2'/2") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
 	testedSubNode = masterNode;
 	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0'/1") );
 	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2'/2") );
-
-	base58_decode_check("xpub6FHa3pjLCk84BayeJxFW2SP4XRrFd1JYnxeLeU8EqN3vDfZmbqBqaGJAyiLjTAwm6ZLRQUMv1ZACTj37sR62cfN7fe5JnJ7dh8zL4fiyLHV", HASHER_SHA2D, expectedPublicBytes, 78);
-	BOOST_REQUIRE( expectedPublicBytes[0] == 0x04 );
-	BOOST_REQUIRE( expectedPublicBytes[1] == 0x88 );
-	BOOST_REQUIRE( expectedPublicBytes[2] == 0xb2 );
-	BOOST_REQUIRE( expectedPublicBytes[3] == 0x1e );
 	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
-
-	base58_decode_check("xprvA2JDeKCSNNZky6uBCviVfJSKyQ1mDYahRjijr5idH2WwLsEd4Hsb2Tyh8RfQMuPh7f7RtyzTtdrbdqqsunu5Mm3wDvUAKRHSC34sJ7in334", HASHER_SHA2D, expectedPrivateBytes, 78);
-	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
-	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
-	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
-	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0'/1/2'") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "1/2'/2") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'/1") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2'/2") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'/1/2'") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'/1/2'/2") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
 	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
 
 
@@ -500,26 +549,474 @@ BOOST_AUTO_TEST_CASE( moveToSubNode_bip32TestVector1 )
 	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
 	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
 	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'/1/2'/2/1000000000") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0'") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "1/2'/2/1000000000") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0'/1") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2'/2/1000000000") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0'/1/2'") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2/1000000000") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0'/1/2'/2") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "1000000000") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "1/2'/2/1000000000") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'/1") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2'/2/1000000000") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'/1/2'") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2/1000000000") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'/1/2'/2") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "1000000000") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'/1/2'/2/1000000000") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( moveToSubNode_bip32TestVector2 )
+{
+	const uint8_t seedSize = 64;
+	const uint8_t testSeed[seedSize] = { 0xff, 0xfc, 0xf9, 0xf6, 0xf3, 0xf0, 0xed, 0xea, 0xe7, 0xe4, 0xe1, 0xde, 0xdb, 0xd8, 0xd5, 0xd2, 0xcf, 0xcc, 0xc9, 0xc6, 0xc3, 0xc0, 0xbd, 0xba, 0xb7, 0xb4, 0xb1, 0xae, 0xab, 0xa8, 0xa5, 0xa2, 0x9f, 0x9c, 0x99, 0x96, 0x93, 0x90, 0x8d, 0x8a, 0x87, 0x84, 0x81, 0x7e, 0x7b, 0x78, 0x75, 0x72, 0x6f, 0x6c, 0x69, 0x66, 0x63, 0x60, 0x5d, 0x5a, 0x57, 0x54, 0x51, 0x4e, 0x4b, 0x48, 0x45, 0x42 };
+
+	HDNode masterNode;
+	BOOST_TEST( hdnode_from_seed(testSeed, seedSize, BITCOIN_ELLIPTIC_CURVE, &masterNode) == 1 );
+	BOOST_TEST( hdnode_fill_public_key(&masterNode) == 0 );
+
+	uint8_t expectedPublicBytes[78] = { 0x00 };
+	base58_decode_check("xpub661MyMwAqRbcFW31YEwpkMuc5THy2PSt5bDMsktWQcFF8syAmRUapSCGu8ED9W6oDMSgv6Zz8idoc4a6mr8BDzTJY47LJhkJ8UB7WEGuduB", HASHER_SHA2D, expectedPublicBytes, 78);
+	BOOST_REQUIRE( expectedPublicBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPublicBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPublicBytes[2] == 0xb2 );
+	BOOST_REQUIRE( expectedPublicBytes[3] == 0x1e );
+	BOOST_REQUIRE( memcmp(masterNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K31xYSDQpPDxsXRTUcvj2iNHm5NUtrGiGG5e2DtALGdso3pGz6ssrdK4PFmM8NSpSBHNqPqm55Qn3LqFtT2emdEXVYsCzC2U", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(masterNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
 
 
 	memset(expectedPublicBytes, 0, 78);
 	memset(expectedPrivateBytes, 0, 78);
-	testedSubNode = masterNode;
-	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0'/1/2'/") );
-	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2/1000000000") );
+	HDNode testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0") );
 
-	base58_decode_check("xpub6H1LXWLaKsWFhvm6RVpEL9P4KfRZSW7abD2ttkWP3SSQvnyA8FSVqNTEcYFgJS2UaFcxupHiYkro49S8yGasTvXEYBVPamhGW6cFJodrTHy", HASHER_SHA2D, expectedPublicBytes, 78);
+	base58_decode_check("xpub69H7F5d8KSRgmmdJg2KhpAK8SR3DjMwAdkxj3ZuxV27CprR9LgpeyGmXUbC6wb7ERfvrnKZjXoUmmDznezpbZb7ap6r1D3tgFxHmwMkQTPH", HASHER_SHA2D, expectedPublicBytes, 78);
 	BOOST_REQUIRE( expectedPublicBytes[0] == 0x04 );
 	BOOST_REQUIRE( expectedPublicBytes[1] == 0x88 );
 	BOOST_REQUIRE( expectedPublicBytes[2] == 0xb2 );
 	BOOST_REQUIRE( expectedPublicBytes[3] == 0x1e );
 	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
 
-	base58_decode_check("xprvA41z7zogVVwxVSgdKUHDy1SKmdb533PjDz7J6N6mV6uS3ze1ai8FHa8kmHScGpWmj4WggLyQjgPie1rFSruoUihUZREPSL39UNdE3BBDu76", HASHER_SHA2D, expectedPrivateBytes, 78);
+	base58_decode_check("xprv9vHkqa6EV4sPZHYqZznhT2NPtPCjKuDKGY38FBWLvgaDx45zo9WQRUT3dKYnjwih2yJD9mkrocEZXo1ex8G81dwSM1fwqWpWkeS3v86pgKt", HASHER_SHA2D, expectedPrivateBytes, 78);
 	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
 	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
 	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
 	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+
+
+	memset(expectedPublicBytes, 0, 78);
+	memset(expectedPrivateBytes, 0, 78);
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0/2147483647'") );
+
+	base58_decode_check("xpub6ASAVgeehLbnwdqV6UKMHVzgqAG8Gr6riv3Fxxpj8ksbH9ebxaEyBLZ85ySDhKiLDBrQSARLq1uNRts8RuJiHjaDMBU4Zn9h8LZNnBC5y4a", HASHER_SHA2D, expectedPublicBytes, 78);
+	BOOST_REQUIRE( expectedPublicBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPublicBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPublicBytes[2] == 0xb2 );
+	BOOST_REQUIRE( expectedPublicBytes[3] == 0x1e );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+
+	base58_decode_check("xprv9wSp6B7kry3Vj9m1zSnLvN3xH8RdsPP1Mh7fAaR7aRLcQMKTR2vidYEeEg2mUCTAwCd6vnxVrcjfy2kRgVsFawNzmjuHc2YmYRmagcEPdU9", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0/2147483647'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0/") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2147483647'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0/") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2147483647'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0/2147483647'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+
+
+	memset(expectedPublicBytes, 0, 78);
+	memset(expectedPrivateBytes, 0, 78);
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0/2147483647'/1") );
+
+	base58_decode_check("xpub6DF8uhdarytz3FWdA8TvFSvvAh8dP3283MY7p2V4SeE2wyWmG5mg5EwVvmdMVCQcoNJxGoWaU9DCWh89LojfZ537wTfunKau47EL2dhHKon", HASHER_SHA2D, expectedPublicBytes, 78);
+	BOOST_REQUIRE( expectedPublicBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPublicBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPublicBytes[2] == 0xb2 );
+	BOOST_REQUIRE( expectedPublicBytes[3] == 0x1e );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+
+	base58_decode_check("xprv9zFnWC6h2cLgpmSA46vutJzBcfJ8yaJGg8cX1e5StJh45BBciYTRXSd25UEPVuesF9yog62tGAQtHjXajPPdbRCHuWS6T8XA2ECKADdw4Ef", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0/2147483647'/1") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2147483647'/1") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0/2147483647'") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "1") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2147483647'/1") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0/2147483647'") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "1") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0/2147483647'/1") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+
+
+	memset(expectedPublicBytes, 0, 78);
+	memset(expectedPrivateBytes, 0, 78);
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0/2147483647'/1/2147483646'") );
+
+	base58_decode_check("xpub6ERApfZwUNrhLCkDtcHTcxd75RbzS1ed54G1LkBUHQVHQKqhMkhgbmJbZRkrgZw4koxb5JaHWkY4ALHY2grBGRjaDMzQLcgJvLJuZZvRcEL", HASHER_SHA2D, expectedPublicBytes, 78);
+	BOOST_REQUIRE( expectedPublicBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPublicBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPublicBytes[2] == 0xb2 );
+	BOOST_REQUIRE( expectedPublicBytes[3] == 0x1e );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+
+	base58_decode_check("xprvA1RpRA33e1JQ7ifknakTFpgNXPmW2YvmhqLQYMmrj4xJXXWYpDPS3xz7iAxn8L39njGVyuoseXzU6rcxFLJ8HFsTjSyQbLYnMpCqE2VbFWc", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0/2147483647'/1/2147483646'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2147483647'/1/2147483646'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0/2147483647'") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "1/2147483646'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0/2147483647'/1") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2147483646'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2147483647'/1/2147483646'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0/2147483647'") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "1/2147483646'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0/2147483647'/1") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2147483646'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0/2147483647'/1/2147483646'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+
+
+	memset(expectedPublicBytes, 0, 78);
+	memset(expectedPrivateBytes, 0, 78);
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0/2147483647'/1/2147483646'/2") );
+
+	base58_decode_check("xpub6FnCn6nSzZAw5Tw7cgR9bi15UV96gLZhjDstkXXxvCLsUXBGXPdSnLFbdpq8p9HmGsApME5hQTZ3emM2rnY5agb9rXpVGyy3bdW6EEgAtqt", HASHER_SHA2D, expectedPublicBytes, 78);
+	BOOST_REQUIRE( expectedPublicBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPublicBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPublicBytes[2] == 0xb2 );
+	BOOST_REQUIRE( expectedPublicBytes[3] == 0x1e );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+
+	base58_decode_check("xprvA2nrNbFZABcdryreWet9Ea4LvTJcGsqrMzxHx98MMrotbir7yrKCEXw7nadnHM8Dq38EGfSh6dqA9QWTyefMLEcBYJUuekgW4BYPJcr9E7j", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0/2147483647'/1/2147483646'/2") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2147483647'/1/2147483646'/2") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0/2147483647'") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "1/2147483646'/2") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0/2147483647'/1") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2147483646'/2") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0/2147483647'/1/2147483646'/") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2147483647'/1/2147483646'/2") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0/2147483647'") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "1/2147483646'/2") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0/2147483647'/1") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2147483646'/2") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0/2147483647'/1/2147483646'/") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "2") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0/2147483647'/1/2147483646'/2") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( moveToSubNode_bip32TestVector3 )
+{
+	const uint8_t seedSize = 64;
+	const uint8_t testSeed[seedSize] = { 0x4b, 0x38, 0x15, 0x41, 0x58, 0x3b, 0xe4, 0x42, 0x33, 0x46, 0xc6, 0x43, 0x85, 0x0d, 0xa4, 0xb3, 0x20, 0xe4, 0x6a, 0x87, 0xae, 0x3d, 0x2a, 0x4e, 0x6d, 0xa1, 0x1e, 0xba, 0x81, 0x9c, 0xd4, 0xac, 0xba, 0x45, 0xd2, 0x39, 0x31, 0x9a, 0xc1, 0x4f, 0x86, 0x3b, 0x8d, 0x5a, 0xb5, 0xa0, 0xd0, 0xc6, 0x4d, 0x2e, 0x8a, 0x1e, 0x7d, 0x14, 0x57, 0xdf, 0x2e, 0x5a, 0x3c, 0x51, 0xc7, 0x32, 0x35, 0xbe };
+
+	HDNode masterNode;
+	BOOST_TEST( hdnode_from_seed(testSeed, seedSize, BITCOIN_ELLIPTIC_CURVE, &masterNode) == 1 );
+	BOOST_TEST( hdnode_fill_public_key(&masterNode) == 0 );
+
+	uint8_t expectedPublicBytes[78] = { 0x00 };
+	base58_decode_check("xpub661MyMwAqRbcEZVB4dScxMAdx6d4nFc9nvyvH3v4gJL378CSRZiYmhRoP7mBy6gSPSCYk6SzXPTf3ND1cZAceL7SfJ1Z3GC8vBgp2epUt13", HASHER_SHA2D, expectedPublicBytes, 78);
+	BOOST_REQUIRE( expectedPublicBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPublicBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPublicBytes[2] == 0xb2 );
+	BOOST_REQUIRE( expectedPublicBytes[3] == 0x1e );
+	BOOST_REQUIRE( memcmp(masterNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K25QhxbucbDDuQ4naNntJRi4KUfWT7xo4EKsHt2QJDu7KXp1A3u7Bi1j8ph3EGsZ9Xvz9dGuVrtHHs7pXeTzjuxBrCmmhgC6", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(masterNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+
+
+	memset(expectedPublicBytes, 0, 78);
+	memset(expectedPrivateBytes, 0, 78);
+	HDNode testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0'") );
+
+	base58_decode_check("xpub68NZiKmJWnxxS6aaHmn81bvJeTESw724CRDs6HbuccFQN9Ku14VQrADWgqbhhTHBaohPX4CjNLf9fq9MYo6oDaPPLPxSb7gwQN3ih19Zm4Y", HASHER_SHA2D, expectedPublicBytes, 78);
+	BOOST_REQUIRE( expectedPublicBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPublicBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPublicBytes[2] == 0xb2 );
+	BOOST_REQUIRE( expectedPublicBytes[3] == 0x1e );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+
+	base58_decode_check("xprv9uPDJpEQgRQfDcW7BkF7eTya6RPxXeJCqCJGHuCJ4GiRVLzkTXBAJMu2qaMWPrS7AANYqdq6vcBcBUdJCVVFceUvJFjaPdGZ2y9WACViL4L", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( moveToSubNode_bip32TestVector4 )
+{
+	const uint8_t seedSize = 32;
+	const uint8_t testSeed[seedSize] = { 0x3d, 0xdd, 0x56, 0x02, 0x28, 0x58, 0x99, 0xa9, 0x46, 0x11, 0x45, 0x06, 0x15, 0x7c, 0x79, 0x97, 0xe5, 0x44, 0x45, 0x28, 0xf3, 0x00, 0x3f, 0x61, 0x34, 0x71, 0x21, 0x47, 0xdb, 0x19, 0xb6, 0x78 };
+
+	HDNode masterNode;
+	BOOST_TEST( hdnode_from_seed(testSeed, seedSize, BITCOIN_ELLIPTIC_CURVE, &masterNode) == 1 );
+	BOOST_TEST( hdnode_fill_public_key(&masterNode) == 0 );
+
+	uint8_t expectedPublicBytes[78] = { 0x00 };
+	base58_decode_check("xpub661MyMwAqRbcGczjuMoRm6dXaLDEhW1u34gKenbeYqAix21mdUKJyuyu5F1rzYGVxyL6tmgBUAEPrEz92mBXjByMRiJdba9wpnN37RLLAXa", HASHER_SHA2D, expectedPublicBytes, 78);
+	BOOST_REQUIRE( expectedPublicBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPublicBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPublicBytes[2] == 0xb2 );
+	BOOST_REQUIRE( expectedPublicBytes[3] == 0x1e );
+	BOOST_REQUIRE( memcmp(masterNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K48vGoLGRPxgo2JNkJ3J3fqkirQC2zVdk5Dgd5w14S7fRDyHH4dWNHUgkvsvNDCkvAwcSHNAQwhwgNMgZhLtQC63zxwhQmRv", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(masterNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+
+
+	memset(expectedPublicBytes, 0, 78);
+	memset(expectedPrivateBytes, 0, 78);
+	HDNode testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0'") );
+
+	base58_decode_check("xpub69AUMk3qDBi3uW1sXgjCmVjJ2G6WQoYSnNHyzkmdCHEhSZ4tBok37xfFEqHd2AddP56Tqp4o56AePAgCjYdvpW2PU2jbUPFKsav5ut6Ch1m", HASHER_SHA2D, expectedPublicBytes, 78);
+	BOOST_REQUIRE( expectedPublicBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPublicBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPublicBytes[2] == 0xb2 );
+	BOOST_REQUIRE( expectedPublicBytes[3] == 0x1e );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+
+	base58_decode_check("xprv9vB7xEWwNp9kh1wQRfCCQMnZUEG21LpbR9NPCNN1dwhiZkjjeGRnaALmPXCX7SgjFTiCTT6bXes17boXtjq3xLpcDjzEuGLQBM5ohqkao9G", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+
+
+	memset(expectedPublicBytes, 0, 78);
+	memset(expectedPrivateBytes, 0, 78);
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0'/1'") );
+
+	base58_decode_check("xpub6BJA1jSqiukeaesWfxe6sNK9CCGaujFFSJLomWHprUL9DePQ4JDkM5d88n49sMGJxrhpjazuXYWdMf17C9T5XnxkopaeS7jGk1GyyVziaMt", HASHER_SHA2D, expectedPublicBytes, 78);
+	BOOST_REQUIRE( expectedPublicBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPublicBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPublicBytes[2] == 0xb2 );
+	BOOST_REQUIRE( expectedPublicBytes[3] == 0x1e );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+
+	base58_decode_check("xprv9xJocDuwtYCMNAo3Zw76WENQeAS6WGXQ55RCy7tDJ8oALr4FWkuVoHJeHVAcAqiZLE7Je3vZJHxspZdFHfnBEjHqU5hG1Jaj32dVoS6XLT1", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'/1'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "m/0'") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "1'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'") );
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "1'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+	testedSubNode = masterNode;
+	BOOST_REQUIRE( moveToSubNode(&testedSubNode, "0'/1'") );
+	BOOST_REQUIRE( memcmp(testedSubNode.public_key, &expectedPublicBytes[45], PUBLIC_KEY_BYTE_SIZE) == 0 );
 	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
 }
 
