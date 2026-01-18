@@ -100,16 +100,16 @@ namespace RetroCrypto
 		HDNode node;
 		if (hdnode_from_seed(masterNodeSeed, BITCOIN_HD_MASTER_SEED_SIZE, BITCOIN_ELLIPTIC_CURVE, &node) != 1)
 			return string("Error generating master HD node.");
-		char btcAddress[BITCOIN_MAXIMUM_ADDRESS_LENGTH];
-		hdnode_private_ckd_prime(&node, BITCOIN_PATH_PURPOSE);
-		hdnode_private_ckd_prime(&node, BITCOIN_PATH_COIN_TYPE);
-		hdnode_private_ckd_prime(&node, BITCOIN_PATH_ACCOUNT);
+
+		bool movedToAddressPath = moveToSubNode(&node, addressPath);
+		if (!movedToAddressPath)
+			return string("Error deriving address path: ")+addressPath;
 
 		AddressInformation addressInformation;
 		memcpy(addressInformation.privateKey, node.private_key, PRIVATE_KEY_BYTE_SIZE);
-		hdnode_fill_public_key(&node);
 		memcpy(addressInformation.publicKey, node.public_key, PUBLIC_KEY_BYTE_SIZE);
 
+		char btcAddress[BITCOIN_MAXIMUM_ADDRESS_LENGTH];
 		if (hdnode_get_address(&node, BITCOIN_ADDRESS_VERSION_BYTE, (char*)&btcAddress, BITCOIN_MAXIMUM_ADDRESS_LENGTH) != 0)
 			return string("Failed to generate address from HD node");
 		addressInformation.address = btcAddress;
@@ -138,13 +138,13 @@ namespace RetroCrypto
 		HDNode node;
 		if (hdnode_from_seed(seedBits, seedSize, BITCOIN_ELLIPTIC_CURVE, &node) != 1)
 			return string("Error generating master HD node.");
-		hdnode_private_ckd_prime(&node, DOGE_PATH_PURPOSE);
-		hdnode_private_ckd_prime(&node, DOGE_PATH_COIN_TYPE);
-		hdnode_private_ckd_prime(&node, DOGE_PATH_ACCOUNT);
+
+		bool movedToAddressPath = moveToSubNode(&node, addressPath);
+		if (!movedToAddressPath)
+			return string("Error deriving address path: ")+addressPath;
 
 		AddressInformation addressInformation;
 		memcpy(addressInformation.privateKey, node.private_key, PRIVATE_KEY_BYTE_SIZE);
-		hdnode_fill_public_key(&node);
 		memcpy(addressInformation.publicKey, node.public_key, PUBLIC_KEY_BYTE_SIZE);
 
 		char dogeAddress[BITCOIN_MAXIMUM_ADDRESS_LENGTH];
@@ -182,13 +182,13 @@ namespace RetroCrypto
 		HDNode node;
 		if (hdnode_from_seed(masterNodeSeed, BITCOIN_HD_MASTER_SEED_SIZE, ETHEREUM_CLASSIC_HD_ELLIPTIC_CURVE, &node) != 1)
 			return string("Error generating master HD node.");
-		hdnode_private_ckd_prime(&node, ETHEREUM_CLASSIC_PATH_PURPOSE);
-		hdnode_private_ckd_prime(&node, ETHEREUM_CLASSIC_PATH_COIN_TYPE);
-		hdnode_private_ckd_prime(&node, ETHEREUM_CLASSIC_PATH_ACCOUNT);
+
+		bool movedToAddressPath = moveToSubNode(&node, addressPath);
+		if (!movedToAddressPath)
+			return string("Error deriving address path: ")+addressPath;
 
 		AddressInformation addressInformation;
 		memcpy(addressInformation.privateKey, node.private_key, PRIVATE_KEY_BYTE_SIZE);
-		hdnode_fill_public_key(&node);
 		memcpy(addressInformation.publicKey, node.public_key, PUBLIC_KEY_BYTE_SIZE);
 
 		uint8_t ethAddressBytes[ETHEREUM_CLASSIC_ADDRESS_BYTES] = { 0 };
@@ -249,13 +249,13 @@ namespace RetroCrypto
 		HDNode node;
 		if (hdnode_from_seed(masterNodeSeed, BITCOIN_HD_MASTER_SEED_SIZE, ETHEREUM_HD_ELLIPTIC_CURVE, &node) != 1)
 			return string("Error generating master HD node.");
-		hdnode_private_ckd_prime(&node, ETHEREUM_PATH_PURPOSE);
-		hdnode_private_ckd_prime(&node, ETHEREUM_PATH_COIN_TYPE);
-		hdnode_private_ckd_prime(&node, ETHEREUM_PATH_ACCOUNT);
+
+		bool movedToAddressPath = moveToSubNode(&node, addressPath);
+		if (!movedToAddressPath)
+			return string("Error deriving address path: ")+addressPath;
 
 		AddressInformation addressInformation;
 		memcpy(addressInformation.privateKey, node.private_key, PRIVATE_KEY_BYTE_SIZE);
-		hdnode_fill_public_key(&node);
 		memcpy(addressInformation.publicKey, node.public_key, PUBLIC_KEY_BYTE_SIZE);
 
 		uint8_t ethAddressBytes[ETHEREUM_ADDRESS_BYTES] = { 0 };
@@ -316,15 +316,13 @@ namespace RetroCrypto
 		HDNode node;
 		if (hdnode_from_seed(masterNodeSeed, BITCOIN_HD_MASTER_SEED_SIZE, BITCOIN_ELLIPTIC_CURVE, &node) != 1)
 			return string("Error generating master HD node.");
-		hdnode_private_ckd_prime(&node, NOSTR_PATH_PURPOSE);
-		hdnode_private_ckd_prime(&node, NOSTR_PATH_COIN_TYPE);
-		hdnode_private_ckd_prime(&node, NOSTR_PATH_ACCOUNT);
-		hdnode_private_ckd(&node, NOSTR_PATH_CHANGE);
-		hdnode_private_ckd(&node, NOSTR_PATH_INDEX);
+
+		bool movedToAddressPath = moveToSubNode(&node, addressPath);
+		if (!movedToAddressPath)
+			return string("Error deriving address path: ")+addressPath;
 
 		AddressInformation addressInformation;
 		memcpy(addressInformation.privateKey, node.private_key, PRIVATE_KEY_BYTE_SIZE);
-		hdnode_fill_public_key(&node);
 		memcpy(addressInformation.publicKey, node.public_key, PUBLIC_KEY_BYTE_SIZE);
 
 		uint8_t data[NOSTR_PUBLIC_KEY_SIZE*8/5+1] = {0};
