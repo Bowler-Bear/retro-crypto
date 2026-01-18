@@ -107,13 +107,14 @@ namespace RetroCrypto
 		: AddressPath()
 		{
 			path = inPath;
-			for (int i = 0; i < path.length(); i++)
+			const int pathStringLength = path.length();
+			for (int i = 0; i < pathStringLength; i++)
 			{
 				if ((path[i] >= 0x30 && path[i] <= 0x39) || (path[i] == 'm' && i == 0))
 				{
 					continue;
 				}
-				else if(path[i] == '/' && ((i+1 < path.length() && path[i+1] >= 0x30 && path[i+1] <= 0x39) || i+1 == path.length()))
+				else if(path[i] == '/' && ((i+1 < pathStringLength && path[i+1] >= 0x30 && path[i+1] <= 0x39) || i+1 == pathStringLength))
 				{
 					if (nextSlashPosition == std::string::npos)
 					{
@@ -121,7 +122,7 @@ namespace RetroCrypto
 					}
 					continue;
 				}
-				else if(path[i] == '\'' && ((i+1 < path.length() && path[i+1] == '/') || i+1 == path.length()))
+				else if(path[i] == '\'' && ((i+1 < pathStringLength && path[i+1] == '/') || i+1 == pathStringLength))
 				{
 						continue;
 				}
@@ -130,7 +131,7 @@ namespace RetroCrypto
 			}
 			isValidPath = true;
 			if (nextSlashPosition == std::string::npos)
-				nextSlashPosition = path.length();
+				nextSlashPosition = pathStringLength;
 			isValueHardened = nextSlashPosition-1 >= 0 && nextSlashPosition-1 < path.length() && path[nextSlashPosition-1] == '\'';
 			try
 			{
@@ -141,7 +142,7 @@ namespace RetroCrypto
 					isValidPath = false;
 				}
 			}
-			catch(std::exception)
+			catch(std::exception* e)
 			{
 				headValue = -1;
 				if (inPath[0] != 'm')
