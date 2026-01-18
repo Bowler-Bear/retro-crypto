@@ -9,6 +9,7 @@
 extern "C"
 {
 #include "base58.h"
+#include "bip39.h"
 }
 
 using namespace RetroCrypto;
@@ -1033,6 +1034,39 @@ BOOST_AUTO_TEST_CASE( moveToSubNode_dogeTestVector )
 	BOOST_REQUIRE( moveToSubNode(&masterNode, testPath) );
 	BOOST_TEST( masterNode.public_key[1] == testExpectedPublicKey[1] );
 	BOOST_REQUIRE( memcmp(masterNode.public_key, testExpectedPublicKey, PUBLIC_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+BOOST_AUTO_TEST_SUITE( crypto_functions_nostr )
+
+//https://github.com/nostr-protocol/nips
+BOOST_AUTO_TEST_CASE( nips06_vector1 )
+{
+	const int seedSize = 16;
+	uint8_t seedBits[seedSize] = { 0 };
+	mnemonic_to_bits("leader monkey parrot ring guide accident before fence cannon height naive bean", seedBits);
+	AddressInformation information = nostrAddressFromSeedBits(seedBits, seedSize, "m/44'/1237'/0'/0/0");
+	uint8_t expectedPrivateKey[PRIVATE_KEY_BYTE_SIZE] = { 0x7f, 0x7f, 0xf0, 0x3d, 0x12, 0x37, 0x92, 0xd6, 0xac, 0x59, 0x4b, 0xfa, 0x67, 0xbf, 0x6d, 0x0c, 0x0a, 0xb5, 0x5b, 0x6b, 0x1f, 0xdb, 0x62, 0x49, 0x30, 0x3f, 0xe8, 0x61, 0xf1, 0xcc, 0xba, 0x9a };
+	uint8_t expectedPublicKey[PUBLIC_KEY_BYTE_SIZE-1] = { 0x17, 0x16, 0x2c, 0x92, 0x1d, 0xc4, 0xd2, 0x51, 0x8f, 0x9a, 0x10, 0x1d, 0xb3, 0x36, 0x95, 0xdf, 0x1a, 0xfb, 0x56, 0xab, 0x82, 0xf5, 0xff, 0x3e, 0x5d, 0xa6, 0xee, 0xc3, 0xca, 0x5c, 0xd9, 0x17 };
+	BOOST_REQUIRE( memcmp(information.privateKey, &expectedPrivateKey, PRIVATE_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(&information.publicKey[1], &expectedPublicKey, PUBLIC_KEY_BYTE_SIZE-1) == 0 );
+	BOOST_REQUIRE( std::string("nsec10allq0gjx7fddtzef0ax00mdps9t2kmtrldkyjfs8l5xruwvh2dq0lhhkp") == nsecFromPrivateKey(information.privateKey) );
+	BOOST_REQUIRE( std::string("npub1zutzeysacnf9rru6zqwmxd54mud0k44tst6l70ja5mhv8jjumytsd2x7nu") == information.address );
+}
+
+BOOST_AUTO_TEST_CASE( nips06_vector2 )
+{
+	const int seedSize = 32;
+	uint8_t seedBits[seedSize] = { 0 };
+	mnemonic_to_bits("what bleak badge arrange retreat wolf trade produce cricket blur garlic valid proud rude strong choose busy staff weather area salt hollow arm fade", seedBits);
+	AddressInformation information = nostrAddressFromSeedBits(seedBits, seedSize, "m/44'/1237'/0'/0/0");
+	uint8_t expectedPrivateKey[PRIVATE_KEY_BYTE_SIZE] = { 0xc1, 0x5d, 0x73, 0x98, 0x94, 0xc8, 0x1a, 0x2f, 0xcf, 0xd3, 0xa2, 0xdf, 0x85, 0xa0, 0xd2, 0xc0, 0xdb, 0xc4, 0x7a, 0x28, 0x0d, 0x09, 0x27, 0x99, 0xf1, 0x44, 0xd7, 0x3d, 0x7a, 0xe7, 0x8a, 0xdd };
+	uint8_t expectedPublicKey[PUBLIC_KEY_BYTE_SIZE-1] = { 0xd4, 0x1b, 0x22, 0x89, 0x95, 0x49, 0xe1, 0xf3, 0xd3, 0x35, 0xa3, 0x10, 0x02, 0xcf, 0xd3, 0x82, 0x17, 0x40, 0x06, 0xe1, 0x66, 0xd3, 0xe6, 0x58, 0xe3, 0xa5, 0xee, 0xcd, 0xb6, 0x46, 0x35, 0x73 };
+	BOOST_REQUIRE( memcmp(information.privateKey, &expectedPrivateKey, PRIVATE_KEY_BYTE_SIZE) == 0 );
+	BOOST_REQUIRE( memcmp(&information.publicKey[1], &expectedPublicKey, PUBLIC_KEY_BYTE_SIZE-1) == 0 );
+	BOOST_REQUIRE( std::string("nsec1c9wh8xy5eqdzln7n5t0ctgxjcrdug73gp5yj0x03gntn67h83twssdfhel") == nsecFromPrivateKey(information.privateKey) );
+	BOOST_REQUIRE( std::string("npub16sdj9zv4f8sl85e45vgq9n7nsgt5qphpvmf7vk8r5hhvmdjxx4es8rq74h") == information.address );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
