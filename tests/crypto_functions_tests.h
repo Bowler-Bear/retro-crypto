@@ -1032,8 +1032,59 @@ BOOST_AUTO_TEST_CASE( moveToSubNode_dogeTestVector )
 	uint8_t chainCode[32] = { 1 };
 	hdnode_from_seed(testPrivateKey, PRIVATE_KEY_BYTE_SIZE, BITCOIN_ELLIPTIC_CURVE, &masterNode);
 	BOOST_REQUIRE( moveToSubNode(&masterNode, testPath) );
-	BOOST_TEST( masterNode.public_key[1] == testExpectedPublicKey[1] );
 	BOOST_REQUIRE( memcmp(masterNode.public_key, testExpectedPublicKey, PUBLIC_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+BOOST_AUTO_TEST_SUITE( crypto_functions_ethereum )
+
+BOOST_AUTO_TEST_CASE( checksum_address_erc55_case1 )
+{
+	const uint8_t ethereumAddressBytes[ETHEREUM_ADDRESS_BYTES] = { 0x52, 0x90, 0x84, 0x00, 0x09, 0x85, 0x27, 0x88, 0x6E, 0x0F, 0x70, 0x30, 0x06, 0x98, 0x57, 0xD2, 0xE4, 0x16, 0x9E, 0xE7 };
+	BOOST_REQUIRE( ethereumAddressBytesToChecksumAddress(ethereumAddressBytes) == std::string("0x52908400098527886E0F7030069857D2E4169EE7"));
+}
+
+BOOST_AUTO_TEST_CASE( checksum_address_erc55_case2 )
+{
+	const uint8_t ethereumAddressBytes[ETHEREUM_ADDRESS_BYTES] = { 0x86, 0x17, 0xE3, 0x40, 0xB3, 0xD0, 0x1F, 0xA5, 0xF1, 0x1F, 0x30, 0x6F, 0x40, 0x90, 0xFD, 0x50, 0xE2, 0x38, 0x07, 0x0D };
+	BOOST_REQUIRE( ethereumAddressBytesToChecksumAddress(ethereumAddressBytes) == std::string("0x8617E340B3D01FA5F11F306F4090FD50E238070D"));
+}
+
+BOOST_AUTO_TEST_CASE( checksum_address_erc55_case3 )
+{
+	const uint8_t ethereumAddressBytes[ETHEREUM_ADDRESS_BYTES] = { 0xde, 0x70, 0x9f, 0x21, 0x02, 0x30, 0x62, 0x20, 0x92, 0x10, 0x60, 0x31, 0x47, 0x15, 0x62, 0x90, 0x80, 0xe2, 0xfb, 0x77 };
+	BOOST_REQUIRE( ethereumAddressBytesToChecksumAddress(ethereumAddressBytes) == std::string("0xde709f2102306220921060314715629080e2fb77"));
+}
+
+BOOST_AUTO_TEST_CASE( checksum_address_erc55_case4 )
+{
+	const uint8_t ethereumAddressBytes[ETHEREUM_ADDRESS_BYTES] = { 0x27, 0xb1, 0xfd, 0xb0, 0x47, 0x52, 0xbb, 0xc5, 0x36, 0x00, 0x7a, 0x92, 0x0d, 0x24, 0xac, 0xb0, 0x45, 0x56, 0x1c, 0x26 };
+	BOOST_REQUIRE( ethereumAddressBytesToChecksumAddress(ethereumAddressBytes) == std::string("0x27b1fdb04752bbc536007a920d24acb045561c26"));
+}
+
+BOOST_AUTO_TEST_CASE( checksum_address_erc55_case5 )
+{
+	const uint8_t ethereumAddressBytes[ETHEREUM_ADDRESS_BYTES] = { 0x5a, 0xAe, 0xb6, 0x05, 0x3F, 0x3E, 0x94, 0xC9, 0xb9, 0xA0, 0x9f, 0x33, 0x66, 0x94, 0x35, 0xE7, 0xEf, 0x1B, 0xeA, 0xed };
+	BOOST_REQUIRE( ethereumAddressBytesToChecksumAddress(ethereumAddressBytes) == std::string("0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed"));
+}
+
+BOOST_AUTO_TEST_CASE( checksum_address_erc55_case6 )
+{
+	const uint8_t ethereumAddressBytes[ETHEREUM_ADDRESS_BYTES] = { 0xfB, 0x69, 0x16, 0x09, 0x5c, 0xa1, 0xdf, 0x60, 0xbB, 0x79, 0xCe, 0x92, 0xcE, 0x3E, 0xa7, 0x4c, 0x37, 0xc5, 0xd3, 0x59 };
+	BOOST_REQUIRE( ethereumAddressBytesToChecksumAddress(ethereumAddressBytes) == std::string("0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359"));
+}
+
+BOOST_AUTO_TEST_CASE( checksum_address_erc55_case7 )
+{
+	const uint8_t ethereumAddressBytes[ETHEREUM_ADDRESS_BYTES] = { 0xdb, 0xF0, 0x3B, 0x40, 0x7c, 0x01, 0xE7, 0xcD, 0x3C, 0xBe, 0xa9, 0x95, 0x09, 0xd9, 0x3f, 0x8D, 0xDD, 0xC8, 0xC6, 0xFB };
+	BOOST_REQUIRE( ethereumAddressBytesToChecksumAddress(ethereumAddressBytes) == std::string("0xdbF03B407c01E7cD3CBea99509d93f8DDDC8C6FB"));
+}
+
+BOOST_AUTO_TEST_CASE( checksum_address_erc55_case8 )
+{
+	const uint8_t ethereumAddressBytes[ETHEREUM_ADDRESS_BYTES] = { 0xD1, 0x22, 0x0A, 0x0c, 0xf4, 0x7c, 0x7B, 0x9B, 0xe7, 0xA2, 0xE6, 0xBA, 0x89, 0xF4, 0x29, 0x76, 0x2e, 0x7b, 0x9a, 0xDb };
+	BOOST_REQUIRE( ethereumAddressBytesToChecksumAddress(ethereumAddressBytes) == std::string("0xD1220A0cf47c7B9Be7A2E6BA89F429762e7b9aDb"));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
