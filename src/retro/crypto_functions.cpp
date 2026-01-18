@@ -195,36 +195,7 @@ namespace RetroCrypto
 		if (hdnode_get_ethereum_pubkeyhash(&node, ethAddressBytes) != 1)
 			return string("Failed to generate address from HD node");
 
-		uint8_t publicKeyHash[sha3_256_hash_size] = { 0 };
-		SHA3_CTX ctx = {0};
-		sha3_256_Init(&ctx);
-		for (int i = 0; i < ETHEREUM_CLASSIC_ADDRESS_BYTES; i++)
-		{
-			char hexString[3] = { 0 };
-			std::sprintf(hexString, "%02x", ethAddressBytes[i]);
-			sha3_Update(&ctx, (const unsigned char*)hexString, 2);
-		}
-		keccak_Final(&ctx, publicKeyHash);
-
-		char ethAddress[ETHEREUM_CLASSIC_ADDRESS_LENGTH] = "0x";
-		for (int i = 0; i < ETHEREUM_CLASSIC_ADDRESS_BYTES; i++)
-		{
-			char hexValue[3] = { 0 };
-			std::sprintf(hexValue, "%02x", ethAddressBytes[i]);
-			for(int j = 0; j < 2; j++)
-			{
-				if (!((hexValue[j] >= 'A' && hexValue[j] <= 'Z') || (hexValue[j] >= 'a' && hexValue[j] <= 'z')))
-				{
-					ethAddress[2+2*i+j] = hexValue[j];
-					continue;
-				}
-				if (((publicKeyHash[i] >> 4*(1-j)) & 0xF) >= 8)
-					ethAddress[2+2*i+j] = hexValue[j] - 0x20;
-				else
-					ethAddress[2+2*i+j] = hexValue[j];
-			}
-		}
-		addressInformation.address = ethAddress;
+		addressInformation.address = ethereumAddressBytesToChecksumAddress(ethAddressBytes);
 		return addressInformation;
 	}
 
@@ -262,6 +233,12 @@ namespace RetroCrypto
 		if (hdnode_get_ethereum_pubkeyhash(&node, ethAddressBytes) != 1)
 			return string("Failed to generate address from HD node");
 
+		addressInformation.address = ethereumAddressBytesToChecksumAddress(ethAddressBytes);
+		return addressInformation;
+	}
+
+	std::string ethereumAddressBytesToChecksumAddress(const uint8_t ethAddressBytes[ETHEREUM_ADDRESS_BYTES])
+	{
 		uint8_t publicKeyHash[sha3_256_hash_size] = { 0 };
 		SHA3_CTX ctx = {0};
 		sha3_256_Init(&ctx);
@@ -291,13 +268,7 @@ namespace RetroCrypto
 					ethAddress[2+2*i+j] = hexValue[j];
 			}
 		}
-		addressInformation.address = ethAddress;
-		return addressInformation;
-	}
-
-	std::string ethereumAddressBytesToChecksumAddress(const uint8_t ethAddressBytes[ETHEREUM_ADDRESS_BYTES])
-	{
-		throw std::logic_error(std::string(__func__)+": Not Implemented.");
+		return ethAddress;
 	}
 
 	AddressInformation nostrAddressFromGlobalContext()
