@@ -1020,6 +1020,21 @@ BOOST_AUTO_TEST_CASE( moveToSubNode_bip32TestVector4 )
 	BOOST_REQUIRE( memcmp(testedSubNode.private_key, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
 }
 
+//https://github.com/dogecoin/dogecoin/blob/master/src/wallet/test/wallet_tests.cpp
+BOOST_AUTO_TEST_CASE( moveToSubNode_dogeTestVector )
+{
+	const uint8_t testPrivateKey[PRIVATE_KEY_BYTE_SIZE] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f };
+	const uint8_t testExpectedPublicKey[PUBLIC_KEY_BYTE_SIZE] = { 0x03, 0x05, 0xa0, 0x77, 0x19, 0x43, 0x00, 0xe2, 0x7d, 0x32, 0x0a, 0x95, 0x04, 0xf8, 0x08, 0xa1, 0x6f, 0x05, 0xb3, 0x8d, 0xab, 0xea, 0xd3, 0x1f, 0x10, 0x10, 0x4c, 0x07, 0x5d, 0x88, 0xf8, 0x1a, 0x38 };
+	const char* testPath = "m/0'/3'/0'";
+
+	HDNode masterNode;
+	uint8_t chainCode[32] = { 1 };
+	hdnode_from_seed(testPrivateKey, PRIVATE_KEY_BYTE_SIZE, BITCOIN_ELLIPTIC_CURVE, &masterNode);
+	BOOST_REQUIRE( moveToSubNode(&masterNode, testPath) );
+	BOOST_TEST( masterNode.public_key[1] == testExpectedPublicKey[1] );
+	BOOST_REQUIRE( memcmp(masterNode.public_key, testExpectedPublicKey, PUBLIC_KEY_BYTE_SIZE) == 0 );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 
 #endif
