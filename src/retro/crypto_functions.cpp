@@ -31,8 +31,6 @@ namespace RetroCrypto
 		}
 		else
 		{
-			if (!path.hasSubPath())
-				return false;
 			if (path.getHeadValue() < 0)
 				return false;
 			if (path.getIsValueHardened())
