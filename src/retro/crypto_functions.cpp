@@ -90,12 +90,12 @@ namespace RetroCrypto
 		return bitcoinAddressFromSeedBits(data.seed, data.seedSize);
 	}
 
-	AddressInformation bitcoinAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize, std::string addressPath)
+	AddressInformation bitcoinAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize, std::string addressPath, const char* passphrase)
 	{
 		if (seedSize != 16 && seedSize != 24 && seedSize != 32)
 			return string("Invalid seed bits size for this address.");
 		uint8_t masterNodeSeed[BITCOIN_HD_MASTER_SEED_SIZE] = { 0 };
-		mnemonic_to_seed(mnemonic_from_data(seedBits, seedSize), "", masterNodeSeed, nullptr);
+		mnemonic_to_seed(mnemonic_from_data(seedBits, seedSize), passphrase, masterNodeSeed, nullptr);
 		mnemonic_clear();
 		HDNode node;
 		if (hdnode_from_seed(masterNodeSeed, BITCOIN_HD_MASTER_SEED_SIZE, BITCOIN_ELLIPTIC_CURVE, &node) != 1)

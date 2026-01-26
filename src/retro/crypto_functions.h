@@ -180,7 +180,7 @@ namespace RetroCrypto
 	AddressInformation cryptoAddressFromGlobalContext();
 	AddressInformation bitcoinAddressFromGlobalContext();
 	AddressInformation bitcoinAddressFromSeedBits(const ContextData& data);
-	AddressInformation bitcoinAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize, std::string addressPath = BITCOIN_DEFAULT_PATH);
+	AddressInformation bitcoinAddressFromSeedBits(const uint8_t* seedBits, const uint8_t seedSize, std::string addressPath = BITCOIN_DEFAULT_PATH, const char* passphrase = "");
 	std::string privateKeyAsBitcoinWIF(const uint8_t privateKey[PRIVATE_KEY_BYTE_SIZE]);
 	AddressInformation dogeAddressFromGlobalContext();
 	AddressInformation dogeAddressFromSeedBits(const ContextData& data);
