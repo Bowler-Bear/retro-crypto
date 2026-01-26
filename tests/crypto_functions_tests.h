@@ -1037,6 +1037,395 @@ BOOST_AUTO_TEST_CASE( moveToSubNode_dogeTestVector )
 
 BOOST_AUTO_TEST_SUITE_END()
 
+BOOST_AUTO_TEST_SUITE( crypto_functions_bitcoin )
+
+//https://github.com/trezor/python-mnemonic/blob/master/vectors.json
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector1 )
+{
+	const uint8_t seedSize = 16;
+	const uint8_t testSeedBits[seedSize] = { 0x00 };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K3h3fDYiay8mocZ3afhfULfb5GX8kCBdno77K4HiA15Tg23wpbeF1pLfs1c5SPmYHrEpTuuRhxMwvKDwqdKiGJS9XFKzUsAF", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector2 )
+{
+	const uint8_t seedSize = 16;
+	const uint8_t testSeedBits[seedSize] = { 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K2gA81bYFHqU68xz1cX2APaSq5tt6MFSLeXnCKV1RVUJt9FWNTbrrryem4ZckN8k4Ls1H6nwdvDTvnV7zEXs2HgPezuVccsq", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector3 )
+{
+	const uint8_t seedSize = 16;
+	const uint8_t testSeedBits[seedSize] = { 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80 };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K2shfP28KM3nr5Ap1SXjz8gc2rAqqMEynmjt6o1qboCDpxckqXavCwdnYds6yBHZGKHv7ef2eTXy461PXUjBFQg6PrwY4Gzq", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector4 )
+{
+	const uint8_t seedSize = 16;
+	const uint8_t testSeedBits[seedSize] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K2V4oox4M8Zmhi2Fjx5XK4Lf7GKRvPSgydU3mjZuKGCTg7UPiBUD7ydVPvSLtg9hjp7MQTYsW67rZHAXeccqYqrsx8LcXnyd", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector5 )
+{
+	const uint8_t seedSize = 24;
+	const uint8_t testSeedBits[seedSize] = { 0x00 };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K3mEDrypcZ2usWqFgzKB6jBBx9B6GfC7fu26X6hPRzVjzkqkPvDqp6g5eypdk6cyhGnBngbjeHTe4LsuLG1cCmKJka5SMkmU", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector6 )
+{
+	const uint8_t seedSize = 24;
+	const uint8_t testSeedBits[seedSize] = { 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K3Lv9MZLj16np5GzLe7tDKQfVusBni7toqJGcnKRtHSxUwbKUyUWiwpK55g1DUSsw76TF1T93VT4gz4wt5RM23pkaQLnvBh7", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector7 )
+{
+	const uint8_t seedSize = 24;
+	const uint8_t testSeedBits[seedSize] = { 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80 };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K3VPCbxbUtpkh9pRG371UCLDz3BjceqP1jz7XZsQ5EnNkYAEkfeZp62cDNj13ZTEVG1TEro9sZ9grfRmcYWLBhCocViKEJae", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector8 )
+{
+	const uint8_t seedSize = 24;
+	const uint8_t testSeedBits[seedSize] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K36Ao5jHRVhFGDbLP6FCx8BEEmpru77ef3bmA928BxsqvVM27WnvvyfWywiFN8K6yToqMaGYfzS6Db1EHAXT5TuyCLBXUfdm", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector9 )
+{
+	const uint8_t seedSize = 32;
+	const uint8_t testSeedBits[seedSize] = { 0x00 };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K32qBagUJAMU2LsHg3ka7jqMcV98Y7gVeVyNStwYS3U7yVVoDZ4btbRNf4h6ibWpY22iRmXq35qgLs79f312g2kj5539ebPM", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector10 )
+{
+	const uint8_t seedSize = 32;
+	const uint8_t testSeedBits[seedSize] = { 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K3Y1sd2XVu9wtqxJRvybCfAetjUrMMco6r3v9qZTBeXiBZkS8JxWbcGJZyio8TrZtm6pkbzG8SYt1sxwNLh3Wx7to5pgiVFU", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector11 )
+{
+	const uint8_t seedSize = 32;
+	const uint8_t testSeedBits[seedSize] = { 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80 };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K3CSnQNYC3MqAAqHwxeTLhDbhF43A4ss4ciWNmCY9zQGvAKUSqVUf2vPHBTSE1rB2pg4avopqSiLVzXEU8KziNnVPauTqLRo", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector12 )
+{
+	const uint8_t seedSize = 32;
+	const uint8_t testSeedBits[seedSize] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K2WFF16X85T2QCpndrGwx6GueB72Zf3AHwHJaknRXNF37ZmDrtHrrLSHvbuRejXcnYxoZKvRquTPyp2JiNG3XcjQyzSEgqCB", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector13 )
+{
+	const uint8_t seedSize = 16;
+	const uint8_t testSeedBits[seedSize] = { 0x9e, 0x88, 0x5d, 0x95, 0x2a, 0xd3, 0x62, 0xca, 0xeb, 0x4e, 0xfe, 0x34, 0xa8, 0xe9, 0x1b, 0xd2 };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K2oZ9stBYpoaZ2ktHj7jLz7iMqpgg1En8kKFTXJHsjxry1JbKH19YrDTicVwKPehFKTbmaxgVEc5TpHdS1aYhB2s9aFJBeJH", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector14 )
+{
+	const uint8_t seedSize = 24;
+	const uint8_t testSeedBits[seedSize] = { 0x66, 0x10, 0xb2, 0x59, 0x67, 0xcd, 0xcc, 0xa9, 0xd5, 0x98, 0x75, 0xf5, 0xcb, 0x50, 0xb0, 0xea, 0x75, 0x43, 0x33, 0x11, 0x86, 0x9e, 0x93, 0x0b };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K3uT8eQowUjsxrmsA9YUuQQK1RLqFufzybxD6DH6gPY7NjJ5G3EPHjsWDrs9iivSbmvjc9DQJbJGatfa9pv4MZ3wjr8qWPAK", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector15 )
+{
+	const uint8_t seedSize = 32;
+	const uint8_t testSeedBits[seedSize] = { 0x68, 0xa7, 0x9e, 0xac, 0xa2, 0x32, 0x48, 0x73, 0xea, 0xcc, 0x50, 0xcb, 0x9c, 0x6e, 0xca, 0x8c, 0xc6, 0x8e, 0xa5, 0xd9, 0x36, 0xf9, 0x87, 0x87, 0xc6, 0x0c, 0x7e, 0xbc, 0x74, 0xe6, 0xce, 0x7c };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K2XTAhys3pMNcGn261Fi5Ta2Pw8PwaVPhg3D8DWkzWQwjTJfskj8ofb81i9NP2cUNKxwjueJHHMQAnxtivTA75uUFqPFeWzk", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector16 )
+{
+	const uint8_t seedSize = 16;
+	const uint8_t testSeedBits[seedSize] = { 0xc0, 0xba, 0x5a, 0x8e, 0x91, 0x41, 0x11, 0x21, 0x0f, 0x2b, 0xd1, 0x31, 0xf3, 0xd5, 0xe0, 0x8d };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K3FperxDp8vFsFycKCRcJGAFmcV7umQmcnMZaLtZRt13QJDsoS5F6oYT6BB4sS6zmTmyQAEkJKxJ7yByDNtRe5asP2jFGhT6", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector17 )
+{
+	const uint8_t seedSize = 24;
+	const uint8_t testSeedBits[seedSize] = { 0x6d, 0x9b, 0xe1, 0xee, 0x6e, 0xbd, 0x27, 0xa2, 0x58, 0x11, 0x5a, 0xad, 0x99, 0xb7, 0x31, 0x7b, 0x9c, 0x8d, 0x28, 0xb6, 0xd7, 0x64, 0x31, 0xc3 };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K3R1SfVZZLtVbXEB9ryVxmVtVMsMwmEyEvgXN6Q84LKkLRmf4ST6QrLeBm3jQsb9gx1uo23TS7vo3vAkZGZz71uuLCcywUkt", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector18 )
+{
+	const uint8_t seedSize = 32;
+	const uint8_t testSeedBits[seedSize] = { 0x9f, 0x6a, 0x28, 0x78, 0xb2, 0x52, 0x07, 0x99, 0xa4, 0x4e, 0xf1, 0x8b, 0xc7, 0xdf, 0x39, 0x4e, 0x70, 0x61, 0xa2, 0x24, 0xd2, 0xc3, 0x3c, 0xd0, 0x15, 0xb1, 0x57, 0xd7, 0x46, 0x86, 0x98, 0x63 };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K2WNnKmssvZYM96VAr47iHUQUTUyUXH3sAGNjhJANddnhw3i3y3pBbRAVk5M5qUGFr4rHbEWwXgX4qrvrceifCYQJbbFDems", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector19 )
+{
+	const uint8_t seedSize = 16;
+	const uint8_t testSeedBits[seedSize] = { 0x23, 0xdb, 0x81, 0x60, 0xa3, 0x1d, 0x3e, 0x0d, 0xca, 0x36, 0x88, 0xed, 0x94, 0x1a, 0xdb, 0xf3 };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K4G28omGMogEoYgDQuigBo8AFHAGDaJdqQ99QKMQ5J6fYTMfANTJy6xBmhvsNZ1CJzRZ64PWbnTFUn6CDV2FxoMDLXdk95DQ", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector20 )
+{
+	const uint8_t seedSize = 24;
+	const uint8_t testSeedBits[seedSize] = { 0x81, 0x97, 0xa4, 0xa4, 0x7f, 0x04, 0x25, 0xfa, 0xea, 0xa6, 0x9d, 0xee, 0xbc, 0x05, 0xca, 0x29, 0xc0, 0xa5, 0xb5, 0xcc, 0x76, 0xce, 0xac, 0xc0 };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K3wtsvY8L2aZyxkiWULZH4vyQE5XkHTXkmx8gHo6RUEfH3Jyr6NwkJhvano7Xb2o6UqFKWHVo5scE31SGDCAUsgVhiUuUDyh", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector21 )
+{
+	const uint8_t seedSize = 32;
+	const uint8_t testSeedBits[seedSize] = { 0x06, 0x6d, 0xca, 0x1a, 0x2b, 0xb7, 0xe8, 0xa1, 0xdb, 0x28, 0x32, 0x14, 0x8c, 0xe9, 0x93, 0x3e, 0xea, 0x0f, 0x3a, 0xc9, 0x54, 0x8d, 0x79, 0x31, 0x12, 0xd9, 0xa9, 0x5c, 0x94, 0x07, 0xef, 0xad };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K3rEfqSM4QZRVmiMuSWY9wugscmaCjYja3SbUD3KPEB1a7QXJoajyR2T1SiXU7rFVRXMV9XdYVSZe7JoUXdP4SRHTxsT1nzm", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector22 )
+{
+	const uint8_t seedSize = 16;
+	const uint8_t testSeedBits[seedSize] = { 0xf3, 0x0f, 0x8c, 0x1d, 0xa6, 0x65, 0x47, 0x8f, 0x49, 0xb0, 0x01, 0xd9, 0x4c, 0x5f, 0xc4, 0x52 };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K2QWV9Wn8Vvs6jbqfF1YbTCdURQW9dLFKDovpKaKrqS3SEWsXCu6ZNky9PSAENg6c9AQYHcg4PjopRGGKmdD313ZHszymnps", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector23 )
+{
+	const uint8_t seedSize = 24;
+	const uint8_t testSeedBits[seedSize] = { 0xc1, 0x0e, 0xc2, 0x0d, 0xc3, 0xcd, 0x9f, 0x65, 0x2c, 0x7f, 0xac, 0x2f, 0x12, 0x30, 0xf7, 0xa3, 0xc8, 0x28, 0x38, 0x9a, 0x14, 0x39, 0x2f, 0x05 };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K4aERa2bq7559eMCCEs2QmmqVjUuzfy5eAeDX4mqZffkYwpzGQRE2YEEeLVRoH4CSHxianrFaVnMN2RYaPUZJhJx8S5j6puX", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( bitcoinAddressFromSeedBits_bip39TestVector24 )
+{
+	const uint8_t seedSize = 32;
+	const uint8_t testSeedBits[seedSize] = { 0xf5, 0x85, 0xc1, 0x1a, 0xec, 0x52, 0x0d, 0xb5, 0x7d, 0xd3, 0x53, 0xc6, 0x95, 0x54, 0xb2, 0x1a, 0x89, 0xb2, 0x0f, 0xb0, 0x65, 0x09, 0x66, 0xfa, 0x0a, 0x9d, 0x6f, 0x74, 0xfd, 0x98, 0x9d, 0x8f };
+
+	AddressInformation information = bitcoinAddressFromSeedBits(testSeedBits, seedSize, "m", "TREZOR");
+
+	uint8_t expectedPrivateBytes[78] = { 0x00 };
+	base58_decode_check("xprv9s21ZrQH143K39rnQJknpH1WEPFJrzmAqqasiDcVrNuk926oizzJDDQkdiTvNPr2FYDYzWgiMiC63YmfPAa2oPyNB23r2g7d1yiK6WpqaQS", HASHER_SHA2D, expectedPrivateBytes, 78);
+	BOOST_REQUIRE( expectedPrivateBytes[0] == 0x04 );
+	BOOST_REQUIRE( expectedPrivateBytes[1] == 0x88 );
+	BOOST_REQUIRE( expectedPrivateBytes[2] == 0xad );
+	BOOST_REQUIRE( expectedPrivateBytes[3] == 0xe4 );
+	BOOST_REQUIRE( memcmp(&information.privateKey, &expectedPrivateBytes[46], PRIVATE_KEY_BYTE_SIZE) == 0 );
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
 BOOST_AUTO_TEST_SUITE( crypto_functions_ethereum )
 
 BOOST_AUTO_TEST_CASE( checksum_address_erc55_case1 )
