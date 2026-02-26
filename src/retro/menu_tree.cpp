@@ -8,6 +8,7 @@
 #include "seed_phrase_input_page.h"
 #include "seed_qr_page.h"
 #include "context_update_functions.h"
+#include "encryption_page.h"
 
 using namespace RetroCrypto;
 
@@ -19,12 +20,14 @@ MenuTree::MenuTree()
 	shared_ptr<MenuOption> generateSeedOption = make_shared<MenuOption>(mainMenu, "Generate Seed", "Generate a random seed.");
 	shared_ptr<MenuOption> generateAddressOption = make_shared<MenuOption>(mainMenu, "Generate Vanity Address", "Generate an address.");
 	shared_ptr<MenuOption> seedRestoreOption = make_shared<MenuOption>(mainMenu, "Restore Seed", "Restore a seed from a mnemonic.");
+	shared_ptr<MenuOption> encryptionOption = make_shared<MenuOption>(mainMenu, "Encryption", "(En/De)crypt data.");
 	shared_ptr<MenuOption> exitOption = make_shared<MenuOption>(mainMenu, "Exit", "Exit this program.");
 	exitOption->setDestination(static_pointer_cast<MenuTreeObject>(mainMenu));
 	exitOption->setOnSelectedFunction(&requestExit);
 	mainMenu->addOption(generateSeedOption);
 	mainMenu->addOption(generateAddressOption);
 	mainMenu->addOption(seedRestoreOption);
+	mainMenu->addOption(encryptionOption);
 	mainMenu->addOption(exitOption);
 
 		shared_ptr<Menu> generateSeedMenu = make_shared<Menu>("Generate Seed", mainMenu);
@@ -262,6 +265,22 @@ MenuTree::MenuTree()
 #endif
 			restoreFromLegacyMoneroEsperantoPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
 			restoreFromLegacyMoneroLojbanPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
+
+		shared_ptr<Menu> encryptionMenu = make_shared<Menu>("Select Option", mainMenu);
+		encryptionOption->setDestination(static_pointer_cast<MenuTreeObject>(encryptionMenu));
+		shared_ptr<MenuOption> encryptOption = make_shared<MenuOption>(encryptionMenu, "Encrypt", "Encrypt data using AES-256.");
+		shared_ptr<MenuOption> decryptOption = make_shared<MenuOption>(encryptionMenu, "Decrypt", "Decrypt data using AES-256.");
+		shared_ptr<MenuOption> encryptMainMenuReturnOption = make_shared<MenuOption>(encryptionMenu, "Main Menu", "Return to Main Menu.");
+		encryptMainMenuReturnOption->setDestination(static_pointer_cast<MenuTreeObject>(mainMenu));
+		encryptionMenu->addOption(encryptOption);
+		encryptionMenu->addOption(decryptOption);
+		encryptionMenu->addOption(encryptMainMenuReturnOption);
+
+			shared_ptr<EncryptionPage> encryptionPage = make_shared<EncryptionPage>("Encryption Page", encryptionMenu);
+			encryptOption->setDestination(static_pointer_cast<MenuTreeObject>(encryptionPage));
+			shared_ptr<EncryptionPage> decryptionPage = make_shared<EncryptionPage>("Decryption Page", encryptionMenu);
+			decryptOption->setDestination(static_pointer_cast<MenuTreeObject>(decryptionPage));
+			decryptionPage->setWillDecrypt();
 }
 
 shared_ptr<MenuTreeObject> MenuTree::getRoot()
