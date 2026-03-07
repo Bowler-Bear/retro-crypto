@@ -8,6 +8,7 @@
 #define EP_BYTE_SCALING (EP_CHARACTERS_PER_BYTE + EP_SPACE_AFTER_BYTE)
 #define EP_DEFAULT_DATA_SIZE AES_BLOCK_SIZE
 #define EP_DEFAULT_KEY_SIZE 256 / 8
+#define EP_INITIALIZATION_VECTOR 16
 
 #include "input_page.h"
 
@@ -15,14 +16,27 @@ using namespace std;
 
 namespace RetroCrypto
 {
+	class Menu;
+
 	enum EncryptionState
 	{
+		SELECT_MODE,
 		INPUT_DATA_SIZE,
 		INPUT_DATA,
 		INPUT_KEY_SIZE,
 		INPUT_KEY,
+		INPUT_IV,
 		PROCESSING,
 		OUTPUT_DATA
+	};
+
+	enum EncryptionMode : uint8_t
+	{
+		AES_256_EBC,
+		AES_256_CBC,
+		AES_256_CFB,
+		AES_256_OFB,
+		END_INDEX
 	};
 
 	class EncryptionPage : public InputPage
@@ -30,20 +44,25 @@ namespace RetroCrypto
 	private:
 		bool willEncrypt;
 		EncryptionState currentState;
+		EncryptionMode currentMode;
+		shared_ptr<Menu> modeSelectionMenu;
 		uint32_t modifiedDataIndex;
 		uint8_t* inputData;
 		uint32_t inputDataSize;
 		uint8_t* inputKey;
 		uint32_t inputKeySize;
+		uint8_t* initializationVector;
 		uint8_t* outputData;
 
 		void freePointer(uint8_t** pointer, uint32_t size);
 		void freeInputData();
 		void freeInputKey();
+		void freeInitializationVector();
 		void freeOutputData();
 		bool reallocatePointer(uint8_t** pointer, uint32_t size);
 		bool reallocateInputData();
 		bool reallocateInputKey();
+		bool reallocateInitializationVector();
 		bool reallocateOutputData();
 
 	public:
@@ -59,8 +78,10 @@ namespace RetroCrypto
 		virtual void onExit() override;
 		virtual void tick() override;
 		virtual void drawInput(shared_ptr<IDisplay> display) override;
+		virtual void drawTitle(shared_ptr<IDisplay> display) override;
 		void drawDataInput(shared_ptr<IDisplay> display, uint8_t* data = nullptr, uint32_t dataSize = 0);
 		void drawSizeInput(shared_ptr<IDisplay> display, uint32_t* size = nullptr);
+		void drawModeSelect(shared_ptr<IDisplay> display);
 		void setCurrentState(EncryptionState newState);
 		void updateTitle();
 		void clearDescription();

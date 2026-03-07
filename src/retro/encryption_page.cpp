@@ -2,6 +2,7 @@
 
 #include "core_system.h"
 #include "encryption_page.h"
+#include "menu.h"
 
 extern "C"
 {
@@ -11,11 +12,34 @@ extern "C"
 
 using namespace RetroCrypto;
 
+string encryptionModeToTitle(EncryptionMode mode)
+{
+	switch (mode)
+	{
+	case AES_256_EBC:
+		return "AES-256 EBC";
+	case AES_256_CBC:
+		return "AES-256 CBC";
+	case AES_256_CFB:
+		return "AES-256 CFB";
+	case AES_256_OFB:
+		return "AES-256 OFB";
+	default:
+		return "Unkown";
+	}
+}
+
 EncryptionPage::EncryptionPage()
 : InputPage()
 {
 	willEncrypt = true;
 	reset();
+	modeSelectionMenu = make_shared<Menu>("Select Mode", nullptr);
+	for (uint8_t i = 0; i < EncryptionMode::END_INDEX; i++)
+	{
+		shared_ptr<MenuOption> option = make_shared<MenuOption>(modeSelectionMenu, encryptionModeToTitle((EncryptionMode)i), encryptionModeToTitle((EncryptionMode)i)+" mode.");
+		modeSelectionMenu->addOption(option);
+	}
 }
 
 EncryptionPage::EncryptionPage(string inTitle, std::shared_ptr<MenuTreeObject> inParent)
@@ -23,6 +47,12 @@ EncryptionPage::EncryptionPage(string inTitle, std::shared_ptr<MenuTreeObject> i
 {
 	willEncrypt = true;
 	reset();
+	modeSelectionMenu = make_shared<Menu>("Select Mode", nullptr);
+	for (uint8_t i = 0; i < EncryptionMode::END_INDEX; i++)
+	{
+		shared_ptr<MenuOption> option = make_shared<MenuOption>(modeSelectionMenu, encryptionModeToTitle((EncryptionMode)i), encryptionModeToTitle((EncryptionMode)i)+" mode.");
+		modeSelectionMenu->addOption(option);
+	}
 }
 
 EncryptionPage::~EncryptionPage()
@@ -40,7 +70,20 @@ bool EncryptionPage::consumeInput(InputType input)
 	switch (currentState)
 	{
 	default:
+	case SELECT_MODE:
+		if (input == FORWARD)
+		{
+			currentMode = (EncryptionMode)modeSelectionMenu->getSelectedOption();
+			setCurrentState(INPUT_DATA_SIZE);
+			return true;
+		}
+		return false;
 	case INPUT_DATA_SIZE:
+		if (input == BACK)
+		{
+			setCurrentState(SELECT_MODE);
+			return true;
+		}
 		if (input == FORWARD)
 		{
 			try
@@ -107,6 +150,56 @@ bool EncryptionPage::consumeInput(InputType input)
 		}
 		if (input == FORWARD)
 		{
+			switch (currentMode)
+			{
+			case AES_256_EBC:
+				try
+				{
+					if (!reallocateOutputData())
+					{
+						setDescription("Failed to allocate memory for output data.");
+						return true;
+					}
+				}
+				catch(std::string s)
+				{
+					setDescription(s);
+					return true;
+				}
+				setCurrentState(PROCESSING);
+				break;
+			default:
+			case AES_256_CBC:
+			case AES_256_CFB:
+			case AES_256_OFB:
+				try
+				{
+					if (!reallocateInitializationVector())
+					{
+						setDescription("Failed to allocate memory for initialization vector.");
+						return true;
+					}
+				}
+				catch(std::string s)
+				{
+					setDescription(s);
+					return true;
+				}
+				setCurrentState(INPUT_IV);
+				break;
+			}
+			return true;
+		}
+		return false;
+	case INPUT_IV:
+		if (input == BACK)
+		{
+			freeInitializationVector();
+			setCurrentState(INPUT_KEY);
+			return true;
+		}
+		if (input == FORWARD)
+		{
 			try
 			{
 				if (!reallocateOutputData())
@@ -128,7 +221,18 @@ bool EncryptionPage::consumeInput(InputType input)
 		if (input == BACK)
 		{
 			freeOutputData();
-			setCurrentState(INPUT_KEY);
+			switch (currentMode)
+			{
+			case AES_256_EBC:
+				setCurrentState(INPUT_KEY);
+				break;
+			default:
+			case AES_256_CBC:
+			case AES_256_CFB:
+			case AES_256_OFB:
+				setCurrentState(INPUT_IV);
+				break;
+			}
 			return true;
 		}
 		if (input == FORWARD)
@@ -140,7 +244,17 @@ bool EncryptionPage::consumeInput(InputType input)
 		if (input == BACK)
 		{
 			freeOutputData();
-			setCurrentState(INPUT_KEY);
+			switch (currentMode)
+			{
+			case AES_256_EBC:
+				setCurrentState(INPUT_KEY);
+				break;
+			case AES_256_CBC:
+			case AES_256_CFB:
+			case AES_256_OFB:
+				setCurrentState(INPUT_IV);
+				break;
+			}
 			return true;
 		}
 		return false;
@@ -153,9 +267,12 @@ void EncryptionPage::updateSelectedOption(InputType input)
 	uint32_t maxIndex = 0;
 	uint8_t* data = nullptr;
 	uint32_t* sizePointer = nullptr;
+	uint32_t sizeIncrement = (currentMode == AES_256_EBC || currentMode == AES_256_CBC) ? AES_BLOCK_SIZE : 1;
 	switch (currentState)
 	{
 	default:
+	case SELECT_MODE:
+		break;
 	case INPUT_DATA_SIZE:
 		sizePointer = &inputDataSize;
 		break;
@@ -170,6 +287,10 @@ void EncryptionPage::updateSelectedOption(InputType input)
 		maxIndex = (EP_CHARACTERS_PER_BYTE * inputKeySize) - 1;
 		data = inputKey;
 		break;
+	case INPUT_IV:
+		maxIndex = (EP_CHARACTERS_PER_BYTE * EP_INITIALIZATION_VECTOR) - 1;
+		data = initializationVector;
+		break;
 	case PROCESSING:
 		break;
 	case OUTPUT_DATA:
@@ -180,8 +301,20 @@ void EncryptionPage::updateSelectedOption(InputType input)
 
 	switch (currentState)
 	{
+	default:
+	case SELECT_MODE:
+		switch (input)
+		{
+		case InputType::UP:
+		case InputType::DOWN:
+			modeSelectionMenu->updateSelectedOption(input);
+		default:
+			break;
+		}
+		break;
 	case INPUT_DATA:
 	case INPUT_KEY:
+	case INPUT_IV:
 	case OUTPUT_DATA:
 		if (modifiedDataIndex > maxIndex)
 		{
@@ -224,7 +357,6 @@ void EncryptionPage::updateSelectedOption(InputType input)
 			break;
 		}
 		break;
-	default:
 	case INPUT_DATA_SIZE:
 		if (!sizePointer)
 		{
@@ -234,12 +366,12 @@ void EncryptionPage::updateSelectedOption(InputType input)
 		switch (input)
 		{
 		case InputType::UP:
-			*sizePointer += AES_BLOCK_SIZE;
+			*sizePointer += sizeIncrement;
 			break;
 		case InputType::DOWN:
-			if (*sizePointer > AES_BLOCK_SIZE)
+			if (*sizePointer > sizeIncrement)
 			{
-				*sizePointer -= AES_BLOCK_SIZE;
+				*sizePointer -= sizeIncrement;
 			}
 			break;
 		default:
@@ -260,11 +392,13 @@ shared_ptr<MenuTreeObject> EncryptionPage::getDestination()
 
 void EncryptionPage::reset()
 {
-	setCurrentState(INPUT_DATA_SIZE);
+	currentMode = AES_256_EBC;
+	setCurrentState(SELECT_MODE);
 	freeInputData();
 	inputDataSize = EP_DEFAULT_DATA_SIZE;
 	freeInputKey();
 	inputKeySize = EP_DEFAULT_KEY_SIZE;
+	freeInitializationVector();
 	freeOutputData();
 }
 
@@ -287,24 +421,127 @@ void EncryptionPage::tick()
 			aes_encrypt_ctx context;
 			memzero(&context, sizeof(aes_encrypt_ctx));
 			aes_encrypt_key256(inputKey, &context);
-			if(aes_ecb_encrypt(inputData, outputData, inputDataSize, &context) != EXIT_SUCCESS)
+			uint8_t* duplicateInitializationVector = nullptr;
+			switch (currentMode)
 			{
-				setCurrentState(INPUT_KEY);
+			case AES_256_EBC:
+				if (aes_ecb_encrypt(inputData, outputData, inputDataSize, &context) != EXIT_SUCCESS)
+				{
+					setCurrentState(INPUT_KEY);
+					memzero(&context, sizeof(aes_encrypt_ctx));
+					return;
+				}
+				break;
+			case AES_256_CBC:
+				duplicateInitializationVector = (uint8_t*)malloc(EP_INITIALIZATION_VECTOR);
+				memcpy(duplicateInitializationVector, initializationVector, EP_INITIALIZATION_VECTOR);
+				if (aes_cbc_encrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, &context) != EXIT_SUCCESS)
+				{
+					setCurrentState(INPUT_IV);
+					free(duplicateInitializationVector);
+					memzero(&context, sizeof(aes_encrypt_ctx));
+					return;
+				}
+				free(duplicateInitializationVector);
+				break;
+			case AES_256_CFB:
+				duplicateInitializationVector = (uint8_t*)malloc(EP_INITIALIZATION_VECTOR);
+				memcpy(duplicateInitializationVector, initializationVector, EP_INITIALIZATION_VECTOR);
+				if (aes_cfb_encrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, &context) != EXIT_SUCCESS)
+				{
+					setCurrentState(INPUT_IV);
+					free(duplicateInitializationVector);
+					memzero(&context, sizeof(aes_encrypt_ctx));
+					return;
+				}
+				free(duplicateInitializationVector);
+				break;
+			case AES_256_OFB:
+				duplicateInitializationVector = (uint8_t*)malloc(EP_INITIALIZATION_VECTOR);
+				memcpy(duplicateInitializationVector, initializationVector, EP_INITIALIZATION_VECTOR);
+				if (aes_ofb_encrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, &context) != EXIT_SUCCESS)
+				{
+					setCurrentState(INPUT_IV);
+					free(duplicateInitializationVector);
+					memzero(&context, sizeof(aes_encrypt_ctx));
+					return;
+				}
+				free(duplicateInitializationVector);
+				break;
+			default:
+				setCurrentState(INPUT_IV);
+				setDescription("Unknown Encryption Mode");
+				memzero(&context, sizeof(aes_encrypt_ctx));
 				return;
 			}
 			memzero(&context, sizeof(aes_encrypt_ctx));
 		}
 		else
 		{
-			aes_decrypt_ctx context;
-			memzero(&context, sizeof(aes_decrypt_ctx));
-			aes_decrypt_key256(inputKey, &context);
-			if(aes_ecb_decrypt(inputData, outputData, inputDataSize, &context) != EXIT_SUCCESS)
+			aes_decrypt_ctx decryptContext;
+			memzero(&decryptContext, sizeof(aes_decrypt_ctx));
+			aes_encrypt_ctx encryptContext;
+			memzero(&encryptContext, sizeof(aes_decrypt_ctx));
+			uint8_t* duplicateInitializationVector = nullptr;
+			switch (currentMode)
 			{
-				setCurrentState(INPUT_KEY);
+			case AES_256_EBC:
+				aes_decrypt_key256(inputKey, &decryptContext);
+				if(aes_ecb_decrypt(inputData, outputData, inputDataSize, &decryptContext) != EXIT_SUCCESS)
+				{
+					setCurrentState(INPUT_KEY);
+					memzero(&decryptContext, sizeof(aes_decrypt_ctx));
+					return;
+				}
+				memzero(&decryptContext, sizeof(aes_decrypt_ctx));
+				break;
+			case AES_256_CBC:
+				aes_decrypt_key256(inputKey, &decryptContext);
+				duplicateInitializationVector = (uint8_t*)malloc(EP_INITIALIZATION_VECTOR);
+				memcpy(duplicateInitializationVector, initializationVector, EP_INITIALIZATION_VECTOR);
+				if (aes_cbc_decrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, &decryptContext) != EXIT_SUCCESS)
+				{
+					setCurrentState(INPUT_IV);
+					free(duplicateInitializationVector);
+					memzero(&decryptContext, sizeof(aes_decrypt_ctx));
+					return;
+				}
+				free(duplicateInitializationVector);
+				memzero(&decryptContext, sizeof(aes_decrypt_ctx));
+				break;
+			case AES_256_CFB:
+				aes_encrypt_key256(inputKey, &encryptContext);
+				duplicateInitializationVector = (uint8_t*)malloc(EP_INITIALIZATION_VECTOR);
+				memcpy(duplicateInitializationVector, initializationVector, EP_INITIALIZATION_VECTOR);
+				if (aes_cfb_decrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, &encryptContext) != EXIT_SUCCESS)
+				{
+					setCurrentState(INPUT_IV);
+					free(duplicateInitializationVector);
+					memzero(&encryptContext, sizeof(aes_encrypt_ctx));
+					return;
+				}
+				free(duplicateInitializationVector);
+				memzero(&encryptContext, sizeof(aes_encrypt_ctx));
+				break;
+			case AES_256_OFB:
+				aes_encrypt_key256(inputKey, &encryptContext);
+				duplicateInitializationVector = (uint8_t*)malloc(EP_INITIALIZATION_VECTOR);
+				memcpy(duplicateInitializationVector, initializationVector, EP_INITIALIZATION_VECTOR);
+				if (aes_ofb_decrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, &encryptContext) != EXIT_SUCCESS)
+				{
+					setCurrentState(INPUT_IV);
+					free(duplicateInitializationVector);
+					memzero(&encryptContext, sizeof(aes_encrypt_ctx));
+					return;
+				}
+				free(duplicateInitializationVector);
+				memzero(&encryptContext, sizeof(aes_encrypt_ctx));
+				break;
+			default:
+				setCurrentState(INPUT_IV);
+				setDescription("Unknown Decryption Mode");
 				return;
 			}
-			memzero(&context, sizeof(aes_decrypt_ctx));
 		}
 		setCurrentState(OUTPUT_DATA);
 	}
@@ -315,6 +552,9 @@ void EncryptionPage::drawInput(shared_ptr<IDisplay> display)
 	switch (currentState)
 	{
 	default:
+	case SELECT_MODE:
+		drawModeSelect(display);
+		break;
 	case INPUT_DATA_SIZE:
 		drawSizeInput(display, &inputDataSize);
 		break;
@@ -326,6 +566,9 @@ void EncryptionPage::drawInput(shared_ptr<IDisplay> display)
 		break;
 	case INPUT_KEY:
 		drawDataInput(display, inputKey, inputKeySize);
+		break;
+	case INPUT_IV:
+		drawDataInput(display, initializationVector, EP_INITIALIZATION_VECTOR);
 		break;
 	case PROCESSING:
 		break;
@@ -397,6 +640,14 @@ void EncryptionPage::drawDataInput(shared_ptr<IDisplay> display, uint8_t* data, 
 	}
 }
 
+void EncryptionPage::drawTitle(shared_ptr<IDisplay> display)
+{
+	if (currentState != SELECT_MODE)
+	{
+		Page::drawTitle(display);
+	}
+}
+
 void EncryptionPage::drawSizeInput(shared_ptr<IDisplay> display, uint32_t* size)
 {
 	if (size == nullptr)
@@ -413,23 +664,35 @@ void EncryptionPage::drawSizeInput(shared_ptr<IDisplay> display, uint32_t* size)
 	display->drawTextBox(inputBox);
 }
 
+void EncryptionPage::drawModeSelect(shared_ptr<IDisplay> display)
+{
+	modeSelectionMenu->draw(display);
+}
+
 void EncryptionPage::setCurrentState(EncryptionState newState)
 {
 	currentState = newState;
 	updateTitle();
 	clearDescription();
 	modifiedDataIndex = 0;
+	if (currentState == SELECT_MODE)
+	{
+		inputDataSize = EP_DEFAULT_DATA_SIZE;
+	}
 }
 
 void EncryptionPage::updateTitle()
 {
 	switch (currentState)
 	{
+	case SELECT_MODE:
+		title = "Select Mode";
+		break;
 	case INPUT_DATA_SIZE:
 		title = "Enter Data Size";
 		break;
 	case INPUT_DATA:
-		title = willEncrypt ? "Enter Plaintext Data" : "Enter Ciphertext Data";
+		title = encryptionModeToTitle(currentMode) + (willEncrypt ? " Plaintext Data" : " Ciphertext Data");
 		break;
 	case INPUT_KEY:
 		title = "Enter Key Size";
@@ -437,11 +700,14 @@ void EncryptionPage::updateTitle()
 	case INPUT_KEY_SIZE:
 		title = "Enter Key Data";
 		break;
+	case INPUT_IV:
+		title = "Enter Initialization Vector";
+		break;
 	case PROCESSING:
 		title = "Processing Data";
 		break;
 	case OUTPUT_DATA:
-		title =  willEncrypt ? "Ciphertext Data" : "Plaintext Data";
+		title = encryptionModeToTitle(currentMode) + (willEncrypt ? " Ciphertext Data" : " Plaintext Data");
 		break;
 	default:
 		title = "Unknown State";
@@ -479,6 +745,11 @@ void EncryptionPage::freeInputKey()
 	freePointer(&inputKey, inputKeySize);
 }
 
+void EncryptionPage::freeInitializationVector()
+{
+	freePointer(&initializationVector, EP_INITIALIZATION_VECTOR);
+}
+
 void EncryptionPage::freeOutputData()
 {
 	freePointer(&outputData, inputDataSize);
@@ -508,6 +779,12 @@ bool EncryptionPage::reallocateInputKey()
 {
 	freeInputKey();
 	return reallocatePointer(&inputKey, inputKeySize);
+}
+
+bool EncryptionPage::reallocateInitializationVector()
+{
+	freeInitializationVector();
+	return reallocatePointer(&initializationVector, EP_INITIALIZATION_VECTOR);
 }
 
 bool EncryptionPage::reallocateOutputData()
