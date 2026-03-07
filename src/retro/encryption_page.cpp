@@ -223,10 +223,10 @@ bool EncryptionPage::consumeInput(InputType input)
 			freeOutputData();
 			switch (currentMode)
 			{
+			default:
 			case AES_256_EBC:
 				setCurrentState(INPUT_KEY);
 				break;
-			default:
 			case AES_256_CBC:
 			case AES_256_CFB:
 			case AES_256_OFB:
@@ -246,6 +246,7 @@ bool EncryptionPage::consumeInput(InputType input)
 			freeOutputData();
 			switch (currentMode)
 			{
+			default:
 			case AES_256_EBC:
 				setCurrentState(INPUT_KEY);
 				break;
