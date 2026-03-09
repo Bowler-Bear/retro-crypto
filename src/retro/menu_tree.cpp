@@ -271,8 +271,11 @@ MenuTree::MenuTree()
 			restoreFromLegacyMoneroEsperantoPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
 			restoreFromLegacyMoneroLojbanPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
 
+		shared_ptr<Prompt> encryptionPrompt = make_shared<Prompt>("End-to-End Encryption", mainMenu);
+		encryptionPrompt->setDescription("E2E encryption has become a marketing term widely used to gaslight the public in the age of security theatre. True E2E encryption requires both the sender's and receiver's devices to have no leakpoints and/or backdoors.");
+		encryptionOption->setDestination(static_pointer_cast<MenuTreeObject>(encryptionPrompt));
 		shared_ptr<Menu> encryptionMenu = make_shared<Menu>("Select Option", mainMenu);
-		encryptionOption->setDestination(static_pointer_cast<MenuTreeObject>(encryptionMenu));
+		encryptionPrompt->setDestination(static_pointer_cast<MenuTreeObject>(encryptionMenu));
 		shared_ptr<MenuOption> encryptOption = make_shared<MenuOption>(encryptionMenu, "Encrypt", "Encrypt data using AES-256.");
 		shared_ptr<MenuOption> decryptOption = make_shared<MenuOption>(encryptionMenu, "Decrypt", "Decrypt data using AES-256.");
 		shared_ptr<MenuOption> encryptMainMenuReturnOption = make_shared<MenuOption>(encryptionMenu, "Main Menu", "Return to Main Menu.");
