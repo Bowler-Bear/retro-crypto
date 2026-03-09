@@ -67,8 +67,11 @@ MenuTree::MenuTree()
 				showSeedOptionsMenu->addOption(showSeedQROption);
 				showSeedOptionsMenu->addOption(mainMenuReturnOption);
 
-					shared_ptr<Menu> showAddressMenu = make_shared<Menu>("Show An Address", showSeedOptionsMenu);
-					showAddressesOption->setDestination(static_pointer_cast<MenuTreeObject>(showAddressMenu));
+					shared_ptr<Prompt> addressPrompt = make_shared<Prompt>("About Addresses", showSeedOptionsMenu);
+					addressPrompt->setDescription("This app does not yet have wallet functionality and cannot connect to the blockchain to verify a test transaction. If the user is planning on using these addresses, they should first import the key into that coins official wallet and verify the addresses before sending any funds to it.");
+					showAddressesOption->setDestination(static_pointer_cast<MenuTreeObject>(addressPrompt));
+					shared_ptr<Menu> showAddressMenu = make_shared<Menu>("Show An Address", addressPrompt);
+					addressPrompt->setDestination(static_pointer_cast<MenuTreeObject>(showAddressMenu));
 					shared_ptr<MenuOption> showBTCAddressOption = make_shared<MenuOption>(showAddressMenu, "BTC", "Show bitcoin public address from seed.");
 					showBTCAddressOption->setOnSelectedFunction(&setBitcoinContext);
 					shared_ptr<MenuOption> showDOGEAddressOption = make_shared<MenuOption>(showAddressMenu, "DOGE", "show DOGE public address from seed.");
