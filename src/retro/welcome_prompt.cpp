@@ -30,6 +30,5 @@ uint8_t WelcomePrompt::getRandomTipIndex()
 
 void WelcomePrompt::onEnter()
 {
-	if (tips != nullptr)
-		setDescription(tips[getRandomTipIndex()]);
+	setDescription(tips[getRandomTipIndex()]);
 }

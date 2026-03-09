@@ -34,10 +34,10 @@ void Prompt::drawDescription(shared_ptr<IDisplay> display)
 	descriptionBox.width = MENU_BOX_WIDTH-2;
 	descriptionBox.height = PROMPT_DESCRIPTION_HEIGHT;
 	descriptionBox.setBordered();
-	if (getDescription().length() <= descriptionBox.width)
+	if ((int)getDescription().length() <= descriptionBox.width)
 		descriptionBox.text = getDescription();
 	display->drawTextBox(descriptionBox);
-	if (getDescription().length() > descriptionBox.width)
+	if ((int)getDescription().length() > descriptionBox.width)
 	{
 		TextBox descriptionLine;
 		descriptionLine.xPosition = descriptionBox.xPosition;
