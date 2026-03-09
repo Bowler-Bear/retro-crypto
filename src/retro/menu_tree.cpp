@@ -97,8 +97,11 @@ MenuTree::MenuTree()
 						showNOSTRAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(addressPage));
 						showXMRAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(addressPage));
 
-					shared_ptr<Menu> showPhrasesMenu = make_shared<Menu>("Show A Phrase", showSeedOptionsMenu);
-					showSeedPhrasesOption->setDestination(static_pointer_cast<MenuTreeObject>(showPhrasesMenu));
+					shared_ptr<Prompt> phrasePrompt = make_shared<Prompt>("Phrase Information", showSeedOptionsMenu);
+					phrasePrompt->setDescription("A seed phrase is a word-based representation of your seed. Save it non-electronically. Make backups if it is essential to avoid losing. Backing it up might be risky for those under high surveillance or with high theft risk. Memorizing it is possible, as a brain wallet, but comes with a high rate of failure. It's probably not a good idea to split up a phrase into multiple segments for security. User's should look for more information beyond what any app explains, and take time to think how they personally want to secure any important seed.");
+					showSeedPhrasesOption->setDestination(static_pointer_cast<MenuTreeObject>(phrasePrompt));
+					shared_ptr<Menu> showPhrasesMenu = make_shared<Menu>("Show A Phrase", phrasePrompt);
+					phrasePrompt->setDestination(static_pointer_cast<MenuTreeObject>(showPhrasesMenu));
 					shared_ptr<MenuOption> showBIP39Option = make_shared<MenuOption>(showPhrasesMenu, "BIP-39", "Show Bitcoin Improvement Proposal 39 seed phrase for this seed(bits).");
 					showBIP39Option->setOnSelectedFunction(&setBIP39MnemonicContext);
 					shared_ptr<MenuOption> showMoneroEnglishPhraseOption = make_shared<MenuOption>(showPhrasesMenu, "Legacy Monero English", "Show legacy monero english seed phrase for this seed.");
