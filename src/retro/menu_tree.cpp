@@ -169,8 +169,11 @@ MenuTree::MenuTree()
 						showMoneroEsperantoPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
 						showMoneroLojbanPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
 
-					shared_ptr<SeedQRPage> seedQrPage = make_shared<SeedQRPage>("QR Code", showSeedOptionsMenu);
-					showSeedQROption->setDestination(static_pointer_cast<MenuTreeObject>(seedQrPage));
+					shared_ptr<Prompt> qrPrompt = make_shared<Prompt>("QR", showSeedOptionsMenu);
+					qrPrompt->setDescription("Pointing one device's camera at another device's screen, or even the light cast by it, could allow hidden backdoors to transfer data beyond what the user intends to transfer.");
+					showSeedQROption->setDestination(static_pointer_cast<MenuTreeObject>(qrPrompt));
+					shared_ptr<SeedQRPage> seedQrPage = make_shared<SeedQRPage>("QR Code", qrPrompt);
+					qrPrompt->setDestination(static_pointer_cast<MenuTreeObject>(seedQrPage));
 
 			shared_ptr<SeedGenInputPage> diceRollsInputPage = make_shared<SeedGenInputPage>("Enter Dice Rolls", generateSeedMenu);
 			diceRollsInputPage->setDestination(static_pointer_cast<MenuTreeObject>(showSeedOptionsMenu));
