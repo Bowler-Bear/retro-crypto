@@ -9,13 +9,18 @@
 #include "seed_qr_page.h"
 #include "context_update_functions.h"
 #include "encryption_page.h"
+#include "welcome_prompt.h"
 
 using namespace RetroCrypto;
 
 MenuTree::MenuTree()
 {
+	shared_ptr<WelcomePrompt> welcomePrompt = make_shared<WelcomePrompt>("Welcome");
+	root = static_pointer_cast<MenuTreeObject>(welcomePrompt);
+
 	shared_ptr<Menu> mainMenu = make_shared<Menu>("Main Menu");
-	root = static_pointer_cast<MenuTreeObject>(mainMenu);
+	mainMenu->setShouldReparent(false);
+	welcomePrompt->setDestination(static_pointer_cast<MenuTreeObject>(mainMenu));
 
 	shared_ptr<MenuOption> generateSeedOption = make_shared<MenuOption>(mainMenu, "Generate Seed", "Generate a random seed.");
 	shared_ptr<MenuOption> generateAddressOption = make_shared<MenuOption>(mainMenu, "Generate Vanity Address", "Generate an address.");

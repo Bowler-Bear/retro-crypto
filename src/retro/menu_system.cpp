@@ -34,6 +34,10 @@ bool MenuSystem::init()
 		return getInitialized();
 	if (display == nullptr)
 		throw std::runtime_error(std::string(__func__)+": No IDisplay passed to MenuSystem.");
+	if (!currentMenuPosition)
+		throw std::runtime_error(std::string(__func__)+": MenuSystem currentMenuPosition is null.");
+	else
+		currentMenuPosition->onEnter();
 	setInitialized(true);
 	return getInitialized();
 }
