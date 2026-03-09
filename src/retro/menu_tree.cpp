@@ -35,8 +35,11 @@ MenuTree::MenuTree()
 	mainMenu->addOption(encryptionOption);
 	mainMenu->addOption(exitOption);
 
-		shared_ptr<Menu> generateSeedMenu = make_shared<Menu>("Generate Seed", mainMenu);
-		generateSeedOption->setDestination(static_pointer_cast<MenuTreeObject>(generateSeedMenu));
+		shared_ptr<Prompt> seedPrompt = make_shared<Prompt>("Seed Information", mainMenu);
+		seedPrompt->setDescription("This seed will be used through secure key derivative functions to create of sets of keys. The randomness of the seed is of importance as it is directly correlated to the randomness of the keys. Using dice is advised as they can provide the most security given 30+ rolls. User inputs are less secure as the user may not randomly pick the inputs. The RNG option is likely the least secure as it needs to be seeded itself and the inner workings are heavily system dependent");
+		generateSeedOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPrompt));
+		shared_ptr<Menu> generateSeedMenu = make_shared<Menu>("Generate Seed", seedPrompt);
+		seedPrompt->setDestination(static_pointer_cast<MenuTreeObject>(generateSeedMenu));
 		shared_ptr<MenuOption> generateSeedFromRngOption = make_shared<MenuOption>(generateSeedMenu, "From RNG", "Use random number generation.");
 		shared_ptr<MenuOption> generateSeedFromDiceOption = make_shared<MenuOption>(generateSeedMenu, "From Dice", "Use physical dice to generate a seed.");
 		shared_ptr<MenuOption> generateSeedFromInputOption = make_shared<MenuOption>(generateSeedMenu, "From Input", "Use user input.");

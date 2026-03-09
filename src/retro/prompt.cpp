@@ -46,7 +46,7 @@ void Prompt::drawDescription(shared_ptr<IDisplay> display)
 		const uint8_t reductionOffset = 4;
 		const uint8_t lineWidth = (descriptionBox.width-reductionOffset);
 		const uint8_t descriptionLines = (getDescription().length()/lineWidth)+1;
-		descriptionLine.yPosition = MENU_BOX_Y_POSITION + MENU_TITLE_BOX_HEIGHT + 4 + ((PROMPT_DESCRIPTION_HEIGHT-2)/2+1) - (descriptionLines/2+1);
+		descriptionLine.yPosition = MENU_BOX_Y_POSITION + MENU_TITLE_BOX_HEIGHT + 4 + ((PROMPT_DESCRIPTION_HEIGHT-2)/2+1) - (descriptionLines/2);
 		for(int i = 0; i < descriptionLines; i++)
 		{
 			descriptionLine.text = getDescription().substr(i*lineWidth, lineWidth);
