@@ -419,28 +419,36 @@ void EncryptionPage::tick()
 	{
 		if (willEncrypt)
 		{
-			aes_encrypt_ctx context;
-			memzero(&context, sizeof(aes_encrypt_ctx));
-			aes_encrypt_key256(inputKey, &context);
+			aes_encrypt_ctx* context = new aes_encrypt_ctx();
+			if (!context)
+			{
+				setCurrentState(INPUT_KEY);
+				setDescription("Failed to create encryption context.");
+				return;
+			}
+			memzero(context, sizeof(aes_encrypt_ctx));
+			aes_encrypt_key256(inputKey, context);
 			uint8_t* duplicateInitializationVector = nullptr;
 			switch (currentMode)
 			{
 			case AES_256_EBC:
-				if (aes_ecb_encrypt(inputData, outputData, inputDataSize, &context) != EXIT_SUCCESS)
+				if (aes_ecb_encrypt(inputData, outputData, inputDataSize, context) != EXIT_SUCCESS)
 				{
 					setCurrentState(INPUT_KEY);
-					memzero(&context, sizeof(aes_encrypt_ctx));
+					memzero(context, sizeof(aes_encrypt_ctx));
+					delete context;
 					return;
 				}
 				break;
 			case AES_256_CBC:
 				duplicateInitializationVector = (uint8_t*)malloc(EP_INITIALIZATION_VECTOR);
 				memcpy(duplicateInitializationVector, initializationVector, EP_INITIALIZATION_VECTOR);
-				if (aes_cbc_encrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, &context) != EXIT_SUCCESS)
+				if (aes_cbc_encrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, context) != EXIT_SUCCESS)
 				{
 					setCurrentState(INPUT_IV);
 					free(duplicateInitializationVector);
-					memzero(&context, sizeof(aes_encrypt_ctx));
+					memzero(context, sizeof(aes_encrypt_ctx));
+					delete context;
 					return;
 				}
 				free(duplicateInitializationVector);
@@ -448,11 +456,12 @@ void EncryptionPage::tick()
 			case AES_256_CFB:
 				duplicateInitializationVector = (uint8_t*)malloc(EP_INITIALIZATION_VECTOR);
 				memcpy(duplicateInitializationVector, initializationVector, EP_INITIALIZATION_VECTOR);
-				if (aes_cfb_encrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, &context) != EXIT_SUCCESS)
+				if (aes_cfb_encrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, context) != EXIT_SUCCESS)
 				{
 					setCurrentState(INPUT_IV);
 					free(duplicateInitializationVector);
-					memzero(&context, sizeof(aes_encrypt_ctx));
+					memzero(context, sizeof(aes_encrypt_ctx));
+					delete context;
 					return;
 				}
 				free(duplicateInitializationVector);
@@ -460,11 +469,12 @@ void EncryptionPage::tick()
 			case AES_256_OFB:
 				duplicateInitializationVector = (uint8_t*)malloc(EP_INITIALIZATION_VECTOR);
 				memcpy(duplicateInitializationVector, initializationVector, EP_INITIALIZATION_VECTOR);
-				if (aes_ofb_encrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, &context) != EXIT_SUCCESS)
+				if (aes_ofb_encrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, context) != EXIT_SUCCESS)
 				{
 					setCurrentState(INPUT_IV);
 					free(duplicateInitializationVector);
-					memzero(&context, sizeof(aes_encrypt_ctx));
+					memzero(context, sizeof(aes_encrypt_ctx));
+					delete context;
 					return;
 				}
 				free(duplicateInitializationVector);
@@ -472,71 +482,113 @@ void EncryptionPage::tick()
 			default:
 				setCurrentState(INPUT_IV);
 				setDescription("Unknown Encryption Mode");
-				memzero(&context, sizeof(aes_encrypt_ctx));
+				memzero(context, sizeof(aes_encrypt_ctx));
+				delete context;
 				return;
 			}
-			memzero(&context, sizeof(aes_encrypt_ctx));
+			memzero(context, sizeof(aes_encrypt_ctx));
+			delete context;
 		}
 		else
 		{
-			aes_decrypt_ctx decryptContext;
-			memzero(&decryptContext, sizeof(aes_decrypt_ctx));
-			aes_encrypt_ctx encryptContext;
-			memzero(&encryptContext, sizeof(aes_decrypt_ctx));
+			aes_decrypt_ctx* decryptContext = nullptr;
+			aes_encrypt_ctx* encryptContext = nullptr;
 			uint8_t* duplicateInitializationVector = nullptr;
 			switch (currentMode)
 			{
 			case AES_256_EBC:
-				aes_decrypt_key256(inputKey, &decryptContext);
-				if(aes_ecb_decrypt(inputData, outputData, inputDataSize, &decryptContext) != EXIT_SUCCESS)
+				decryptContext = new aes_decrypt_ctx();
+				if (!decryptContext)
 				{
 					setCurrentState(INPUT_KEY);
-					memzero(&decryptContext, sizeof(aes_decrypt_ctx));
+					setDescription("Failed to create decryption context.");
 					return;
 				}
-				memzero(&decryptContext, sizeof(aes_decrypt_ctx));
+				memzero(decryptContext, sizeof(aes_decrypt_ctx));
+				aes_decrypt_key256(inputKey, decryptContext);
+				if(aes_ecb_decrypt(inputData, outputData, inputDataSize, decryptContext) != EXIT_SUCCESS)
+				{
+					setCurrentState(INPUT_KEY);
+					memzero(decryptContext, sizeof(aes_decrypt_ctx));
+					delete decryptContext;
+					return;
+				}
+				memzero(decryptContext, sizeof(aes_decrypt_ctx));
+				delete decryptContext;
 				break;
 			case AES_256_CBC:
-				aes_decrypt_key256(inputKey, &decryptContext);
+				decryptContext = new aes_decrypt_ctx();
+				if (!decryptContext)
+				{
+					setCurrentState(INPUT_IV);
+					setDescription("Failed to create decryption context.");
+					return;
+				}
+				memzero(decryptContext, sizeof(aes_decrypt_ctx));
+				aes_decrypt_key256(inputKey, decryptContext);
 				duplicateInitializationVector = (uint8_t*)malloc(EP_INITIALIZATION_VECTOR);
 				memcpy(duplicateInitializationVector, initializationVector, EP_INITIALIZATION_VECTOR);
-				if (aes_cbc_decrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, &decryptContext) != EXIT_SUCCESS)
+				if (aes_cbc_decrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, decryptContext) != EXIT_SUCCESS)
 				{
 					setCurrentState(INPUT_IV);
 					free(duplicateInitializationVector);
-					memzero(&decryptContext, sizeof(aes_decrypt_ctx));
+					memzero(decryptContext, sizeof(aes_decrypt_ctx));
+					delete decryptContext;
 					return;
 				}
 				free(duplicateInitializationVector);
-				memzero(&decryptContext, sizeof(aes_decrypt_ctx));
+				memzero(decryptContext, sizeof(aes_decrypt_ctx));
+				delete decryptContext;
 				break;
 			case AES_256_CFB:
-				aes_encrypt_key256(inputKey, &encryptContext);
+				encryptContext = new aes_encrypt_ctx();
+				if (!encryptContext)
+				{
+					setCurrentState(INPUT_IV);
+					setDescription("Failed to create decryption context.");
+					memzero(encryptContext, sizeof(aes_encrypt_ctx));
+					return;
+				}
+				memzero(encryptContext, sizeof(aes_encrypt_ctx));
+				aes_encrypt_key256(inputKey, encryptContext);
 				duplicateInitializationVector = (uint8_t*)malloc(EP_INITIALIZATION_VECTOR);
 				memcpy(duplicateInitializationVector, initializationVector, EP_INITIALIZATION_VECTOR);
-				if (aes_cfb_decrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, &encryptContext) != EXIT_SUCCESS)
+				if (aes_cfb_decrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, encryptContext) != EXIT_SUCCESS)
 				{
 					setCurrentState(INPUT_IV);
 					free(duplicateInitializationVector);
-					memzero(&encryptContext, sizeof(aes_encrypt_ctx));
+					memzero(encryptContext, sizeof(aes_encrypt_ctx));
+					delete encryptContext;
 					return;
 				}
 				free(duplicateInitializationVector);
-				memzero(&encryptContext, sizeof(aes_encrypt_ctx));
+				memzero(encryptContext, sizeof(aes_encrypt_ctx));
+				delete encryptContext;
 				break;
 			case AES_256_OFB:
-				aes_encrypt_key256(inputKey, &encryptContext);
+				encryptContext = new aes_encrypt_ctx();
+				if (!encryptContext)
+				{
+					setCurrentState(INPUT_IV);
+					setDescription("Failed to create decryption context.");
+					memzero(encryptContext, sizeof(aes_encrypt_ctx));
+					return;
+				}
+				memzero(encryptContext, sizeof(aes_encrypt_ctx));
+				aes_encrypt_key256(inputKey, encryptContext);
 				duplicateInitializationVector = (uint8_t*)malloc(EP_INITIALIZATION_VECTOR);
 				memcpy(duplicateInitializationVector, initializationVector, EP_INITIALIZATION_VECTOR);
-				if (aes_ofb_decrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, &encryptContext) != EXIT_SUCCESS)
+				if (aes_ofb_decrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, encryptContext) != EXIT_SUCCESS)
 				{
 					setCurrentState(INPUT_IV);
 					free(duplicateInitializationVector);
-					memzero(&encryptContext, sizeof(aes_encrypt_ctx));
+					memzero(encryptContext, sizeof(aes_encrypt_ctx));
+					delete encryptContext;
 					return;
 				}
 				free(duplicateInitializationVector);
-				memzero(&encryptContext, sizeof(aes_encrypt_ctx));
+				memzero(encryptContext, sizeof(aes_encrypt_ctx));
+				delete encryptContext;
 				break;
 			default:
 				setCurrentState(INPUT_IV);
