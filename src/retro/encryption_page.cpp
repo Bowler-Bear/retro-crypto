@@ -22,6 +22,74 @@ AES_RETURN aes_cbc_encrypt_wrapper(const unsigned char *ibuf, unsigned char *obu
 	return aes_cbc_encrypt(ibuf, obuf, len, iv, cx);
 }
 
+class MergedDecryptionContext
+{
+public:
+	aes_decrypt_ctx* decryptContext;
+	aes_encrypt_ctx* encryptContext;
+
+public:
+	MergedDecryptionContext()
+	{
+		decryptContext = nullptr;
+		encryptContext = nullptr;
+	}
+
+	~MergedDecryptionContext()
+	{
+		if (decryptContext != nullptr)
+		{
+			memzero(decryptContext, sizeof(aes_decrypt_ctx));
+			delete decryptContext;
+		}
+		if (encryptContext != nullptr)
+		{
+			memzero(encryptContext, sizeof(aes_encrypt_ctx));
+			delete encryptContext;
+		}
+	}
+
+	void useDecryptContext(const unsigned char* inputKey)
+	{
+		if (decryptContext == nullptr)
+		{
+			decryptContext = new aes_decrypt_ctx();
+			aes_decrypt_key256(inputKey, decryptContext);
+		}
+	}
+
+	void useEncryptContext(const unsigned char* inputKey)
+	{
+		if (encryptContext == nullptr)
+		{
+			encryptContext = new aes_encrypt_ctx();
+			aes_encrypt_key256(inputKey, encryptContext);
+		}
+	}
+};
+
+typedef AES_RETURN (*DecryptionFunction)(const unsigned char*, unsigned char*, int, unsigned char*, MergedDecryptionContext*);
+
+AES_RETURN aes_ecb_decrypt_wrapper(const unsigned char *ibuf, unsigned char *obuf, int len, unsigned char* iv, MergedDecryptionContext cx[1])
+{
+	return aes_ecb_decrypt(ibuf, obuf, len, cx->decryptContext);
+}
+
+AES_RETURN aes_cbc_decrypt_wrapper(const unsigned char *ibuf, unsigned char *obuf, int len, unsigned char* iv, MergedDecryptionContext cx[1])
+{
+	return aes_cbc_decrypt(ibuf, obuf, len, iv, cx->decryptContext);
+}
+
+AES_RETURN aes_cfb_decrypt_wrapper(const unsigned char *ibuf, unsigned char *obuf, int len, unsigned char* iv, MergedDecryptionContext cx[1])
+{
+	return aes_cfb_decrypt(ibuf, obuf, len, iv, cx->encryptContext);
+}
+
+AES_RETURN aes_ofb_decrypt_wrapper(const unsigned char *ibuf, unsigned char *obuf, int len, unsigned char* iv, MergedDecryptionContext cx[1])
+{
+	return aes_ofb_decrypt(ibuf, obuf, len, iv, cx->encryptContext);
+}
+
 using namespace RetroCrypto;
 
 string encryptionModeToTitle(EncryptionMode mode)
@@ -489,110 +557,54 @@ void EncryptionPage::tick()
 		}
 		else
 		{
-			aes_decrypt_ctx* decryptContext = nullptr;
-			aes_encrypt_ctx* encryptContext = nullptr;
+			MergedDecryptionContext* context = new MergedDecryptionContext();
+
+			DecryptionFunction decryptionFunction = nullptr;
 			uint8_t* duplicateInitializationVector = nullptr;
+			EncryptionState failureReturnState = INPUT_IV;
+
 			switch (currentMode)
 			{
 			case AES_256_EBC:
-				decryptContext = new aes_decrypt_ctx();
-				if (!decryptContext)
-				{
-					setCurrentState(INPUT_KEY);
-					setDescription("Failed to create decryption context.");
-					return;
-				}
-				memzero(decryptContext, sizeof(aes_decrypt_ctx));
-				aes_decrypt_key256(inputKey, decryptContext);
-				if(aes_ecb_decrypt(inputData, outputData, inputDataSize, decryptContext) != EXIT_SUCCESS)
-				{
-					setCurrentState(INPUT_KEY);
-					memzero(decryptContext, sizeof(aes_decrypt_ctx));
-					delete decryptContext;
-					return;
-				}
-				memzero(decryptContext, sizeof(aes_decrypt_ctx));
-				delete decryptContext;
+				decryptionFunction = aes_ecb_decrypt_wrapper;
+				failureReturnState = INPUT_KEY;
+				context->useDecryptContext(inputKey);
 				break;
 			case AES_256_CBC:
-				decryptContext = new aes_decrypt_ctx();
-				if (!decryptContext)
-				{
-					setCurrentState(INPUT_IV);
-					setDescription("Failed to create decryption context.");
-					return;
-				}
-				memzero(decryptContext, sizeof(aes_decrypt_ctx));
-				aes_decrypt_key256(inputKey, decryptContext);
-				duplicateInitializationVector = (uint8_t*)malloc(EP_INITIALIZATION_VECTOR);
-				memcpy(duplicateInitializationVector, initializationVector, EP_INITIALIZATION_VECTOR);
-				if (aes_cbc_decrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, decryptContext) != EXIT_SUCCESS)
-				{
-					setCurrentState(INPUT_IV);
-					free(duplicateInitializationVector);
-					memzero(decryptContext, sizeof(aes_decrypt_ctx));
-					delete decryptContext;
-					return;
-				}
-				free(duplicateInitializationVector);
-				memzero(decryptContext, sizeof(aes_decrypt_ctx));
-				delete decryptContext;
+				decryptionFunction = aes_cbc_decrypt_wrapper;
+				context->useDecryptContext(inputKey);
 				break;
 			case AES_256_CFB:
-				encryptContext = new aes_encrypt_ctx();
-				if (!encryptContext)
-				{
-					setCurrentState(INPUT_IV);
-					setDescription("Failed to create decryption context.");
-					memzero(encryptContext, sizeof(aes_encrypt_ctx));
-					return;
-				}
-				memzero(encryptContext, sizeof(aes_encrypt_ctx));
-				aes_encrypt_key256(inputKey, encryptContext);
-				duplicateInitializationVector = (uint8_t*)malloc(EP_INITIALIZATION_VECTOR);
-				memcpy(duplicateInitializationVector, initializationVector, EP_INITIALIZATION_VECTOR);
-				if (aes_cfb_decrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, encryptContext) != EXIT_SUCCESS)
-				{
-					setCurrentState(INPUT_IV);
-					free(duplicateInitializationVector);
-					memzero(encryptContext, sizeof(aes_encrypt_ctx));
-					delete encryptContext;
-					return;
-				}
-				free(duplicateInitializationVector);
-				memzero(encryptContext, sizeof(aes_encrypt_ctx));
-				delete encryptContext;
+				decryptionFunction = aes_cfb_decrypt_wrapper;
+				context->useEncryptContext(inputKey);
 				break;
 			case AES_256_OFB:
-				encryptContext = new aes_encrypt_ctx();
-				if (!encryptContext)
-				{
-					setCurrentState(INPUT_IV);
-					setDescription("Failed to create decryption context.");
-					memzero(encryptContext, sizeof(aes_encrypt_ctx));
-					return;
-				}
-				memzero(encryptContext, sizeof(aes_encrypt_ctx));
-				aes_encrypt_key256(inputKey, encryptContext);
-				duplicateInitializationVector = (uint8_t*)malloc(EP_INITIALIZATION_VECTOR);
-				memcpy(duplicateInitializationVector, initializationVector, EP_INITIALIZATION_VECTOR);
-				if (aes_ofb_decrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, encryptContext) != EXIT_SUCCESS)
-				{
-					setCurrentState(INPUT_IV);
-					free(duplicateInitializationVector);
-					memzero(encryptContext, sizeof(aes_encrypt_ctx));
-					delete encryptContext;
-					return;
-				}
-				free(duplicateInitializationVector);
-				memzero(encryptContext, sizeof(aes_encrypt_ctx));
-				delete encryptContext;
+				decryptionFunction = aes_ofb_decrypt_wrapper;
+				context->useEncryptContext(inputKey);
 				break;
 			default:
+				delete context;
 				setCurrentState(INPUT_IV);
 				setDescription("Unknown Decryption Mode");
 				return;
 			}
+			if (failureReturnState == INPUT_IV)
+			{
+				duplicateInitializationVector = (uint8_t*)malloc(EP_INITIALIZATION_VECTOR);
+				memcpy(duplicateInitializationVector, initializationVector, EP_INITIALIZATION_VECTOR);
+			}
+			if (decryptionFunction(inputData, outputData, inputDataSize, duplicateInitializationVector, context) != EXIT_SUCCESS)
+			{
+				setCurrentState(failureReturnState);
+				if (duplicateInitializationVector != nullptr)
+				{
+					free(duplicateInitializationVector);
+				}
+				delete context;
+				setDescription("Decryption function failed.");
+				return;
+			}
+			delete context;
 		}
 		setCurrentState(OUTPUT_DATA);
 	}
