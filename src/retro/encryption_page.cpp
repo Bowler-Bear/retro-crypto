@@ -10,6 +10,18 @@ extern "C"
 #include "memzero.h"
 }
 
+typedef AES_RETURN (*EncryptionFunction)(const unsigned char*, unsigned char*, int, unsigned char*, aes_encrypt_ctx*);
+
+AES_RETURN aes_ecb_encrypt_wrapper(const unsigned char *ibuf, unsigned char *obuf, int len, unsigned char* iv, aes_encrypt_ctx cx[1])
+{
+	return aes_ecb_encrypt(ibuf, obuf, len, cx);
+}
+
+AES_RETURN aes_cbc_encrypt_wrapper(const unsigned char *ibuf, unsigned char *obuf, int len, unsigned char* iv, aes_encrypt_ctx cx[1])
+{
+	return aes_cbc_encrypt(ibuf, obuf, len, iv, cx);
+}
+
 using namespace RetroCrypto;
 
 string encryptionModeToTitle(EncryptionMode mode)
@@ -428,62 +440,48 @@ void EncryptionPage::tick()
 			}
 			memzero(context, sizeof(aes_encrypt_ctx));
 			aes_encrypt_key256(inputKey, context);
+
+			EncryptionFunction encryptionFunction = nullptr;
 			uint8_t* duplicateInitializationVector = nullptr;
+			EncryptionState failureReturnState = INPUT_IV;
+
 			switch (currentMode)
 			{
 			case AES_256_EBC:
-				if (aes_ecb_encrypt(inputData, outputData, inputDataSize, context) != EXIT_SUCCESS)
-				{
-					setCurrentState(INPUT_KEY);
-					memzero(context, sizeof(aes_encrypt_ctx));
-					delete context;
-					return;
-				}
+				encryptionFunction = aes_ecb_encrypt_wrapper;
+				failureReturnState = INPUT_KEY;
 				break;
 			case AES_256_CBC:
-				duplicateInitializationVector = (uint8_t*)malloc(EP_INITIALIZATION_VECTOR);
-				memcpy(duplicateInitializationVector, initializationVector, EP_INITIALIZATION_VECTOR);
-				if (aes_cbc_encrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, context) != EXIT_SUCCESS)
-				{
-					setCurrentState(INPUT_IV);
-					free(duplicateInitializationVector);
-					memzero(context, sizeof(aes_encrypt_ctx));
-					delete context;
-					return;
-				}
-				free(duplicateInitializationVector);
+				encryptionFunction = aes_cbc_encrypt_wrapper;
 				break;
 			case AES_256_CFB:
-				duplicateInitializationVector = (uint8_t*)malloc(EP_INITIALIZATION_VECTOR);
-				memcpy(duplicateInitializationVector, initializationVector, EP_INITIALIZATION_VECTOR);
-				if (aes_cfb_encrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, context) != EXIT_SUCCESS)
-				{
-					setCurrentState(INPUT_IV);
-					free(duplicateInitializationVector);
-					memzero(context, sizeof(aes_encrypt_ctx));
-					delete context;
-					return;
-				}
-				free(duplicateInitializationVector);
+				encryptionFunction = aes_cfb_encrypt;
 				break;
 			case AES_256_OFB:
-				duplicateInitializationVector = (uint8_t*)malloc(EP_INITIALIZATION_VECTOR);
-				memcpy(duplicateInitializationVector, initializationVector, EP_INITIALIZATION_VECTOR);
-				if (aes_ofb_encrypt(inputData, outputData, inputDataSize, duplicateInitializationVector, context) != EXIT_SUCCESS)
-				{
-					setCurrentState(INPUT_IV);
-					free(duplicateInitializationVector);
-					memzero(context, sizeof(aes_encrypt_ctx));
-					delete context;
-					return;
-				}
-				free(duplicateInitializationVector);
+				encryptionFunction = aes_ofb_encrypt;
 				break;
 			default:
-				setCurrentState(INPUT_IV);
+				setCurrentState(failureReturnState);
 				setDescription("Unknown Encryption Mode");
 				memzero(context, sizeof(aes_encrypt_ctx));
 				delete context;
+				return;
+			}
+			if (failureReturnState == INPUT_IV)
+			{
+				duplicateInitializationVector = (uint8_t*)malloc(EP_INITIALIZATION_VECTOR);
+				memcpy(duplicateInitializationVector, initializationVector, EP_INITIALIZATION_VECTOR);
+			}
+			if (encryptionFunction(inputData, outputData, inputDataSize, duplicateInitializationVector, context) != EXIT_SUCCESS)
+			{
+				setCurrentState(failureReturnState);
+				if (duplicateInitializationVector != nullptr)
+				{
+					free(duplicateInitializationVector);
+				}
+				memzero(context, sizeof(aes_encrypt_ctx));
+				delete context;
+				setDescription("Encryption function failed.");
 				return;
 			}
 			memzero(context, sizeof(aes_encrypt_ctx));
