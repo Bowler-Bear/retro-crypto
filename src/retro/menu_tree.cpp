@@ -117,8 +117,10 @@ MenuTree::MenuTree()
 #endif
 					shared_ptr<MenuOption> showMoneroEsperantoPhraseOption = make_shared<MenuOption>(showPhrasesMenu, "Legacy Monero Esperanto", "Show legacy monero esperanto seed phrase for this seed.");
 					showMoneroEsperantoPhraseOption->setOnSelectedFunction(&setLegacyMoneroEsperantoMnemonicContext);
+#if INCLUDE_LOJBAN_MONERO_MNEMONIC
 					shared_ptr<MenuOption> showMoneroLojbanPhraseOption = make_shared<MenuOption>(showPhrasesMenu, "Legacy Monero Lojban", "Show legacy monero lojban seed phrase for this seed.");
 					showMoneroLojbanPhraseOption->setOnSelectedFunction(&setLegacyMoneroLojbanMnemonicContext);
+#endif
 					showPhrasesMenu->addOption(showBIP39Option);
 					showPhrasesMenu->addOption(showMoneroEnglishPhraseOption);
 #if UTF8_COMPAT_BUILD
@@ -135,7 +137,9 @@ MenuTree::MenuTree()
 					showPhrasesMenu->addOption(showMoneroChinesePhraseOption);
 #endif
 					showPhrasesMenu->addOption(showMoneroEsperantoPhraseOption);
+#if INCLUDE_LOJBAN_MONERO_MNEMONIC
 					showPhrasesMenu->addOption(showMoneroLojbanPhraseOption);
+#endif
 
 						shared_ptr<MnemonicPage> mnemonicPage = make_shared<MnemonicPage>("Seed Phrase", showPhrasesMenu);
 						addressPage->setBackwardAction(&clearMnemonicTypeContext);
@@ -153,7 +157,9 @@ MenuTree::MenuTree()
 						showMoneroChinesePhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
 #endif
 						showMoneroEsperantoPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
+#if INCLUDE_LOJBAN_MONERO_MNEMONIC
 						showMoneroLojbanPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
+#endif
 
 					shared_ptr<SeedQRPage> seedQrPage = make_shared<SeedQRPage>("QR Code", showSeedOptionsMenu);
 					showSeedQROption->setDestination(static_pointer_cast<MenuTreeObject>(seedQrPage));
@@ -227,8 +233,10 @@ MenuTree::MenuTree()
 #endif
 		shared_ptr<MenuOption> restoreFromLegacyMoneroEsperantoPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero Esperanto", "Restore seed bit from legacy monero esperanto seed phrase.");
 		restoreFromLegacyMoneroEsperantoPhraseOption->setOnSelectedFunction(&setLegacyMoneroEsperantoMnemonicContext);
+#if INCLUDE_LOJBAN_MONERO_MNEMONIC
 		shared_ptr<MenuOption> restoreFromLegacyMoneroLojbanPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero Lojban", "Restore seed bit from legacy monero lojban seed phrase.");
 		restoreFromLegacyMoneroLojbanPhraseOption->setOnSelectedFunction(&setLegacyMoneroLojbanMnemonicContext);
+#endif
 		pickPhraseTypeMenu->addOption(restoreFromBIP39Option);
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroEnglishPhraseOption);
 #if UTF8_COMPAT_BUILD
@@ -245,7 +253,9 @@ MenuTree::MenuTree()
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroChinesePhraseOption);
 #endif
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroEsperantoPhraseOption);
+#if INCLUDE_LOJBAN_MONERO_MNEMONIC
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroLojbanPhraseOption);
+#endif
 
 			shared_ptr<SeedPhraseInputPage> seedPhraseInputPage = make_shared<SeedPhraseInputPage>("Input Seed Phrase", pickPhraseTypeMenu);
 			seedPhraseInputPage->setDestination(static_pointer_cast<MenuTreeObject>(showSeedOptionsMenu));
@@ -264,7 +274,9 @@ MenuTree::MenuTree()
 			restoreFromLegacyMoneroChinesePhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
 #endif
 			restoreFromLegacyMoneroEsperantoPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
+#if INCLUDE_LOJBAN_MONERO_MNEMONIC
 			restoreFromLegacyMoneroLojbanPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
+#endif
 
 		shared_ptr<Menu> encryptionMenu = make_shared<Menu>("Select Option", mainMenu);
 		encryptionOption->setDestination(static_pointer_cast<MenuTreeObject>(encryptionMenu));
