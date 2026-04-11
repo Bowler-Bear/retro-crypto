@@ -115,8 +115,10 @@ MenuTree::MenuTree()
 					shared_ptr<MenuOption> showMoneroChinesePhraseOption = make_shared<MenuOption>(showPhrasesMenu, "Legacy Monero Chinese", "Show legacy monero chinese seed phrase for this seed.");
 					showMoneroChinesePhraseOption->setOnSelectedFunction(&setLegacyMoneroChineseMnemonicContext);
 #endif
+#if INCLUDE_ESPERANTO_MONERO_MNEMONIC
 					shared_ptr<MenuOption> showMoneroEsperantoPhraseOption = make_shared<MenuOption>(showPhrasesMenu, "Legacy Monero Esperanto", "Show legacy monero esperanto seed phrase for this seed.");
 					showMoneroEsperantoPhraseOption->setOnSelectedFunction(&setLegacyMoneroEsperantoMnemonicContext);
+#endif
 #if INCLUDE_LOJBAN_MONERO_MNEMONIC
 					shared_ptr<MenuOption> showMoneroLojbanPhraseOption = make_shared<MenuOption>(showPhrasesMenu, "Legacy Monero Lojban", "Show legacy monero lojban seed phrase for this seed.");
 					showMoneroLojbanPhraseOption->setOnSelectedFunction(&setLegacyMoneroLojbanMnemonicContext);
@@ -136,7 +138,9 @@ MenuTree::MenuTree()
 					showPhrasesMenu->addOption(showMoneroJapanesePhraseOption);
 					showPhrasesMenu->addOption(showMoneroChinesePhraseOption);
 #endif
+#if INCLUDE_ESPERANTO_MONERO_MNEMONIC
 					showPhrasesMenu->addOption(showMoneroEsperantoPhraseOption);
+#endif
 #if INCLUDE_LOJBAN_MONERO_MNEMONIC
 					showPhrasesMenu->addOption(showMoneroLojbanPhraseOption);
 #endif
@@ -156,7 +160,9 @@ MenuTree::MenuTree()
 						showMoneroJapanesePhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
 						showMoneroChinesePhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
 #endif
+#if INCLUDE_ESPERANTO_MONERO_MNEMONIC
 						showMoneroEsperantoPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
+#endif
 #if INCLUDE_LOJBAN_MONERO_MNEMONIC
 						showMoneroLojbanPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
 #endif
@@ -231,8 +237,10 @@ MenuTree::MenuTree()
 		shared_ptr<MenuOption> restoreFromLegacyMoneroChinesePhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero Chinese", "Restore seed bit from legacy monero chinese seed phrase.");
 		restoreFromLegacyMoneroChinesePhraseOption->setOnSelectedFunction(&setLegacyMoneroChineseMnemonicContext);
 #endif
+#if INCLUDE_ESPERANTO_MONERO_MNEMONIC
 		shared_ptr<MenuOption> restoreFromLegacyMoneroEsperantoPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero Esperanto", "Restore seed bit from legacy monero esperanto seed phrase.");
 		restoreFromLegacyMoneroEsperantoPhraseOption->setOnSelectedFunction(&setLegacyMoneroEsperantoMnemonicContext);
+#endif
 #if INCLUDE_LOJBAN_MONERO_MNEMONIC
 		shared_ptr<MenuOption> restoreFromLegacyMoneroLojbanPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero Lojban", "Restore seed bit from legacy monero lojban seed phrase.");
 		restoreFromLegacyMoneroLojbanPhraseOption->setOnSelectedFunction(&setLegacyMoneroLojbanMnemonicContext);
@@ -252,7 +260,9 @@ MenuTree::MenuTree()
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroJapanesePhraseOption);
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroChinesePhraseOption);
 #endif
+#if INCLUDE_ESPERANTO_MONERO_MNEMONIC
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroEsperantoPhraseOption);
+#endif
 #if INCLUDE_LOJBAN_MONERO_MNEMONIC
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroLojbanPhraseOption);
 #endif
@@ -273,7 +283,9 @@ MenuTree::MenuTree()
 			restoreFromLegacyMoneroJapanesePhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
 			restoreFromLegacyMoneroChinesePhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
 #endif
+#if INCLUDE_ESPERANTO_MONERO_MNEMONIC
 			restoreFromLegacyMoneroEsperantoPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
+#endif
 #if INCLUDE_LOJBAN_MONERO_MNEMONIC
 			restoreFromLegacyMoneroLojbanPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
 #endif
