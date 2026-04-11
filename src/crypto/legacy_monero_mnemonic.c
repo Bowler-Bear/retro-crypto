@@ -6,12 +6,18 @@
 #include "monero_spanish_words.h"
 #include "monero_french_words.h"
 #include "monero_italian_words.h"
+#if INCLUDE_DUTCH_MONERO_MNEMONIC
 #include "monero_dutch_words.h"
+#endif
+#if INCLUDE_PORTUGUESE_MONERO_MNEMONIC
 #include "monero_portuguese_words.h"
+#endif
 #include "monero_russian_words.h"
 #include "monero_japanese_words.h"
 #include "monero_chinese_words.h"
+#if INCLUDE_ESPERANTO_MONERO_MNEMONIC
 #include "monero_esperanto_words.h"
+#endif
 #if INCLUDE_LOJBAN_MONERO_MNEMONIC
 #include "monero_lojban_words.h"
 #endif
@@ -31,18 +37,24 @@ const char** legacy_monero_mnemonic_get_word_list(enum MoneroLanguage language) 
         return monero_french_words;
     case MoneroItalian:
         return monero_italian_words;
+#if INCLUDE_DUTCH_MONERO_MNEMONIC
     case MoneroDutch:
         return monero_dutch_words;
+#endif
+#if INCLUDE_PORTUGUESE_MONERO_MNEMONIC
     case MoneroPortuguese:
         return monero_portuguese_words;
+#endif
     case MoneroRussian:
         return monero_russian_words;
     case MoneroJapanese:
         return monero_japanese_words;
     case MoneroChinese:
         return monero_chinese_words;
+#if INCLUDE_ESPERANTO_MONERO_MNEMONIC
     case MoneroEsperanto:
         return monero_esperanto_words;
+#endif
 #if INCLUDE_LOJBAN_MONERO_MNEMONIC
     case MoneroLojban:
         return monero_lojban_words;
