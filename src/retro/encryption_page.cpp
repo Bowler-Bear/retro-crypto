@@ -109,6 +109,20 @@ string encryptionModeToTitle(EncryptionMode mode)
 	}
 }
 
+uint32_t encryptionModeIncrementSize(EncryptionMode mode)
+{
+	switch (mode)
+	{
+	default:
+	case AES_256_EBC:
+	case AES_256_CBC:
+		return AES_BLOCK_SIZE;
+	case AES_256_CFB:
+	case AES_256_OFB:
+		return 1;
+	}
+}
+
 EncryptionPage::EncryptionPage()
 : InputPage()
 {
@@ -348,7 +362,7 @@ void EncryptionPage::updateSelectedOption(InputType input)
 	uint32_t maxIndex = 0;
 	uint8_t* data = nullptr;
 	uint32_t* sizePointer = nullptr;
-	uint32_t sizeIncrement = (currentMode == AES_256_EBC || currentMode == AES_256_CBC) ? AES_BLOCK_SIZE : 1;
+	uint32_t sizeIncrement = encryptionModeIncrementSize(currentMode);
 	switch (currentState)
 	{
 	default:
