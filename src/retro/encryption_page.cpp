@@ -551,6 +551,12 @@ void EncryptionPage::tick()
 				delete context;
 				return;
 			}
+			if (encryptionFunction == nullptr)
+			{
+				setCurrentState(failureReturnState);
+				setDescription("Encryption function was not properly assigned prior based on mode.");
+				return;
+			}
 			if (failureReturnState == INPUT_IV)
 			{
 				duplicateInitializationVector = (uint8_t*)malloc(EP_INITIALIZATION_VECTOR);
@@ -602,6 +608,12 @@ void EncryptionPage::tick()
 				delete context;
 				setCurrentState(INPUT_IV);
 				setDescription("Unknown Decryption Mode");
+				return;
+			}
+			if (decryptionFunction == nullptr)
+			{
+				setCurrentState(failureReturnState);
+				setDescription("Decryption function was not properly assigned prior based on mode.");
 				return;
 			}
 			if (failureReturnState == INPUT_IV)
