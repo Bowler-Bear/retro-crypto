@@ -794,10 +794,10 @@ void EncryptionPage::updateTitle()
 		title = encryptionModeToTitle(currentMode) + (willEncrypt ? " Plaintext Data" : " Ciphertext Data");
 		break;
 	case INPUT_KEY:
-		title = "Enter Key Size";
+		title = "Enter Key Data";
 		break;
 	case INPUT_KEY_SIZE:
-		title = "Enter Key Data";
+		title = "Enter Key Size";
 		break;
 	case INPUT_IV:
 		title = "Enter Initialization Vector";
