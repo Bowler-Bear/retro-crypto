@@ -54,6 +54,7 @@ public:
 		if (decryptContext == nullptr)
 		{
 			decryptContext = new aes_decrypt_ctx();
+			memzero(decryptContext, sizeof(aes_decrypt_ctx));
 			aes_decrypt_key256(inputKey, decryptContext);
 		}
 	}
@@ -63,6 +64,7 @@ public:
 		if (encryptContext == nullptr)
 		{
 			encryptContext = new aes_encrypt_ctx();
+			memzero(encryptContext, sizeof(aes_encrypt_ctx));
 			aes_encrypt_key256(inputKey, encryptContext);
 		}
 	}
