@@ -574,6 +574,10 @@ void EncryptionPage::tick()
 				setDescription("Encryption function failed.");
 				return;
 			}
+			if (duplicateInitializationVector != nullptr)
+			{
+				free(duplicateInitializationVector);
+			}
 			memzero(context, sizeof(aes_encrypt_ctx));
 			delete context;
 		}
@@ -631,6 +635,10 @@ void EncryptionPage::tick()
 				delete context;
 				setDescription("Decryption function failed.");
 				return;
+			}
+			if (duplicateInitializationVector != nullptr)
+			{
+				free(duplicateInitializationVector);
 			}
 			delete context;
 		}
