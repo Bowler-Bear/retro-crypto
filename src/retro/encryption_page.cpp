@@ -98,8 +98,8 @@ string encryptionModeToTitle(EncryptionMode mode)
 {
 	switch (mode)
 	{
-	case AES_256_EBC:
-		return "AES-256 EBC";
+	case AES_256_ECB:
+		return "AES-256 ECB";
 	case AES_256_CBC:
 		return "AES-256 CBC";
 	case AES_256_CFB:
@@ -116,7 +116,7 @@ uint32_t encryptionModeIncrementSize(EncryptionMode mode)
 	switch (mode)
 	{
 	default:
-	case AES_256_EBC:
+	case AES_256_ECB:
 	case AES_256_CBC:
 		return AES_BLOCK_SIZE;
 	case AES_256_CFB:
@@ -248,7 +248,7 @@ bool EncryptionPage::consumeInput(InputType input)
 		{
 			switch (currentMode)
 			{
-			case AES_256_EBC:
+			case AES_256_ECB:
 				try
 				{
 					if (!reallocateOutputData())
@@ -320,7 +320,7 @@ bool EncryptionPage::consumeInput(InputType input)
 			switch (currentMode)
 			{
 			default:
-			case AES_256_EBC:
+			case AES_256_ECB:
 				setCurrentState(INPUT_KEY);
 				break;
 			case AES_256_CBC:
@@ -343,7 +343,7 @@ bool EncryptionPage::consumeInput(InputType input)
 			switch (currentMode)
 			{
 			default:
-			case AES_256_EBC:
+			case AES_256_ECB:
 				setCurrentState(INPUT_KEY);
 				break;
 			case AES_256_CBC:
@@ -489,7 +489,7 @@ shared_ptr<MenuTreeObject> EncryptionPage::getDestination()
 
 void EncryptionPage::reset()
 {
-	currentMode = AES_256_EBC;
+	currentMode = AES_256_ECB;
 	setCurrentState(SELECT_MODE);
 	freeInputData();
 	inputDataSize = EP_DEFAULT_DATA_SIZE;
@@ -531,7 +531,7 @@ void EncryptionPage::tick()
 
 			switch (currentMode)
 			{
-			case AES_256_EBC:
+			case AES_256_ECB:
 				encryptionFunction = aes_ecb_encrypt_wrapper;
 				failureReturnState = INPUT_KEY;
 				break;
@@ -591,7 +591,7 @@ void EncryptionPage::tick()
 
 			switch (currentMode)
 			{
-			case AES_256_EBC:
+			case AES_256_ECB:
 				decryptionFunction = aes_ecb_decrypt_wrapper;
 				failureReturnState = INPUT_KEY;
 				context->useDecryptContext(inputKey);

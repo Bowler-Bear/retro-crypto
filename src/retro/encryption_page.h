@@ -32,7 +32,7 @@ namespace RetroCrypto
 
 	enum EncryptionMode : uint8_t
 	{
-		AES_256_EBC,
+		AES_256_ECB,
 		AES_256_CBC,
 		AES_256_CFB,
 		AES_256_OFB,
