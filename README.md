@@ -90,7 +90,7 @@ The color scheme can be updated by modifying the existing DEFAULT_\*G_COLOR_\* d
 
 
 ## Screenshots ##
-<img width="903" height="631" alt="main_menu" src="https://github.com/user-attachments/assets/06af3524-d9e4-4fec-bb37-9c61132e26fe" />
+<img width="910" height="625" alt="main_menu" src="https://github.com/user-attachments/assets/009e910a-05a5-4837-917b-5fbded42a0d5" />
 <img width="900" height="625" alt="generate_seed" src="https://github.com/user-attachments/assets/24940e0a-2c95-43b8-bee7-b813b0139bec" />
 <img width="903" height="627" alt="dir_inputs" src="https://github.com/user-attachments/assets/f347f840-cd52-412d-b85a-96eceb4e9a68" />
 <img width="900" height="625" alt="dice_input" src="https://github.com/user-attachments/assets/539c026a-4afc-4d7b-9e4f-41b0b28f5651" />
@@ -121,6 +121,11 @@ The color scheme can be updated by modifying the existing DEFAULT_\*G_COLOR_\* d
 <img width="902" height="626" alt="vanity_address" src="https://github.com/user-attachments/assets/33d94753-93e6-4590-9b16-dc8f58a59629" />
 <img width="900" height="625" alt="input_phrases_0" src="https://github.com/user-attachments/assets/baa4c710-6fad-4297-b384-cedfb5344c36" />
 <img width="900" height="625" alt="input_phrases_1" src="https://github.com/user-attachments/assets/1e26b6e2-dfbe-42f3-8e65-102af637f38f" />
+<img width="912" height="620" alt="aes_mode_menu" src="https://github.com/user-attachments/assets/6040721a-6705-4a28-aa95-3856ed15e71f" />
+<img width="911" height="625" alt="encryption_input" src="https://github.com/user-attachments/assets/c199314f-92c3-4932-9d27-d7d52dd2e3a4" />
+<img width="911" height="623" alt="encryption_output" src="https://github.com/user-attachments/assets/90554ecc-b1f6-4ac0-a012-fa866c27b6cc" />
+
+
 
 ## Donations ##
 If you found this project interesting or want to help fund it's continued development, consider donating. Donations can be sent to 85rkddSoYqwN4neAAgjJTFYYgyfU6pwT9dYquNyBzdtqBnr8QZCU1qoR6kjwMWEF6EMd2aGtrCuuA19irjWbTbKSKKF5yuv.
