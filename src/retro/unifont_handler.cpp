@@ -8,17 +8,20 @@ using namespace RetroCrypto;
 
 UnifontHandler::UnifontHandler()
 {
-	throw std::logic_error(std::string(__func__)+": Not Implemented.");
+	filePath = "";
+	fileHandle =  nullptr;
+	characterPositionsLoaded = false;
 }
 
 UnifontHandler::UnifontHandler(std::string inFilePath)
+: UnifontHandler()
 {
-	throw std::logic_error(std::string(__func__)+": Not Implemented.");
+	filePath = inFilePath;
 }
 
 bool UnifontHandler::getCharacterPositionsLoaded()
 {
-	throw std::logic_error(std::string(__func__)+": Not Implemented.");
+	return characterPositionsLoaded;
 }
 
 void UnifontHandler::loadCharacterPositions()
@@ -28,7 +31,7 @@ void UnifontHandler::loadCharacterPositions()
 
 map<uint16_t, uint32_t> UnifontHandler::getCharacterPositions()
 {
-	throw std::logic_error(std::string(__func__)+": Not Implemented.");
+	return characterPositions;
 }
 
 uint8_t UnifontHandler::getBitmapFromUTF8(const uint8_t utf8[MAXIMUM_UNIFONT_CODE_POINTS_PER_CHARACTER], uint8_t bitmap[MAXIMUM_UNIFONT_BITMAP_SIZE])
@@ -38,11 +41,14 @@ uint8_t UnifontHandler::getBitmapFromUTF8(const uint8_t utf8[MAXIMUM_UNIFONT_COD
 
 std::string UnifontHandler::getFilePath()
 {
-	throw std::logic_error(std::string(__func__)+": Not Implemented.");
+	return filePath;
 }
 
 bool UnifontHandler::setFilePath(string newFilePath)
 {
-	throw std::logic_error(std::string(__func__)+": Not Implemented.");
+	if (characterPositionsLoaded || fileHandle != nullptr)
+		return false;
+	filePath = newFilePath;
+	return true;
 }
 
