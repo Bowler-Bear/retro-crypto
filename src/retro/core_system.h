@@ -6,6 +6,7 @@
 #include "input_system.h"
 #include "core_context.h"
 #include "random_number_generator.h"
+#include "unifont_handler.h"
 
 namespace RetroCrypto
 {
@@ -17,6 +18,8 @@ namespace RetroCrypto
 		InputSystem* inputSystem;
 
 		std::shared_ptr<IRandomNumberGenerator> rng;
+
+		std::shared_ptr<UnifontHandler> unifontHandler;
 
 		ContextData contextData;
 
@@ -39,6 +42,8 @@ namespace RetroCrypto
 		void setRandomNumberGenerator(std::shared_ptr<IRandomNumberGenerator> rng);
 
 		std::shared_ptr<IRandomNumberGenerator> getRandomNumberGenerator();
+
+		std::shared_ptr<UnifontHandler> getUnifontHandler();
 
 		void tick();
 

@@ -131,9 +131,11 @@ n64: clean retro-crypto-n64.z64
 	@mkdir -p "$(BINARY_DIR)"
 	@mv retro-crypto-n64.z64 "$(BINARY_DIR)"
 
+$(BUILD_DIR)/retro-crypto-n64.dfs: $(wildcard filesystem/*)
 $(BUILD_DIR)/retro-crypto-n64.elf: $(N64_OBJECTS)
 
 retro-crypto-n64.z64: N64_ROM_TITLE="Retro Crypto N64"
+retro-crypto-n64.z64: $(BUILD_DIR)/retro-crypto-n64.dfs
 
 clean:
 	@rm -fR "$(BASE_BUILD_DIR)" "$(BINARY_DIR)" "$(N64_DIR)" retro-crypto-n64.z64
