@@ -10,7 +10,7 @@ using namespace RetroCrypto;
 
 BOOST_AUTO_TEST_SUITE( unifont_handler )
 
-const char* testFile = "./unifont_test.hex";
+const char* testFile = "./tests/unifont_test.hex";
 
 BOOST_AUTO_TEST_CASE( getters_setters )
 {
@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE( get_specific_bitmaps )
 	BOOST_REQUIRE( handler.getCharacterPositionsLoaded() == false );
 
 	uint8_t bitmap[MAXIMUM_UNIFONT_BITMAP_SIZE] = { 0 };
-	unsigned char testCharacter[MAXIMUM_UNIFONT_CODE_POINTS_PER_CHARACTER] = "ó\0";
+	unsigned char testCharacter[MAXIMUM_UTF8_BYTES_PER_CHARACTER] = "ó\0";
 	BOOST_REQUIRE( handler.getBitmapFromUTF8(testCharacter, bitmap) == 8 );
 	BOOST_REQUIRE( handler.getCharacterPositionsLoaded() == true );
 	const uint8_t expectedBitmap8[MAXIMUM_UNIFONT_BITMAP_SIZE] = { 0x00, 0x00, 0x0C, 0x30, 0x00, 0x00, 0x3C, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x3C, 0x00, 0x00 };

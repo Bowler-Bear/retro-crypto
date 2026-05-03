@@ -1,10 +1,12 @@
 #include <stdexcept>
+#include <cstring>
 #include <string>
 
 #include "unifont_handler.h"
 
-using namespace RetroCrypto;
+#define READ_BUFFER_SIZE 128
 
+using namespace RetroCrypto;
 
 UnifontHandler::UnifontHandler()
 {
@@ -19,6 +21,14 @@ UnifontHandler::UnifontHandler(std::string inFilePath)
 	filePath = inFilePath;
 }
 
+UnifontHandler::~UnifontHandler()
+{
+	if (fileHandle)
+	{
+		fclose(fileHandle);
+	}
+}
+
 bool UnifontHandler::getCharacterPositionsLoaded()
 {
 	return characterPositionsLoaded;
@@ -26,7 +36,44 @@ bool UnifontHandler::getCharacterPositionsLoaded()
 
 void UnifontHandler::loadCharacterPositions()
 {
-	throw std::logic_error(std::string(__func__)+": Not Implemented.");
+	if (filePath == "" || characterPositionsLoaded)
+		return;
+	fileHandle = fopen(filePath.c_str(), "r");
+	if (!fileHandle)
+	{
+		return;
+	}
+	char* buffer = (char*)malloc(READ_BUFFER_SIZE);
+	uint32_t bufferOffset = 0;
+	size_t nread;
+	while ((nread = fread(buffer, sizeof(buffer[0]), READ_BUFFER_SIZE-1, fileHandle)) != 0)
+	{
+		buffer[nread] = '\0';
+		char* substring = buffer;
+		while (substring != nullptr)
+		{
+			char* lineEnd = strchr(substring, '\n');
+			if (lineEnd == nullptr)
+			{
+				bufferOffset += (substring - buffer);
+				fseek(fileHandle, substring - &buffer[nread], SEEK_CUR);
+				break;
+			}
+			auto lineSize = lineEnd - substring;
+			if (
+			(lineSize == (UNIFONT_CODE_POINT_LENGTH+UNIFONT_COLON_LENGTH+UNIFONT_8_WIDTH_BITMAP_LENGTH)
+			|| lineSize == (UNIFONT_CODE_POINT_LENGTH+UNIFONT_COLON_LENGTH+UNIFONT_16_WIDTH_BITMAP_LENGTH))
+			&& substring[UNIFONT_CODE_POINT_LENGTH] == ':')
+			{
+				uint16_t codePoint = (uint16_t)strtol(substring, nullptr, 16);
+				uint32_t bitmapPosition = bufferOffset + (substring - buffer) + UNIFONT_CODE_POINT_LENGTH + UNIFONT_COLON_LENGTH;
+				characterPositions[codePoint] = bitmapPosition;
+			}
+			substring = lineEnd + 1;
+		}
+	}
+	free(buffer);
+	characterPositionsLoaded = true;
 }
 
 map<uint16_t, uint32_t> UnifontHandler::getCharacterPositions()
@@ -34,7 +81,7 @@ map<uint16_t, uint32_t> UnifontHandler::getCharacterPositions()
 	return characterPositions;
 }
 
-uint8_t UnifontHandler::getBitmapFromUTF8(const uint8_t utf8[MAXIMUM_UNIFONT_CODE_POINTS_PER_CHARACTER], uint8_t bitmap[MAXIMUM_UNIFONT_BITMAP_SIZE])
+uint8_t UnifontHandler::getBitmapFromUTF8(const uint8_t utf8[MAXIMUM_UTF8_BYTES_PER_CHARACTER], uint8_t bitmap[MAXIMUM_UNIFONT_BITMAP_SIZE])
 {
 	throw std::logic_error(std::string(__func__)+": Not Implemented.");
 }
