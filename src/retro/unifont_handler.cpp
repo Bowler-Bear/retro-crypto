@@ -1,4 +1,3 @@
-#include <stdexcept>
 #include <cstring>
 #include <string>
 
@@ -6,7 +5,20 @@
 
 #define READ_BUFFER_SIZE 128
 
+#define REPLACEMENT_CHARACTER_CODE_POINT_VALUE 0xfffd
+
+#define shiftNibbleLeft(value, offset) \
+	((value) << (4*(offset)))
+
+#define maskThenShiftRight(value, mask, shift) \
+	(((mask) & (value)) >> (shift))
+
+#define maskThenShiftLeft(value, mask, shift) \
+	(((mask) & (value)) << (shift))
+
 using namespace RetroCrypto;
+
+char replacementCharacterBitmap[UNIFONT_8_WIDTH_BITMAP_SIZE] = { 0x00, 0x00, 0x00, 0x7E, 0x66, 0x5A, 0x5A, 0x7A, 0x76, 0x76, 0x7E, 0x76, 0x76, 0x7E, 0x00, 0x00 };
 
 UnifontHandler::UnifontHandler()
 {
@@ -83,12 +95,68 @@ map<uint16_t, uint32_t> UnifontHandler::getCharacterPositions()
 
 uint16_t UnifontHandler::unicodeCodePointFromUTF8Bytes(const uint8_t utf8[MAXIMUM_UTF8_BYTES_PER_CHARACTER])
 {
-	throw std::logic_error(std::string(__func__)+": Not Implemented.");
+	uint16_t codePoint = REPLACEMENT_CHARACTER_CODE_POINT_VALUE;
+	if ((utf8[0] & 0x80) == 0x0)
+	{
+		codePoint = utf8[0];
+	}
+	else if ((utf8[0] & 0xe0) == 0xc0)
+	{
+		codePoint = shiftNibbleLeft(maskThenShiftRight(utf8[0], 0x1c, 2), 2) | shiftNibbleLeft(maskThenShiftLeft(utf8[0], 0x3, 2) | maskThenShiftRight(utf8[1], 0x30, 4), 1) | (0xf & utf8[1]);
+	}
+	else if ((utf8[0] & 0xf0) == 0xe0)
+	{
+		codePoint = shiftNibbleLeft(maskThenShiftLeft(utf8[0], 0xf, 0), 3) | shiftNibbleLeft(maskThenShiftRight(utf8[1], 0x3C, 2), 2) | shiftNibbleLeft(maskThenShiftLeft(utf8[1], 0x3, 2) | maskThenShiftRight(utf8[2], 0x30, 4), 1) | (0xf & utf8[2]);
+	}
+	else if ((utf8[0] & 0xf8) == 0xf0)
+	{
+		//Use a replacement character when font is over three bytes for now
+		codePoint = REPLACEMENT_CHARACTER_CODE_POINT_VALUE;
+	}
+	return codePoint;
 }
 
 uint8_t UnifontHandler::getBitmapFromUTF8(const uint8_t utf8[MAXIMUM_UTF8_BYTES_PER_CHARACTER], uint8_t bitmap[MAXIMUM_UNIFONT_BITMAP_SIZE])
 {
-	throw std::logic_error(std::string(__func__)+": Not Implemented.");
+	if (!fileHandle || !characterPositionsLoaded)
+	{
+		loadCharacterPositions();
+		if (!fileHandle || !characterPositionsLoaded)
+			return 0;
+	}
+	uint16_t codePoint = unicodeCodePointFromUTF8Bytes(utf8);
+	if (characterPositions.count(codePoint) <= 0)
+	{
+		memcpy(bitmap, replacementCharacterBitmap, UNIFONT_8_WIDTH_BITMAP_LENGTH/2);
+		return MAXIMUM_UNIFONT_CHARACTER_PIXEL_WIDTH/2;
+	}
+	else
+	{
+		fseek(fileHandle, characterPositions[codePoint], SEEK_SET);
+		uint8_t bitmapBuffer[UNIFONT_16_WIDTH_BITMAP_LENGTH] = { 0 };
+		size_t readCount = fread(bitmapBuffer, sizeof(bitmapBuffer[0]), UNIFONT_16_WIDTH_BITMAP_LENGTH, fileHandle);
+		if (readCount != UNIFONT_16_WIDTH_BITMAP_LENGTH && readCount != UNIFONT_8_WIDTH_BITMAP_LENGTH)
+		{
+			memcpy(bitmap, replacementCharacterBitmap, UNIFONT_8_WIDTH_BITMAP_LENGTH/2);
+			return MAXIMUM_UNIFONT_CHARACTER_PIXEL_WIDTH/2;
+		}
+		uint8_t characterWidth = 0;
+		for (int i = 0; i < UNIFONT_16_WIDTH_BITMAP_LENGTH; i+=2)
+		{
+			if (i == UNIFONT_8_WIDTH_BITMAP_LENGTH-2)
+				characterWidth = 8;
+			else if (i == UNIFONT_16_WIDTH_BITMAP_LENGTH-2)
+				characterWidth = 16;
+			if (bitmapBuffer[i] == '\n')
+			{
+				break;
+			}
+			unsigned char bytesString[3] = { 0 };
+			memcpy(bytesString, &bitmapBuffer[i], 2);
+			bitmap[i/2] = (uint8_t)(0xff & strtol((const char*)bytesString, nullptr, 16));
+		}
+		return characterWidth;
+	}
 }
 
 std::string UnifontHandler::getFilePath()

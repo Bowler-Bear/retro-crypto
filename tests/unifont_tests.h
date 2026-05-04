@@ -67,21 +67,21 @@ BOOST_AUTO_TEST_CASE( get_specific_bitmaps )
 BOOST_AUTO_TEST_CASE( utf8_bytes_to_code_point )
 {
 	UnifontHandler handler(testFile);
-	uint16_t codePoint = handler.unicodeCodePointFromUTF8Bytes("\u0060");
+	uint16_t codePoint = handler.unicodeCodePointFromUTF8Bytes((const uint8_t*)"\u0060\0\0");
 	BOOST_REQUIRE( codePoint == 0x0060 );
-	codePoint = handler.unicodeCodePointFromUTF8Bytes("\u00f3");
+	codePoint = handler.unicodeCodePointFromUTF8Bytes((const uint8_t*)"\u00f3\0\0");
 	BOOST_REQUIRE( codePoint == 0x00f3 );
-	codePoint = handler.unicodeCodePointFromUTF8Bytes("\u00f4");
+	codePoint = handler.unicodeCodePointFromUTF8Bytes((const uint8_t*)"\u00f4\0\0");
 	BOOST_REQUIRE( codePoint == 0x00f4 );
-	codePoint = handler.unicodeCodePointFromUTF8Bytes("\u00f5");
+	codePoint = handler.unicodeCodePointFromUTF8Bytes((const uint8_t*)"\u00f5\0\0");
 	BOOST_REQUIRE( codePoint == 0x00f5 );
-	codePoint = handler.unicodeCodePointFromUTF8Bytes("\u01f5");
+	codePoint = handler.unicodeCodePointFromUTF8Bytes((const uint8_t*)"\u01f5\0\0");
 	BOOST_REQUIRE( codePoint == 0x01f5 );
-	codePoint = handler.unicodeCodePointFromUTF8Bytes("\u03f5");
+	codePoint = handler.unicodeCodePointFromUTF8Bytes((const uint8_t*)"\u03f5");
 	BOOST_REQUIRE( codePoint == 0x03f5 );
-	codePoint = handler.unicodeCodePointFromUTF8Bytes("\u04f5");
+	codePoint = handler.unicodeCodePointFromUTF8Bytes((const uint8_t*)"\u04f5");
 	BOOST_REQUIRE( codePoint == 0x04f5 );
-	codePoint = handler.unicodeCodePointFromUTF8Bytes("\u3055");
+	codePoint = handler.unicodeCodePointFromUTF8Bytes((const uint8_t*)"\u3055");
 	BOOST_REQUIRE( codePoint == 0x3055 );
 }
 
