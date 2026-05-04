@@ -64,6 +64,27 @@ BOOST_AUTO_TEST_CASE( get_specific_bitmaps )
 	BOOST_REQUIRE( memcmp(bitmap, expectedReplacementBitmap, 16) == 0 );
 }
 
+BOOST_AUTO_TEST_CASE( utf8_bytes_to_code_point )
+{
+	UnifontHandler handler(testFile);
+	uint16_t codePoint = handler.unicodeCodePointFromUTF8Bytes("\u0060");
+	BOOST_REQUIRE( codePoint == 0x0060 );
+	codePoint = handler.unicodeCodePointFromUTF8Bytes("\u00f3");
+	BOOST_REQUIRE( codePoint == 0x00f3 );
+	codePoint = handler.unicodeCodePointFromUTF8Bytes("\u00f4");
+	BOOST_REQUIRE( codePoint == 0x00f4 );
+	codePoint = handler.unicodeCodePointFromUTF8Bytes("\u00f5");
+	BOOST_REQUIRE( codePoint == 0x00f5 );
+	codePoint = handler.unicodeCodePointFromUTF8Bytes("\u01f5");
+	BOOST_REQUIRE( codePoint == 0x01f5 );
+	codePoint = handler.unicodeCodePointFromUTF8Bytes("\u03f5");
+	BOOST_REQUIRE( codePoint == 0x03f5 );
+	codePoint = handler.unicodeCodePointFromUTF8Bytes("\u04f5");
+	BOOST_REQUIRE( codePoint == 0x04f5 );
+	codePoint = handler.unicodeCodePointFromUTF8Bytes("\u3055");
+	BOOST_REQUIRE( codePoint == 0x3055 );
+}
+
 BOOST_AUTO_TEST_CASE( get_all_bitmap_positions )
 {
 	UnifontHandler handler(testFile);
