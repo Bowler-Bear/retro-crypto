@@ -127,7 +127,8 @@ uint8_t UnifontHandler::getBitmapFromUTF8(const uint8_t utf8[MAXIMUM_UTF8_BYTES_
 	uint16_t codePoint = unicodeCodePointFromUTF8Bytes(utf8);
 	if (characterPositions.count(codePoint) <= 0)
 	{
-		memcpy(bitmap, replacementCharacterBitmap, UNIFONT_8_WIDTH_BITMAP_LENGTH/2);
+		if (bitmap != nullptr)
+			memcpy(bitmap, replacementCharacterBitmap, UNIFONT_8_WIDTH_BITMAP_LENGTH/2);
 		return MAXIMUM_UNIFONT_CHARACTER_PIXEL_WIDTH/2;
 	}
 	else
@@ -137,7 +138,8 @@ uint8_t UnifontHandler::getBitmapFromUTF8(const uint8_t utf8[MAXIMUM_UTF8_BYTES_
 		size_t readCount = fread(bitmapBuffer, sizeof(bitmapBuffer[0]), UNIFONT_16_WIDTH_BITMAP_LENGTH, fileHandle);
 		if (readCount != UNIFONT_16_WIDTH_BITMAP_LENGTH && readCount != UNIFONT_8_WIDTH_BITMAP_LENGTH)
 		{
-			memcpy(bitmap, replacementCharacterBitmap, UNIFONT_8_WIDTH_BITMAP_LENGTH/2);
+			if (bitmap != nullptr)
+				memcpy(bitmap, replacementCharacterBitmap, UNIFONT_8_WIDTH_BITMAP_LENGTH/2);
 			return MAXIMUM_UNIFONT_CHARACTER_PIXEL_WIDTH/2;
 		}
 		uint8_t characterWidth = 0;
@@ -153,10 +155,16 @@ uint8_t UnifontHandler::getBitmapFromUTF8(const uint8_t utf8[MAXIMUM_UTF8_BYTES_
 			}
 			unsigned char bytesString[3] = { 0 };
 			memcpy(bytesString, &bitmapBuffer[i], 2);
-			bitmap[i/2] = (uint8_t)(0xff & strtol((const char*)bytesString, nullptr, 16));
+			if (bitmap != nullptr)
+				bitmap[i/2] = (uint8_t)(0xff & strtol((const char*)bytesString, nullptr, 16));
 		}
 		return characterWidth;
 	}
+}
+
+uint8_t UnifontHandler::getCharacterWidthFromUTF8(const uint8_t utf8[MAXIMUM_UTF8_BYTES_PER_CHARACTER])
+{
+	return getBitmapFromUTF8(utf8, nullptr);
 }
 
 std::string UnifontHandler::getFilePath()

@@ -1,6 +1,7 @@
 #ifndef UNIFONT_HANDLER_H
 #define UNIFONT_HANDLER_H
 
+#include <cstdint>
 #include <map>
 
 #define MAXIMUM_UNIFONT_CHARACTER_PIXEL_WIDTH 16
@@ -34,6 +35,7 @@ namespace RetroCrypto
 		map<uint16_t, uint32_t> getCharacterPositions();
 		uint16_t unicodeCodePointFromUTF8Bytes(const uint8_t utf8[MAXIMUM_UTF8_BYTES_PER_CHARACTER]);
 		uint8_t getBitmapFromUTF8(const uint8_t utf8[MAXIMUM_UTF8_BYTES_PER_CHARACTER], uint8_t bitmap[MAXIMUM_UNIFONT_BITMAP_SIZE]);
+		uint8_t getCharacterWidthFromUTF8(const uint8_t utf8[MAXIMUM_UTF8_BYTES_PER_CHARACTER]);
 		string getFilePath();
 		bool setFilePath(string newFilePath);
 	};

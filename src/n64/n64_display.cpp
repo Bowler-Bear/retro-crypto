@@ -1,5 +1,7 @@
+#include <cstring>
 #include <display.h>
 #include <graphics.h>
+#include <memory>
 
 #include "n64_display.h"
 #include "scaled_character_drawing.h"
@@ -41,6 +43,7 @@ N64Display::N64Display()
 	viewportOffsetX = 0;
 	viewportOffsetY = 0;
 	characterScale = 1;
+	unifont = nullptr;
 }
 
 N64Display::~N64Display()
@@ -86,10 +89,67 @@ void N64Display::drawTextBox(const TextBox& textBox)
 		return;
 	if (textBox.isBordered())
 		drawBox(textBox);
+	int displayedCharacters = 0;
+	uint8_t* characterSizes = (uint8_t*) malloc(textBox.text.length());
 	for (int i = 0; i < (int)textBox.text.length(); i++)
 	{
-		drawCharacter(textBox.xPosition+1+i+(textBox.width-(int)textBox.text.length())/2, textBox.yPosition+textBox.height/2, textBox.text[i]);
+		displayedCharacters++;
+		characterSizes[i] = 1;
+		int expectedCodePoints = 0;
+		if ((textBox.text[i] & 0x80) == 0)
+		{
+			continue;
+		}
+		else if ((textBox.text[i] & 0xe0) == 0xc0)
+		{
+			expectedCodePoints = 1;
+		}
+		else if ((textBox.text[i] & 0xf0) == 0xe0)
+		{
+			expectedCodePoints = 2;
+		}
+		else if ((textBox.text[i] & 0xf8) == 0xf0)
+		{
+			expectedCodePoints = 3;
+		}
+		int startI = i;
+		int finalIndex = i+1+expectedCodePoints;
+		for (int j = i+1; j < finalIndex; j++)
+		{
+			if (j < (int)textBox.text.length() && (textBox.text[j] & 0xc0) == 0x80)
+			{
+				characterSizes[startI]++;
+				characterSizes[j] = 0;
+				i++;
+				continue;
+			}
+			break;
+		}
+		unsigned char utf8[MAXIMUM_UTF8_BYTES_PER_CHARACTER] = { 0 };
+		memcpy(utf8, &textBox.text[startI], characterSizes[startI]);
+		if (unifont)
+		{
+			displayedCharacters += (unifont->getCharacterWidthFromUTF8(utf8)/N64_CHARACTER_PIXEL_WIDTH)-1;
+		}
 	}
+	int startX = textBox.xPosition+1+((textBox.width-displayedCharacters)/2);
+	displayedCharacters = 0;
+	for (int i = 0; i < (int)textBox.text.length(); i++)
+	{
+		if (characterSizes[i] == 1)
+		{
+			drawCharacter(startX+displayedCharacters, textBox.yPosition+textBox.height/2, textBox.text[i]);
+			displayedCharacters += 1;
+		}
+		else if (characterSizes[i] > 1)
+		{
+			unsigned char utf8[MAXIMUM_UTF8_BYTES_PER_CHARACTER] = { 0 };
+			memcpy(utf8, &textBox.text[i], characterSizes[i]);
+			int drawnCharacterWidth = drawUnifontCharacter(startX+displayedCharacters, textBox.yPosition+textBox.height/2, utf8);
+			displayedCharacters += drawnCharacterWidth/N64_CHARACTER_PIXEL_WIDTH;
+		}
+	}
+	free(characterSizes);
 }
 
 void N64Display::drawQrBox(const QrBox& qrBox)
@@ -123,12 +183,34 @@ bool N64Display::isPositionVisible(const int x, const int y)
 	return x >= 0 && y >= 0 && x <= BASE_BORDER_BOX_WIDTH/characterScale && y < BASE_BORDER_BOX_HEIGHT/characterScale;
 }
 
+void N64Display::setUnifontHandler(std::shared_ptr<UnifontHandler> newUnifontHandler)
+{
+	unifont = newUnifontHandler;
+}
+
 void N64Display::drawCharacter(const int x, const int y, const char character)
 {
 	if (isPositionVisible(x-viewportOffsetX, y-viewportOffsetY))
 	{
 		graphics_draw_scaled_character(currentFrame, (x-viewportOffsetX)*characterScale*N64_CHARACTER_PIXEL_WIDTH, (y-viewportOffsetY)*characterScale*N64_CHARACTER_PIXEL_HEIGHT, character, characterScale);
 	}
+}
+
+int N64Display::drawUnifontCharacter(const int x, const int y, const unsigned char utf8[MAXIMUM_UTF8_BYTES_PER_CHARACTER])
+{
+	if (isPositionVisible(x-viewportOffsetX, y-viewportOffsetY))
+	{
+		if (!unifont)
+		{
+			drawCharacter(x, y, '?');
+			return N64_CHARACTER_PIXEL_WIDTH;
+		}
+		char bitmap[UNIFONT_16_WIDTH_BITMAP_SIZE] = { 0 };
+		uint8_t characterWidth = unifont->getBitmapFromUTF8((const uint8_t*)utf8, (uint8_t*)bitmap);
+		graphics_draw_scaled_unifont_bitmap(currentFrame, (x-viewportOffsetX)*characterScale*N64_CHARACTER_PIXEL_WIDTH, (y-viewportOffsetY)*characterScale*N64_CHARACTER_PIXEL_HEIGHT, bitmap, characterWidth, characterScale);
+		return characterWidth;
+	}
+	return 0;
 }
 
 void N64Display::increaseCharacterScale()

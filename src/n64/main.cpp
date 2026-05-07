@@ -10,6 +10,10 @@ int main()
 
 	RetroCrypto::CoreSystem& coreSystem = RetroCrypto::CoreSystem::getCoreSystem();
 	std::shared_ptr<N64Display> display = std::make_shared<N64Display>();
+	std::shared_ptr<UnifontHandler> unifontHandler = coreSystem.getUnifontHandler();
+	unifontHandler->setFilePath("rom://reduced_unifont.hex");
+	dfs_init( DFS_DEFAULT_LOCATION );
+	display->setUnifontHandler(unifontHandler);
 	std::shared_ptr<N64Capturer> capturer = std::make_shared<N64Capturer>();
 	capturer->setDisplay(display);
 	coreSystem.setDisplay(display);

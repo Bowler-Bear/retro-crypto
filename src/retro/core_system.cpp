@@ -11,6 +11,7 @@ CoreSystem::CoreSystem()
 	menuSystem = MenuSystem::getMenuSystem();
 	inputSystem = InputSystem::getInputSystem();
 	rng = static_pointer_cast<IRandomNumberGenerator>(make_shared<CRNG>());
+	unifontHandler = make_shared<UnifontHandler>();
 }
 
 CoreSystem::~CoreSystem()
@@ -50,6 +51,11 @@ void CoreSystem::setRandomNumberGenerator(std::shared_ptr<IRandomNumberGenerator
 std::shared_ptr<IRandomNumberGenerator> CoreSystem::getRandomNumberGenerator()
 {
 	return rng;
+}
+
+std::shared_ptr<UnifontHandler> CoreSystem::getUnifontHandler()
+{
+	return unifontHandler;
 }
 
 void CoreSystem::tick()
