@@ -28,6 +28,8 @@ WORKDIR "${retro_crypto_dir}"
 
 COPY "./src" "./src"
 
+COPY "./filesystem" "./filesystem"
+
 COPY "./tests" "./tests"
 
 COPY "./Makefile" "./"
