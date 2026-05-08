@@ -5,6 +5,7 @@
 
 #define ENTER_KEY 10
 #define ESC_KEY 27
+#define SPACE_KEY 32
 #define A_KEY 65
 #define B_KEY 66
 #define C_KEY 67
@@ -68,6 +69,9 @@ void CLICapturer::checkInputThroughCIN()
 			case S_KEY:
 			case s_KEY:
 				lastInput = InputType::DOWN;
+				break;
+			case SPACE_KEY:
+				lastInput = InputType::SHOW_NEXT_ALT_MENU;
 				break;
 			case BACKSPACE_KEY:
 				lastInput = InputType::BACK;
