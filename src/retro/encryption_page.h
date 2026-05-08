@@ -27,7 +27,8 @@ namespace RetroCrypto
 		INPUT_KEY,
 		INPUT_IV,
 		PROCESSING,
-		OUTPUT_DATA
+		OUTPUT_DATA,
+		SHOW_CHARACTERS
 	};
 
 	enum EncryptionMode : uint8_t
@@ -46,6 +47,7 @@ namespace RetroCrypto
 		EncryptionState currentState;
 		EncryptionMode currentMode;
 		shared_ptr<Menu> modeSelectionMenu;
+		shared_ptr<Menu> characterList;
 		uint32_t modifiedDataIndex;
 		uint8_t* inputData;
 		uint32_t inputDataSize;
@@ -82,6 +84,7 @@ namespace RetroCrypto
 		void drawDataInput(shared_ptr<IDisplay> display, uint8_t* data = nullptr, uint32_t dataSize = 0);
 		void drawSizeInput(shared_ptr<IDisplay> display, uint32_t* size = nullptr);
 		void drawModeSelect(shared_ptr<IDisplay> display);
+		void drawCharacterList(shared_ptr<IDisplay> display);
 		void setCurrentState(EncryptionState newState);
 		void updateTitle();
 		void clearDescription();

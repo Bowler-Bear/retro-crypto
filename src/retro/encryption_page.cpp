@@ -136,6 +136,7 @@ EncryptionPage::EncryptionPage()
 		shared_ptr<MenuOption> option = make_shared<MenuOption>(modeSelectionMenu, encryptionModeToTitle((EncryptionMode)i), encryptionModeToTitle((EncryptionMode)i)+" mode.");
 		modeSelectionMenu->addOption(option);
 	}
+	characterList = make_shared<Menu>("Characters", nullptr);
 }
 
 EncryptionPage::EncryptionPage(string inTitle, std::shared_ptr<MenuTreeObject> inParent)
@@ -149,6 +150,7 @@ EncryptionPage::EncryptionPage(string inTitle, std::shared_ptr<MenuTreeObject> i
 		shared_ptr<MenuOption> option = make_shared<MenuOption>(modeSelectionMenu, encryptionModeToTitle((EncryptionMode)i), encryptionModeToTitle((EncryptionMode)i)+" mode.");
 		modeSelectionMenu->addOption(option);
 	}
+	characterList = make_shared<Menu>("Characters", nullptr);
 }
 
 EncryptionPage::~EncryptionPage()
@@ -355,6 +357,12 @@ bool EncryptionPage::consumeInput(InputType input)
 			return true;
 		}
 		return false;
+	case SHOW_CHARACTERS:
+		if (input == BACK)
+		{
+			currentState = INPUT_DATA;
+			return true;
+		}
 	}
 	return true;
 }
@@ -409,7 +417,58 @@ void EncryptionPage::updateSelectedOption(InputType input)
 			break;
 		}
 		break;
+	case SHOW_CHARACTERS:
+		switch (input)
+		{
+		case InputType::SHOW_PREVIOUS_ALT_MENU:
+			currentState = INPUT_DATA;
+			return;
+		case InputType::UP:
+		case InputType::DOWN:
+			characterList->updateSelectedOption(input);
+			break;
+		default:
+			break;
+		}
+		break;
 	case INPUT_DATA:
+		switch (input)
+		{
+		case InputType::SHOW_NEXT_ALT_MENU:
+			currentState = SHOW_CHARACTERS;
+			if (characterList->getOptionCount() == 0)
+			{
+				std::shared_ptr<UnifontHandler> unifontHandler = CoreSystem::getCoreSystem().getUnifontHandler();
+				if (!unifontHandler)
+					return;
+				if (!unifontHandler->getCharacterPositionsLoaded())
+				{
+					unifontHandler->loadCharacterPositions();
+				}
+				map<uint16_t, uint32_t> characters = unifontHandler->getCharacterPositions();
+				uint8_t characterCount = min((int)characters.size(), 0xff);
+				map<uint16_t, uint32_t>::const_iterator it = characters.begin();
+				for (uint8_t i = 0; i < characterCount; i++, it++)
+				{
+					char buffer[25] = { 0 };
+					uint16_t codePoint = it->first;
+					uint8_t utf8[MAXIMUM_UTF8_BYTES_PER_CHARACTER] = { 0 };
+					uint8_t byteCount = unifontHandler->unicodeCodePointToUTF8Bytes(codePoint, utf8);
+					strcat(buffer, (const char*)utf8);
+					sprintf(&buffer[byteCount], ":U%04X(0x", codePoint);
+					for (uint8_t i = 0; i < byteCount; i++)
+					{
+						sprintf(&buffer[byteCount+9+i*2], "%02X", utf8[i]);
+					}
+					strcat(buffer, ")");
+					shared_ptr<MenuOption> option = make_shared<MenuOption>(characterList, buffer, "");
+					characterList->addOption(option);
+				}
+			}
+			return;
+		default:
+			break;
+		}
 	case INPUT_KEY:
 	case INPUT_IV:
 	case OUTPUT_DATA:
@@ -674,6 +733,9 @@ void EncryptionPage::drawInput(shared_ptr<IDisplay> display)
 	case OUTPUT_DATA:
 		drawDataInput(display, outputData, inputDataSize);
 		break;
+	case SHOW_CHARACTERS:
+		drawCharacterList(display);
+		break;
 	}
 }
 
@@ -741,7 +803,7 @@ void EncryptionPage::drawDataInput(shared_ptr<IDisplay> display, uint8_t* data, 
 
 void EncryptionPage::drawTitle(shared_ptr<IDisplay> display)
 {
-	if (currentState != SELECT_MODE)
+	if (currentState != SELECT_MODE && currentState != SHOW_CHARACTERS)
 	{
 		Page::drawTitle(display);
 	}
@@ -766,6 +828,11 @@ void EncryptionPage::drawSizeInput(shared_ptr<IDisplay> display, uint32_t* size)
 void EncryptionPage::drawModeSelect(shared_ptr<IDisplay> display)
 {
 	modeSelectionMenu->draw(display);
+}
+
+void EncryptionPage::drawCharacterList(shared_ptr<IDisplay> display)
+{
+	characterList->draw(display);
 }
 
 void EncryptionPage::setCurrentState(EncryptionState newState)
