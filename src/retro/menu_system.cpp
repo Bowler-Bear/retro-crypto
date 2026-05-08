@@ -62,6 +62,8 @@ void MenuSystem::processInput(InputType input)
 	case InputType::DOWN:
 	case InputType::LEFT:
 	case InputType::RIGHT:
+	case InputType::SHOW_NEXT_ALT_MENU:
+	case InputType::SHOW_PREVIOUS_ALT_MENU:
 		currentMenuPosition->updateSelectedOption(input);
 		break;
 	case InputType::FORWARD:

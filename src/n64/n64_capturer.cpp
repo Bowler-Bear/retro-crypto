@@ -55,6 +55,14 @@ InputType N64Capturer::getInput()
 		{
 			return InputType::RIGHT;
 		}
+		else if (data.c[i].C_left)
+		{
+			return InputType::SHOW_PREVIOUS_ALT_MENU;
+		}
+		else if (data.c[i].C_right)
+		{
+			return InputType::SHOW_NEXT_ALT_MENU;
+		}
 		if (data.c[i].C_up && display)
 		{
 			display->increaseCharacterScale();

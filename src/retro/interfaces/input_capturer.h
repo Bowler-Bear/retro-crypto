@@ -11,7 +11,9 @@ namespace RetroCrypto
 		LEFT,
 		RIGHT,
 		FORWARD,
-		BACK
+		BACK,
+		SHOW_NEXT_ALT_MENU,
+		SHOW_PREVIOUS_ALT_MENU
 	};
 
 	class IInputCapturer
