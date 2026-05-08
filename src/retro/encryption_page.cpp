@@ -373,6 +373,7 @@ void EncryptionPage::updateSelectedOption(InputType input)
 	uint8_t* data = nullptr;
 	uint32_t* sizePointer = nullptr;
 	uint32_t sizeIncrement = encryptionModeIncrementSize(currentMode);
+	const bool showCurrentLineInDescription = true;
 	switch (currentState)
 	{
 	default:
@@ -511,6 +512,17 @@ void EncryptionPage::updateSelectedOption(InputType input)
 			break;
 		default:
 			break;
+		}
+		if (showCurrentLineInDescription)
+		{
+			char buffer[EP_BYTES_PER_LINE+1] = { 0 };
+			memcpy(buffer, &data[((modifiedDataIndex/EP_CHARACTERS_PER_BYTE)/EP_BYTES_PER_LINE)*EP_BYTES_PER_LINE], min((uint32_t)EP_BYTES_PER_LINE, ((maxIndex+1)/EP_CHARACTERS_PER_BYTE)-((modifiedDataIndex/EP_CHARACTERS_PER_BYTE)/EP_BYTES_PER_LINE)*EP_BYTES_PER_LINE));
+			for (uint8_t i = 0; i < EP_BYTES_PER_LINE; i++)
+			{
+				if (buffer[i] == 0)
+					buffer[i] = 0x20;
+			}
+			description = buffer;
 		}
 		break;
 	case INPUT_DATA_SIZE:
