@@ -7,7 +7,7 @@ int main()
 {
 	RetroCrypto::CoreSystem& coreSystem = RetroCrypto::CoreSystem::getCoreSystem();
 	std::shared_ptr<UnifontHandler> unifontHandler = coreSystem.getUnifontHandler();
-	char* potentialUnifontLocations[] = { "./reduced_unifont.hex", "../reduced_unifont.hex", "../filesystem/reduced_unifont.hex" };
+	const char* potentialUnifontLocations[] = { "./reduced_unifont.hex", "../reduced_unifont.hex", "../filesystem/reduced_unifont.hex" };
 	for (int i = 0 ; i < sizeof(potentialUnifontLocations)/sizeof(char*); i++)
 	{
 		if (FILE* file = fopen(potentialUnifontLocations[i], "r"))
