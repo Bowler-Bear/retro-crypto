@@ -99,6 +99,64 @@ BOOST_AUTO_TEST_CASE( get_all_bitmap_positions )
 	BOOST_REQUIRE( returnedMap[0x3053] == 542 );
 }
 
+BOOST_AUTO_TEST_CASE( unicodeCodePointToUTF8Bytes_null_pointer )
+{
+	UnifontHandler handler(testFile);
+	uint8_t outBytes = handler.unicodeCodePointToUTF8Bytes(0x00f3, nullptr);
+	BOOST_REQUIRE( outBytes == 0);
+}
+
+BOOST_AUTO_TEST_CASE( code_points_to_utf8_bytes )
+{
+	UnifontHandler handler(testFile);
+	uint8_t utf8[MAXIMUM_UTF8_BYTES_PER_CHARACTER] = { 0 };
+	uint8_t outBytes = handler.unicodeCodePointToUTF8Bytes(0x00f3, utf8);
+	BOOST_REQUIRE( memcmp( utf8, "\u00f3", outBytes) == 0);
+	memset(utf8, 0, MAXIMUM_UTF8_BYTES_PER_CHARACTER);
+	outBytes = handler.unicodeCodePointToUTF8Bytes(0x00f6, utf8);
+	BOOST_REQUIRE( memcmp( utf8, "\u00f6", outBytes) == 0);
+	memset(utf8, 0, MAXIMUM_UTF8_BYTES_PER_CHARACTER);
+	outBytes = handler.unicodeCodePointToUTF8Bytes(0x00fa, utf8);
+	BOOST_REQUIRE( memcmp( utf8, "\u00fa", outBytes) == 0);
+	memset(utf8, 0, MAXIMUM_UTF8_BYTES_PER_CHARACTER);
+	outBytes = handler.unicodeCodePointToUTF8Bytes(0x00fc, utf8);
+	BOOST_REQUIRE( memcmp( utf8, "\u00fc", outBytes) == 0);
+	memset(utf8, 0, MAXIMUM_UTF8_BYTES_PER_CHARACTER);
+	outBytes = handler.unicodeCodePointToUTF8Bytes(0x0430, utf8);
+	BOOST_REQUIRE( memcmp( utf8, "\u0430", outBytes) == 0);
+	memset(utf8, 0, MAXIMUM_UTF8_BYTES_PER_CHARACTER);
+	outBytes = handler.unicodeCodePointToUTF8Bytes(0x0431, utf8);
+	BOOST_REQUIRE( memcmp( utf8, "\u0431", outBytes) == 0);
+	memset(utf8, 0, MAXIMUM_UTF8_BYTES_PER_CHARACTER);
+	outBytes = handler.unicodeCodePointToUTF8Bytes(0x0432, utf8);
+	BOOST_REQUIRE( memcmp( utf8, "\u0432", outBytes) == 0);
+	memset(utf8, 0, MAXIMUM_UTF8_BYTES_PER_CHARACTER);
+	outBytes = handler.unicodeCodePointToUTF8Bytes(0x0433, utf8);
+	BOOST_REQUIRE( memcmp( utf8, "\u0433", outBytes) == 0);
+	memset(utf8, 0, MAXIMUM_UTF8_BYTES_PER_CHARACTER);
+	outBytes = handler.unicodeCodePointToUTF8Bytes(0x0434, utf8);
+	BOOST_REQUIRE( memcmp( utf8, "\u0434", outBytes) == 0);
+	memset(utf8, 0, MAXIMUM_UTF8_BYTES_PER_CHARACTER);
+	outBytes = handler.unicodeCodePointToUTF8Bytes(0x3052, utf8);
+	BOOST_REQUIRE( memcmp( utf8, "\u3052", outBytes) == 0);
+	memset(utf8, 0, MAXIMUM_UTF8_BYTES_PER_CHARACTER);
+	outBytes = handler.unicodeCodePointToUTF8Bytes(0x3053, utf8);
+	BOOST_REQUIRE( memcmp( utf8, "\u3053", outBytes) == 0);
+	memset(utf8, 0, MAXIMUM_UTF8_BYTES_PER_CHARACTER);
+	outBytes = handler.unicodeCodePointToUTF8Bytes(0x3054, utf8);
+	BOOST_REQUIRE( memcmp( utf8, "\u3054", outBytes) == 0);
+	memset(utf8, 0, MAXIMUM_UTF8_BYTES_PER_CHARACTER);
+	outBytes = handler.unicodeCodePointToUTF8Bytes(0x3055, utf8);
+	BOOST_REQUIRE( memcmp( utf8, "\u3055", outBytes) == 0);
+	memset(utf8, 0, MAXIMUM_UTF8_BYTES_PER_CHARACTER);
+	outBytes = handler.unicodeCodePointToUTF8Bytes(0x3058, utf8);
+	BOOST_REQUIRE( memcmp( utf8, "\u3058", outBytes) == 0);
+	memset(utf8, 0, MAXIMUM_UTF8_BYTES_PER_CHARACTER);
+	outBytes = handler.unicodeCodePointToUTF8Bytes(0x3059, utf8);
+	BOOST_REQUIRE( memcmp( utf8, "\u3059", outBytes) == 0);
+	memset(utf8, 0, MAXIMUM_UTF8_BYTES_PER_CHARACTER);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 
 #endif

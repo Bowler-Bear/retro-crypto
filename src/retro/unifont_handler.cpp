@@ -93,6 +93,31 @@ map<uint16_t, uint32_t> UnifontHandler::getCharacterPositions()
 	return characterPositions;
 }
 
+uint8_t UnifontHandler::unicodeCodePointToUTF8Bytes(uint16_t codePoint, uint8_t utf8[MAXIMUM_UTF8_BYTES_PER_CHARACTER])
+{
+	if (utf8 == nullptr)
+		return 0;
+	if (codePoint <= 0x007f)
+	{
+		utf8[0] = codePoint;
+		return 1;
+	}
+	else if (codePoint >= 0x0080 && codePoint <= 0x07ff)
+	{
+		utf8[0] = 0xc0 | ((codePoint & 0xf00) >> 6) | ((codePoint & 0xf0) >> 6);
+		utf8[1] = 0x80 | (codePoint & 0x30) | (codePoint & 0xf);
+		return 2;
+	}
+	else if (codePoint >= 0x0800 && codePoint <= 0xffff)
+	{
+		utf8[0] = 0xe0 | ((codePoint & 0xf000) >> 12);
+		utf8[1] = 0x80 | ((codePoint & 0xf00) >> 6) | ((codePoint & 0xf0) >> 6);
+		utf8[2] = 0x80 | (codePoint & 0x30) | (codePoint & 0xf);
+		return 3;
+	}
+	return 0;
+}
+
 uint16_t UnifontHandler::unicodeCodePointFromUTF8Bytes(const uint8_t utf8[MAXIMUM_UTF8_BYTES_PER_CHARACTER])
 {
 	uint16_t codePoint = REPLACEMENT_CHARACTER_CODE_POINT_VALUE;

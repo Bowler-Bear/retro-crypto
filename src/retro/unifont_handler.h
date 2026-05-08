@@ -33,6 +33,7 @@ namespace RetroCrypto
 		bool getCharacterPositionsLoaded();
 		void loadCharacterPositions();
 		map<uint16_t, uint32_t> getCharacterPositions();
+		uint8_t unicodeCodePointToUTF8Bytes(uint16_t codePoint, uint8_t utf8[MAXIMUM_UTF8_BYTES_PER_CHARACTER]);
 		uint16_t unicodeCodePointFromUTF8Bytes(const uint8_t utf8[MAXIMUM_UTF8_BYTES_PER_CHARACTER]);
 		uint8_t getBitmapFromUTF8(const uint8_t utf8[MAXIMUM_UTF8_BYTES_PER_CHARACTER], uint8_t bitmap[MAXIMUM_UNIFONT_BITMAP_SIZE]);
 		uint8_t getCharacterWidthFromUTF8(const uint8_t utf8[MAXIMUM_UTF8_BYTES_PER_CHARACTER]);
