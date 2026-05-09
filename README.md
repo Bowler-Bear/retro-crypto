@@ -13,6 +13,8 @@ A multi coin crypto seed and address library meant to be easily ported to retro 
 |BACKWARD|backspace|B|
 |ZOOM IN|-|c up|
 |ZOOM OUT|-|c down|
+|EXIT CHARACTER LIST|backspace|c left|
+|VIEW CHARACTER LIST|space|c right|
 |MOVE VIEWPORT|-|analog stick|
 |CENTER VIEWPORT|-|start|
 
@@ -49,6 +51,16 @@ To build the binaries for **command line interface** and **nintendo 64**, run:
 `docker build --tag 'retro-crypto' --output=./bin .`
 
 The resulting files will be in the bin folder.
+
+
+## Adding or Removing Unicode Character Support ##
+The N64 build makes use of unicode characters through a modified unifont bitmap file. The [reduced_unifont.hex](./filesystem/reduced_unifont.hex) file contains the character values and their respective bitmaps on each line. Their lines can be manually added(from the original unifont file) or removed to add or remove support for those characters. Any character not supported will be displayed as a replacement character(U+FFFD). Care must be taken to keep each line containing only the unicode code point, a colon, and the hexadecimal bitmap. Failing to keep this structure may result in a parsing error, which will cause the characters to not display properly. A reduced\_unifont.hex file can also be generated automatically by running the [extract_characters.sh](./unifont/extract_characters.sh) script with the first argument being the list of characters to be included in the reduced unifont file. An example command for this is:
+
+`./extract_characters.sh "óúñабвь"`
+
+To generate a unifont file containing only the characters required for monero mnemonics, simply run the script with no arguments:
+
+`./extract_characters.sh`
 
 
 ### Importing Private Keys into [Bitcoin Core Wallet](https://github.com/bitcoin/bitcoin) ###
