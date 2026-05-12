@@ -8,6 +8,7 @@ MenuOption::MenuOption(const std::shared_ptr<Menu> menu, const std::string& labe
 {
 	parent = menu;
 	onSelectedFunction = nullptr;
+	disabled = false;
 }
 
 void MenuOption::setDestination(std::shared_ptr<MenuTreeObject> destination)

@@ -109,15 +109,19 @@ void Menu::updateSelectedOption(InputType input)
 	}
 	int8_t addition = input == InputType::UP ? -1 : 1;
 	uint8_t newOptionIndex = (selectedOptionIndex + addition + optionCount) % optionCount;
-	do
+	uint8_t iterationCount = 1;
+	while(options[newOptionIndex]->getDisabled())
 	{
-		if (!options[newOptionIndex]->getDisabled())
+		if (iterationCount >= 0xff)
 		{
-			selectedOptionIndex = newOptionIndex;
 			return;
 		}
-		newOptionIndex = (selectedOptionIndex + addition + optionCount) % optionCount;
-	} while(newOptionIndex != selectedOptionIndex);
+		else
+		{
+			iterationCount++;
+		}
+		newOptionIndex = (newOptionIndex + addition + optionCount) % optionCount;
+	}
 	selectedOptionIndex = newOptionIndex;
 }
 
