@@ -3,25 +3,39 @@
 
 #include "legacy_monero_mnemonic.h"
 #include "monero_english_words.h"
+#if INCLUDE_SPANISH_MONERO_MNEMONIC
 #include "monero_spanish_words.h"
+#endif
+#if INCLUDE_FRENCH_MONERO_MNEMONIC
 #include "monero_french_words.h"
+#endif
+#if INCLUDE_ITALIAN_MONERO_MNEMONIC
 #include "monero_italian_words.h"
+#endif
 #if INCLUDE_DUTCH_MONERO_MNEMONIC
 #include "monero_dutch_words.h"
 #endif
 #if INCLUDE_PORTUGUESE_MONERO_MNEMONIC
 #include "monero_portuguese_words.h"
 #endif
+#if INCLUDE_RUSSIAN_MONERO_MNEMONIC
 #include "monero_russian_words.h"
+#endif
+#if INCLUDE_JAPANESE_MONERO_MNEMONIC
 #include "monero_japanese_words.h"
+#endif
+#if INCLUDE_CHINESE_MONERO_MNEMONIC
 #include "monero_chinese_words.h"
+#endif
 #if INCLUDE_ESPERANTO_MONERO_MNEMONIC
 #include "monero_esperanto_words.h"
 #endif
 #if INCLUDE_LOJBAN_MONERO_MNEMONIC
 #include "monero_lojban_words.h"
 #endif
+#if INCLUDE_GERMAN_MONERO_MNEMONIC
 #include "monero_german_words.h"
+#endif
 #include "memzero.h"
 #include "crc.h"
 
@@ -31,12 +45,18 @@ const char** legacy_monero_mnemonic_get_word_list(enum MoneroLanguage language) 
     switch(language) {
     case MoneroEnglish:
         return monero_english_words;
+#if INCLUDE_SPANISH_MONERO_MNEMONIC
     case MoneroSpanish:
         return monero_spanish_words;
+#endif
+#if INCLUDE_FRENCH_MONERO_MNEMONIC
     case MoneroFrench:
         return monero_french_words;
+#endif
+#if INCLUDE_ITALIAN_MONERO_MNEMONIC
     case MoneroItalian:
         return monero_italian_words;
+#endif
 #if INCLUDE_DUTCH_MONERO_MNEMONIC
     case MoneroDutch:
         return monero_dutch_words;
@@ -45,12 +65,18 @@ const char** legacy_monero_mnemonic_get_word_list(enum MoneroLanguage language) 
     case MoneroPortuguese:
         return monero_portuguese_words;
 #endif
+#if INCLUDE_RUSSIAN_MONERO_MNEMONIC
     case MoneroRussian:
         return monero_russian_words;
+#endif
+#if INCLUDE_JAPANESE_MONERO_MNEMONIC
     case MoneroJapanese:
         return monero_japanese_words;
+#endif
+#if INCLUDE_CHINESE_MONERO_MNEMONIC
     case MoneroChinese:
         return monero_chinese_words;
+#endif
 #if INCLUDE_ESPERANTO_MONERO_MNEMONIC
     case MoneroEsperanto:
         return monero_esperanto_words;
@@ -59,8 +85,10 @@ const char** legacy_monero_mnemonic_get_word_list(enum MoneroLanguage language) 
     case MoneroLojban:
         return monero_lojban_words;
 #endif
+#if INCLUDE_GERMAN_MONERO_MNEMONIC
     case MoneroGerman:
         return monero_german_words;
+#endif
     default:
         return 0;
     }

@@ -95,10 +95,14 @@ MenuTree::MenuTree()
 					showBIP39Option->setOnSelectedFunction(&setBIP39MnemonicContext);
 					shared_ptr<MenuOption> showMoneroEnglishPhraseOption = make_shared<MenuOption>(showPhrasesMenu, "Legacy Monero English", "Show legacy monero english seed phrase for this seed.");
 					showMoneroEnglishPhraseOption->setOnSelectedFunction(&setLegacyMoneroEnglishMnemonicContext);
+#if INCLUDE_FRENCH_MONERO_MNEMONIC
 					shared_ptr<MenuOption> showMoneroFrenchPhraseOption = make_shared<MenuOption>(showPhrasesMenu, "Legacy Monero French", "Show legacy monero french seed phrase for this seed.");
 					showMoneroFrenchPhraseOption->setOnSelectedFunction(&setLegacyMoneroFrenchMnemonicContext);
+#endif
+#if INCLUDE_ITALIAN_MONERO_MNEMONIC
 					shared_ptr<MenuOption> showMoneroItalianPhraseOption = make_shared<MenuOption>(showPhrasesMenu, "Legacy Monero Italian", "Show legacy monero italian seed phrase for this seed.");
 					showMoneroItalianPhraseOption->setOnSelectedFunction(&setLegacyMoneroItalianMnemonicContext);
+#endif
 #if INCLUDE_DUTCH_MONERO_MNEMONIC
 					shared_ptr<MenuOption> showMoneroDutchPhraseOption = make_shared<MenuOption>(showPhrasesMenu, "Legacy Monero Dutch", "Show legacy monero dutch seed phrase for this seed.");
 					showMoneroDutchPhraseOption->setOnSelectedFunction(&setLegacyMoneroDutchMnemonicContext);
@@ -108,16 +112,26 @@ MenuTree::MenuTree()
 					showMoneroPortuguesePhraseOption->setOnSelectedFunction(&setLegacyMoneroPortugueseMnemonicContext);
 #endif
 #if UTF8_COMPAT_BUILD
+#if INCLUDE_GERMAN_MONERO_MNEMONIC
 					shared_ptr<MenuOption> showMoneroGermanPhraseOption = make_shared<MenuOption>(showPhrasesMenu, "Legacy Monero German", "Show legacy monero german seed phrase for this seed.");
 					showMoneroGermanPhraseOption->setOnSelectedFunction(&setLegacyMoneroGermanMnemonicContext);
+#endif
+#if INCLUDE_SPANISH_MONERO_MNEMONIC
 					shared_ptr<MenuOption> showMoneroSpanishPhraseOption = make_shared<MenuOption>(showPhrasesMenu, "Legacy Monero Spanish", "Show legacy monero spanish seed phrase for this seed.");
 					showMoneroSpanishPhraseOption->setOnSelectedFunction(&setLegacyMoneroSpanishMnemonicContext);
+#endif
+#if INCLUDE_RUSSIAN_MONERO_MNEMONIC
 					shared_ptr<MenuOption> showMoneroRussianPhraseOption = make_shared<MenuOption>(showPhrasesMenu, "Legacy Monero Russian", "Show legacy monero russian seed phrase for this seed.");
 					showMoneroRussianPhraseOption->setOnSelectedFunction(&setLegacyMoneroRussianMnemonicContext);
+#endif
+#if INCLUDE_JAPANESE_MONERO_MNEMONIC
 					shared_ptr<MenuOption> showMoneroJapanesePhraseOption = make_shared<MenuOption>(showPhrasesMenu, "Legacy Monero Japanese", "Show legacy monero japanese seed phrase for this seed.");
 					showMoneroJapanesePhraseOption->setOnSelectedFunction(&setLegacyMoneroJapaneseMnemonicContext);
+#endif
+#if INCLUDE_CHINESE_MONERO_MNEMONIC
 					shared_ptr<MenuOption> showMoneroChinesePhraseOption = make_shared<MenuOption>(showPhrasesMenu, "Legacy Monero Chinese", "Show legacy monero chinese seed phrase for this seed.");
 					showMoneroChinesePhraseOption->setOnSelectedFunction(&setLegacyMoneroChineseMnemonicContext);
+#endif
 #endif
 #if INCLUDE_ESPERANTO_MONERO_MNEMONIC
 					shared_ptr<MenuOption> showMoneroEsperantoPhraseOption = make_shared<MenuOption>(showPhrasesMenu, "Legacy Monero Esperanto", "Show legacy monero esperanto seed phrase for this seed.");
@@ -129,12 +143,12 @@ MenuTree::MenuTree()
 #endif
 					showPhrasesMenu->addOption(showBIP39Option);
 					showPhrasesMenu->addOption(showMoneroEnglishPhraseOption);
-#if UTF8_COMPAT_BUILD
-					showPhrasesMenu->addOption(showMoneroGermanPhraseOption);
-					showPhrasesMenu->addOption(showMoneroSpanishPhraseOption);
-#endif
+#if INCLUDE_FRENCH_MONERO_MNEMONIC
 					showPhrasesMenu->addOption(showMoneroFrenchPhraseOption);
+#endif
+#if INCLUDE_ITALIAN_MONERO_MNEMONIC
 					showPhrasesMenu->addOption(showMoneroItalianPhraseOption);
+#endif
 #if INCLUDE_DUTCH_MONERO_MNEMONIC
 					showPhrasesMenu->addOption(showMoneroDutchPhraseOption);
 #endif
@@ -142,9 +156,21 @@ MenuTree::MenuTree()
 					showPhrasesMenu->addOption(showMoneroPortuguesePhraseOption);
 #endif
 #if UTF8_COMPAT_BUILD
+#if INCLUDE_GERMAN_MONERO_MNEMONIC
+					showPhrasesMenu->addOption(showMoneroGermanPhraseOption);
+#endif
+#if INCLUDE_SPANISH_MONERO_MNEMONIC
+					showPhrasesMenu->addOption(showMoneroSpanishPhraseOption);
+#endif
+#if INCLUDE_RUSSIAN_MONERO_MNEMONIC
 					showPhrasesMenu->addOption(showMoneroRussianPhraseOption);
+#endif
+#if INCLUDE_JAPANESE_MONERO_MNEMONIC
 					showPhrasesMenu->addOption(showMoneroJapanesePhraseOption);
+#endif
+#if INCLUDE_CHINESE_MONERO_MNEMONIC
 					showPhrasesMenu->addOption(showMoneroChinesePhraseOption);
+#endif
 #endif
 #if INCLUDE_ESPERANTO_MONERO_MNEMONIC
 					showPhrasesMenu->addOption(showMoneroEsperantoPhraseOption);
@@ -157,8 +183,12 @@ MenuTree::MenuTree()
 						addressPage->setBackwardAction(&clearMnemonicTypeContext);
 						showBIP39Option->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
 						showMoneroEnglishPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
+#if INCLUDE_FRENCH_MONERO_MNEMONIC
 						showMoneroFrenchPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
+#endif
+#if INCLUDE_ITALIAN_MONERO_MNEMONIC
 						showMoneroItalianPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
+#endif
 #if INCLUDE_DUTCH_MONERO_MNEMONIC
 						showMoneroDutchPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
 #endif
@@ -166,11 +196,21 @@ MenuTree::MenuTree()
 						showMoneroPortuguesePhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
 #endif
 #if UTF8_COMPAT_BUILD
+#if INCLUDE_GERMAN_MONERO_MNEMONIC
 						showMoneroGermanPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
+#endif
+#if INCLUDE_SPANISH_MONERO_MNEMONIC
 						showMoneroSpanishPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
+#endif
+#if INCLUDE_RUSSIAN_MONERO_MNEMONIC
 						showMoneroRussianPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
+#endif
+#if INCLUDE_JAPANESE_MONERO_MNEMONIC
 						showMoneroJapanesePhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
+#endif
+#if INCLUDE_CHINESE_MONERO_MNEMONIC
 						showMoneroChinesePhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
+#endif
 #endif
 #if INCLUDE_ESPERANTO_MONERO_MNEMONIC
 						showMoneroEsperantoPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
@@ -229,10 +269,14 @@ MenuTree::MenuTree()
 		restoreFromBIP39Option->setOnSelectedFunction(&setBIP39MnemonicContext);
 		shared_ptr<MenuOption> restoreFromLegacyMoneroEnglishPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero English", "Restore seed bit from legacy monero english seed phrase.");
 		restoreFromLegacyMoneroEnglishPhraseOption->setOnSelectedFunction(&setLegacyMoneroEnglishMnemonicContext);
+#if INCLUDE_FRENCH_MONERO_MNEMONIC
 		shared_ptr<MenuOption> restoreFromLegacyMoneroFrenchPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero French", "Restore seed bit from legacy monero french seed phrase.");
 		restoreFromLegacyMoneroFrenchPhraseOption->setOnSelectedFunction(&setLegacyMoneroFrenchMnemonicContext);
+#endif
+#if INCLUDE_ITALIAN_MONERO_MNEMONIC
 		shared_ptr<MenuOption> restoreFromLegacyMoneroItalianPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero Italian", "Restore seed bit from legacy monero italian seed phrase.");
 		restoreFromLegacyMoneroItalianPhraseOption->setOnSelectedFunction(&setLegacyMoneroItalianMnemonicContext);
+#endif
 #if INCLUDE_DUTCH_MONERO_MNEMONIC
 		shared_ptr<MenuOption> restoreFromLegacyMoneroDutchPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero Dutch", "Restore seed bit from legacy monero dutch seed phrase.");
 		restoreFromLegacyMoneroDutchPhraseOption->setOnSelectedFunction(&setLegacyMoneroDutchMnemonicContext);
@@ -242,16 +286,26 @@ MenuTree::MenuTree()
 		restoreFromLegacyMoneroPortuguesePhraseOption->setOnSelectedFunction(&setLegacyMoneroPortugueseMnemonicContext);
 #endif
 #if UTF8_COMPAT_BUILD
+#if INCLUDE_GERMAN_MONERO_MNEMONIC
 		shared_ptr<MenuOption> restoreFromLegacyMoneroGermanPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero German", "Restore seed bit from legacy monero german seed phrase.");
 		restoreFromLegacyMoneroGermanPhraseOption->setOnSelectedFunction(&setLegacyMoneroGermanMnemonicContext);
+#endif
+#if INCLUDE_SPANISH_MONERO_MNEMONIC
 		shared_ptr<MenuOption> restoreFromLegacyMoneroSpanishPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero Spanish", "Restore seed bit from legacy monero spanish seed phrase.");
 		restoreFromLegacyMoneroSpanishPhraseOption->setOnSelectedFunction(&setLegacyMoneroSpanishMnemonicContext);
+#endif
+#if INCLUDE_RUSSIAN_MONERO_MNEMONIC
 		shared_ptr<MenuOption> restoreFromLegacyMoneroRussianPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero Russian", "Restore seed bit from legacy monero russian seed phrase.");
 		restoreFromLegacyMoneroRussianPhraseOption->setOnSelectedFunction(&setLegacyMoneroRussianMnemonicContext);
+#endif
+#if INCLUDE_JAPANESE_MONERO_MNEMONIC
 		shared_ptr<MenuOption> restoreFromLegacyMoneroJapanesePhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero Japanese", "Restore seed bit from legacy monero japanese seed phrase.");
 		restoreFromLegacyMoneroJapanesePhraseOption->setOnSelectedFunction(&setLegacyMoneroJapaneseMnemonicContext);
+#endif
+#if INCLUDE_CHINESE_MONERO_MNEMONIC
 		shared_ptr<MenuOption> restoreFromLegacyMoneroChinesePhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero Chinese", "Restore seed bit from legacy monero chinese seed phrase.");
 		restoreFromLegacyMoneroChinesePhraseOption->setOnSelectedFunction(&setLegacyMoneroChineseMnemonicContext);
+#endif
 #endif
 #if INCLUDE_ESPERANTO_MONERO_MNEMONIC
 		shared_ptr<MenuOption> restoreFromLegacyMoneroEsperantoPhraseOption = make_shared<MenuOption>(pickPhraseTypeMenu, "Legacy Monero Esperanto", "Restore seed bit from legacy monero esperanto seed phrase.");
@@ -263,12 +317,12 @@ MenuTree::MenuTree()
 #endif
 		pickPhraseTypeMenu->addOption(restoreFromBIP39Option);
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroEnglishPhraseOption);
-#if UTF8_COMPAT_BUILD
-		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroGermanPhraseOption);
-		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroSpanishPhraseOption);
-#endif
+#if INCLUDE_FRENCH_MONERO_MNEMONIC
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroFrenchPhraseOption);
+#endif
+#if INCLUDE_ITALIAN_MONERO_MNEMONIC
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroItalianPhraseOption);
+#endif
 #if INCLUDE_DUTCH_MONERO_MNEMONIC
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroDutchPhraseOption);
 #endif
@@ -276,9 +330,21 @@ MenuTree::MenuTree()
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroPortuguesePhraseOption);
 #endif
 #if UTF8_COMPAT_BUILD
+#if INCLUDE_GERMAN_MONERO_MNEMONIC
+		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroGermanPhraseOption);
+#endif
+#if INCLUDE_SPANISH_MONERO_MNEMONIC
+		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroSpanishPhraseOption);
+#endif
+#if INCLUDE_RUSSIAN_MONERO_MNEMONIC
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroRussianPhraseOption);
+#endif
+#if INCLUDE_JAPANESE_MONERO_MNEMONIC
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroJapanesePhraseOption);
+#endif
+#if INCLUDE_CHINESE_MONERO_MNEMONIC
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroChinesePhraseOption);
+#endif
 #endif
 #if INCLUDE_ESPERANTO_MONERO_MNEMONIC
 		pickPhraseTypeMenu->addOption(restoreFromLegacyMoneroEsperantoPhraseOption);
@@ -292,8 +358,12 @@ MenuTree::MenuTree()
 			seedPhraseInputPage->setBackwardAction(&clearMnemonicTypeContext);
 			restoreFromBIP39Option->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
 			restoreFromLegacyMoneroEnglishPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
+#if INCLUDE_FRENCH_MONERO_MNEMONIC
 			restoreFromLegacyMoneroFrenchPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
+#endif
+#if INCLUDE_ITALIAN_MONERO_MNEMONIC
 			restoreFromLegacyMoneroItalianPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
+#endif
 #if INCLUDE_DUTCH_MONERO_MNEMONIC
 			restoreFromLegacyMoneroDutchPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
 #endif
@@ -301,11 +371,21 @@ MenuTree::MenuTree()
 			restoreFromLegacyMoneroPortuguesePhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
 #endif
 #if UTF8_COMPAT_BUILD
+#if INCLUDE_GERMAN_MONERO_MNEMONIC
 			restoreFromLegacyMoneroGermanPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
+#endif
+#if INCLUDE_SPANISH_MONERO_MNEMONIC
 			restoreFromLegacyMoneroSpanishPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
+#endif
+#if INCLUDE_RUSSIAN_MONERO_MNEMONIC
 			restoreFromLegacyMoneroRussianPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
+#endif
+#if INCLUDE_JAPANESE_MONERO_MNEMONIC
 			restoreFromLegacyMoneroJapanesePhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
+#endif
+#if INCLUDE_CHINESE_MONERO_MNEMONIC
 			restoreFromLegacyMoneroChinesePhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
+#endif
 #endif
 #if INCLUDE_ESPERANTO_MONERO_MNEMONIC
 			restoreFromLegacyMoneroEsperantoPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(seedPhraseInputPage));
