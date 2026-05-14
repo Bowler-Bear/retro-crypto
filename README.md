@@ -63,6 +63,11 @@ To generate a unifont file containing only the characters required for monero mn
 `./extract_characters.sh`
 
 
+## Adding or Removing Monero Mnemonic Languages ##
+By default, all monero mnemonic languages except for english are disabled for non-cli builds. This is done to conserve already limit stack space on old systems. To enable a language, it's include definition should be added to the INCLUDED\_MONERO\_MNEMONIC\_LANGUAGES\_IN\_ALL\_BUILDS variable in the Makefile. Valid include definitions are:
+-DINCLUDE\_FRENCH\_MONERO\_MNEMONIC=1 -DINCLUDE\_ITALIAN\_MONERO\_MNEMONIC=1 -DINCLUDE\_DUTCH\_MONERO\_MNEMONIC=1 -DINCLUDE\_PORTUGUESE\_MONERO\_MNEMONIC=1 -DINCLUDE\_GERMAN\_MONERO\_MNEMONIC=1 -DINCLUDE\_SPANISH\_MONERO\_MNEMONIC=1 -DINCLUDE\_RUSSIAN\_MONERO\_MNEMONIC=1 -DINCLUDE\_JAPANESE\_MONERO\_MNEMONIC=1 -DINCLUDE\_CHINESE\_MONERO\_MNEMONIC=1 -DINCLUDE\_ESPERANTO\_MONERO\_MNEMONIC=1 -DINCLUDE\_LOJBAN\_MONERO\_MNEMONIC=1
+
+
 ### Importing Private Keys into [Bitcoin Core Wallet](https://github.com/bitcoin/bitcoin) ###
 Under the Window menu, select 'Console'. Enter in the command:
 
