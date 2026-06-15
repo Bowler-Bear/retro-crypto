@@ -92,6 +92,7 @@ namespace RetroCrypto
 		void stateUpdate();
 		void setWillDecrypt();
 		void loadIntoDescription(const char* data, const uint32_t dataSize);
+		void replaceDescriptionCharacter(uint8_t position, const char* replacementCharacter);
 	};
 }
 #endif

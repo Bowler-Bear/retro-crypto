@@ -373,6 +373,7 @@ void EncryptionPage::updateSelectedOption(InputType input)
 	uint8_t* data = nullptr;
 	uint32_t* sizePointer = nullptr;
 	uint32_t sizeIncrement = encryptionModeIncrementSize(currentMode);
+	uint32_t startLine = modifiedDataIndex/EP_CHARACTERS_PER_BYTE/EP_BYTES_PER_LINE;
 	switch (currentState)
 	{
 	default:
@@ -514,7 +515,14 @@ void EncryptionPage::updateSelectedOption(InputType input)
 		}
 		if (showCurrentLineInDescription)
 		{
-			loadIntoDescription((const char*)&data[((modifiedDataIndex/EP_CHARACTERS_PER_BYTE)/EP_BYTES_PER_LINE)*EP_BYTES_PER_LINE], min((uint32_t)EP_BYTES_PER_LINE, ((maxIndex+1)/EP_CHARACTERS_PER_BYTE)-((modifiedDataIndex/EP_CHARACTERS_PER_BYTE)/EP_BYTES_PER_LINE)*EP_BYTES_PER_LINE));
+			if (startLine != modifiedDataIndex/EP_CHARACTERS_PER_BYTE/EP_BYTES_PER_LINE)
+			{
+				loadIntoDescription((const char*)&data[((modifiedDataIndex/EP_CHARACTERS_PER_BYTE)/EP_BYTES_PER_LINE)*EP_BYTES_PER_LINE], min((uint32_t)EP_BYTES_PER_LINE, ((maxIndex+1)/EP_CHARACTERS_PER_BYTE)-((modifiedDataIndex/EP_CHARACTERS_PER_BYTE)/EP_BYTES_PER_LINE)*EP_BYTES_PER_LINE));
+			}
+			else
+			{
+				replaceDescriptionCharacter((modifiedDataIndex/EP_CHARACTERS_PER_BYTE-(modifiedDataIndex/EP_CHARACTERS_PER_BYTE/EP_BYTES_PER_LINE)*EP_BYTES_PER_LINE), (const char*)&data[modifiedDataIndex / EP_CHARACTERS_PER_BYTE]);
+			}
 		}
 		break;
 	case INPUT_DATA_SIZE:
@@ -706,10 +714,6 @@ void EncryptionPage::tick()
 			delete context;
 		}
 		setCurrentState(OUTPUT_DATA);
-		if (showCurrentLineInDescription)
-		{
-			loadIntoDescription((const char*)outputData, min((uint32_t)EP_BYTES_PER_LINE, inputDataSize));
-		}
 	}
 }
 
@@ -857,6 +861,40 @@ void EncryptionPage::setCurrentState(EncryptionState newState)
 	{
 		setDescription("Only 256 bit keys currently supported.");
 	}
+	if (showCurrentLineInDescription)
+	{
+		uint8_t* data = nullptr;
+		uint32_t dataSize = 0;
+		switch (currentState)
+		{
+		default:
+		case SELECT_MODE:
+		case INPUT_DATA_SIZE:
+		case INPUT_KEY_SIZE:
+		case PROCESSING:
+			break;
+		case INPUT_DATA:
+			data = inputData;
+			dataSize = inputDataSize;
+			break;
+		case INPUT_KEY:
+			data = inputKey;
+			dataSize = inputKeySize;
+			break;
+		case INPUT_IV:
+			data = initializationVector;
+			dataSize = EP_INITIALIZATION_VECTOR;
+			break;
+		case OUTPUT_DATA:
+			data = outputData;
+			dataSize = inputDataSize;
+			break;
+		}
+		if (data != nullptr)
+		{
+			loadIntoDescription((const char*)data, min((uint32_t)EP_BYTES_PER_LINE, dataSize));
+		}
+	}
 }
 
 void EncryptionPage::updateTitle()
@@ -977,10 +1015,17 @@ void EncryptionPage::loadIntoDescription(const char* data, const uint32_t dataSi
 		description.resize(dataSize, 0);
 	for (uint8_t i = 0; i < dataSize; i++)
 	{
-		if (data[i] == 0 || (data[i] >= 0x0a && data[i] <= 0x0d))
-			description.replace(i, 1, " ", 1);
-		else
-			description.replace(i, 1, &data[i], 1);
+		replaceDescriptionCharacter(i, &data[i]);
 	}
 	description.shrink_to_fit();
+}
+
+void EncryptionPage::replaceDescriptionCharacter(uint8_t position, const char* replacementCharacter)
+{
+	if (position > description.size())
+		return;
+	if (*replacementCharacter == 0 || (*replacementCharacter >= 0x0a && *replacementCharacter <= 0x0d))
+		description.replace(position, 1, " ", 1);
+	else
+		description.replace(position, 1, replacementCharacter, 1);
 }
