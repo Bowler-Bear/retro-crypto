@@ -10,6 +10,8 @@ static const char* directionalCharSet = "UDLR";
 
 static const char* dieCharSet = "123456";
 
+static const char* coinCharSet = "HT";
+
 using namespace RetroCrypto;
 
 SeedGenInputPage::SeedGenInputPage()
@@ -92,6 +94,9 @@ void SeedGenInputPage::setSeedGenInputType(SeedGenPageType newPageType)
 		break;
 	case DIRECTIONAL:
 		setUsedCharSet(directionalCharSet);
+		break;
+	case COIN:
+		setUsedCharSet(coinCharSet);
 		break;
 	default:
 		break;

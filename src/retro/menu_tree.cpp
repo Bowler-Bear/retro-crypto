@@ -34,9 +34,11 @@ MenuTree::MenuTree()
 		generateSeedOption->setDestination(static_pointer_cast<MenuTreeObject>(generateSeedMenu));
 		shared_ptr<MenuOption> generateSeedFromRngOption = make_shared<MenuOption>(generateSeedMenu, "From RNG", "Use random number generation.");
 		shared_ptr<MenuOption> generateSeedFromDiceOption = make_shared<MenuOption>(generateSeedMenu, "From Dice", "Use physical dice to generate a seed.");
+		shared_ptr<MenuOption> generateSeedFromCoinOption = make_shared<MenuOption>(generateSeedMenu, "From Coin", "Use a physical coin to generate a seed.");
 		shared_ptr<MenuOption> generateSeedFromInputOption = make_shared<MenuOption>(generateSeedMenu, "From Input", "Use user input.");
 		generateSeedMenu->addOption(generateSeedFromRngOption);
 		generateSeedMenu->addOption(generateSeedFromDiceOption);
+		generateSeedMenu->addOption(generateSeedFromCoinOption);
 		generateSeedMenu->addOption(generateSeedFromInputOption);
 
 			shared_ptr<Prompt> generateSeedFromRNGPrompt = make_shared<Prompt>("Generate Seed From RNG", generateSeedMenu);
@@ -232,6 +234,12 @@ MenuTree::MenuTree()
 			directionalInputsPage->setDestination(static_pointer_cast<MenuTreeObject>(showSeedOptionsMenu));
 			generateSeedFromInputOption->setDestination(static_pointer_cast<MenuTreeObject>(directionalInputsPage));
 			directionalInputsPage->setDescription("Enter a series of random directions to generate a seed with.");
+
+			shared_ptr<SeedGenInputPage> coinFlipsInputPage = make_shared<SeedGenInputPage>("Enter Coin Flips", generateSeedMenu);
+			coinFlipsInputPage->setSeedGenInputType(COIN);
+			coinFlipsInputPage->setDestination(static_pointer_cast<MenuTreeObject>(showSeedOptionsMenu));
+			generateSeedFromCoinOption->setDestination(static_pointer_cast<MenuTreeObject>(coinFlipsInputPage));
+			coinFlipsInputPage->setDescription("Enter a series of random (H)eads/(T)ails values from coin flips to generate a seed with.");
 
 		shared_ptr<Menu> generateAddressMenu = make_shared<Menu>("Generate Vanity Address", mainMenu);
 		generateAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(generateAddressMenu));

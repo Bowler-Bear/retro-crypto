@@ -11,7 +11,8 @@ namespace RetroCrypto
 	enum SeedGenPageType
 	{
 		DICE,
-		DIRECTIONAL
+		DIRECTIONAL,
+		COIN
 	};
 
 	class SeedGenInputPage : public InputPage
