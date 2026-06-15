@@ -55,6 +55,7 @@ namespace RetroCrypto
 		uint32_t inputKeySize;
 		uint8_t* initializationVector;
 		uint8_t* outputData;
+		const bool showCurrentLineInDescription = true;
 
 		void freePointer(uint8_t** pointer, uint32_t size);
 		void freeInputData();
@@ -90,6 +91,7 @@ namespace RetroCrypto
 		void clearDescription();
 		void stateUpdate();
 		void setWillDecrypt();
+		void loadIntoDescription(const char* data, const uint32_t dataSize);
 	};
 }
 #endif

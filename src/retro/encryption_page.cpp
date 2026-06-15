@@ -373,7 +373,6 @@ void EncryptionPage::updateSelectedOption(InputType input)
 	uint8_t* data = nullptr;
 	uint32_t* sizePointer = nullptr;
 	uint32_t sizeIncrement = encryptionModeIncrementSize(currentMode);
-	const bool showCurrentLineInDescription = true;
 	switch (currentState)
 	{
 	default:
@@ -515,14 +514,7 @@ void EncryptionPage::updateSelectedOption(InputType input)
 		}
 		if (showCurrentLineInDescription)
 		{
-			char buffer[EP_BYTES_PER_LINE+1] = { 0 };
-			memcpy(buffer, &data[((modifiedDataIndex/EP_CHARACTERS_PER_BYTE)/EP_BYTES_PER_LINE)*EP_BYTES_PER_LINE], min((uint32_t)EP_BYTES_PER_LINE, ((maxIndex+1)/EP_CHARACTERS_PER_BYTE)-((modifiedDataIndex/EP_CHARACTERS_PER_BYTE)/EP_BYTES_PER_LINE)*EP_BYTES_PER_LINE));
-			for (uint8_t i = 0; i < EP_BYTES_PER_LINE; i++)
-			{
-				if (buffer[i] == 0)
-					buffer[i] = 0x20;
-			}
-			description = buffer;
+			loadIntoDescription((const char*)&data[((modifiedDataIndex/EP_CHARACTERS_PER_BYTE)/EP_BYTES_PER_LINE)*EP_BYTES_PER_LINE], min((uint32_t)EP_BYTES_PER_LINE, ((maxIndex+1)/EP_CHARACTERS_PER_BYTE)-((modifiedDataIndex/EP_CHARACTERS_PER_BYTE)/EP_BYTES_PER_LINE)*EP_BYTES_PER_LINE));
 		}
 		break;
 	case INPUT_DATA_SIZE:
@@ -714,6 +706,10 @@ void EncryptionPage::tick()
 			delete context;
 		}
 		setCurrentState(OUTPUT_DATA);
+		if (showCurrentLineInDescription)
+		{
+			loadIntoDescription((const char*)outputData, min((uint32_t)EP_BYTES_PER_LINE, inputDataSize));
+		}
 	}
 }
 
@@ -969,4 +965,18 @@ bool EncryptionPage::reallocateOutputData()
 {
 	freeOutputData();
 	return reallocatePointer(&outputData, inputDataSize);
+}
+
+void EncryptionPage::loadIntoDescription(const char* data, const uint32_t dataSize)
+{
+	if (description.size() != dataSize)
+		description.resize(dataSize, 0);
+	for (uint8_t i = 0; i < dataSize; i++)
+	{
+		if (data[i] == 0 || (data[i] >= 0x0a && data[i] <= 0x0d))
+			description.replace(i, 1, " ", 1);
+		else
+			description.replace(i, 1, &data[i], 1);
+	}
+	description.shrink_to_fit();
 }
