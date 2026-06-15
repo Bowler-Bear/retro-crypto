@@ -853,6 +853,10 @@ void EncryptionPage::setCurrentState(EncryptionState newState)
 	{
 		inputDataSize = EP_DEFAULT_DATA_SIZE;
 	}
+	if (currentState == INPUT_KEY_SIZE)
+	{
+		setDescription("Only 256 bit keys currently supported.");
+	}
 }
 
 void EncryptionPage::updateTitle()
