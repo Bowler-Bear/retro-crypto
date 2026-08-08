@@ -8,25 +8,25 @@ using namespace std;
 namespace RetroCrypto
 {
 
-	enum SeedGenPageType
+	enum EntropyType
 	{
 		DICE,
 		DIRECTIONAL,
 		COIN
 	};
 
-	class SeedGenInputPage : public InputPage
+	class EntropyInputPage : public InputPage
 	{
 	protected:
-		SeedGenPageType pageType;
+		EntropyType pageType;
 	public:
-		SeedGenInputPage();
-		SeedGenInputPage(string inTitle, std::shared_ptr<MenuTreeObject> inParent = nullptr);
+		EntropyInputPage();
+		EntropyInputPage(string inTitle, std::shared_ptr<MenuTreeObject> inParent = nullptr);
 		virtual void updateSelectedOption(InputType input) override;
 		virtual void draw(shared_ptr<IDisplay> display) override;
 		virtual shared_ptr<MenuTreeObject> getDestination() override;
 		virtual void onForward() override;
-		void setSeedGenInputType(SeedGenPageType newInput);
+		void setEntropyInputType(EntropyType newInput);
 		void drawCollisionOdds(shared_ptr<IDisplay> display);
 	};
 }

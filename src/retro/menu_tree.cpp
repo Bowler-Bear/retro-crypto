@@ -4,7 +4,7 @@
 #include "address_page.h"
 #include "mnemonic_page.h"
 #include "vanity_input_page.h"
-#include "seed_gen_input_page.h"
+#include "entropy_input_page.h"
 #include "seed_phrase_input_page.h"
 #include "seed_qr_page.h"
 #include "context_update_functions.h"
@@ -224,19 +224,20 @@ MenuTree::MenuTree()
 					shared_ptr<SeedQRPage> seedQrPage = make_shared<SeedQRPage>("QR Code", showSeedOptionsMenu);
 					showSeedQROption->setDestination(static_pointer_cast<MenuTreeObject>(seedQrPage));
 
-			shared_ptr<SeedGenInputPage> diceRollsInputPage = make_shared<SeedGenInputPage>("Enter Dice Rolls", generateSeedMenu);
+			shared_ptr<EntropyInputPage> diceRollsInputPage = make_shared<EntropyInputPage>("Enter Dice Rolls", generateSeedMenu);
+			diceRollsInputPage->setEntropyInputType(DICE);
 			diceRollsInputPage->setDestination(static_pointer_cast<MenuTreeObject>(showSeedOptionsMenu));
 			generateSeedFromDiceOption->setDestination(static_pointer_cast<MenuTreeObject>(diceRollsInputPage));
 			diceRollsInputPage->setDescription("Enter a series of randomly rolled dice values to generate a seed with.");
 
-			shared_ptr<SeedGenInputPage> directionalInputsPage = make_shared<SeedGenInputPage>("Enter Directional Inputs", generateSeedMenu);
-			directionalInputsPage->setSeedGenInputType(DIRECTIONAL);
+			shared_ptr<EntropyInputPage> directionalInputsPage = make_shared<EntropyInputPage>("Enter Directional Inputs", generateSeedMenu);
+			directionalInputsPage->setEntropyInputType(DIRECTIONAL);
 			directionalInputsPage->setDestination(static_pointer_cast<MenuTreeObject>(showSeedOptionsMenu));
 			generateSeedFromInputOption->setDestination(static_pointer_cast<MenuTreeObject>(directionalInputsPage));
 			directionalInputsPage->setDescription("Enter a series of random directions to generate a seed with.");
 
-			shared_ptr<SeedGenInputPage> coinFlipsInputPage = make_shared<SeedGenInputPage>("Enter Coin Flips", generateSeedMenu);
-			coinFlipsInputPage->setSeedGenInputType(COIN);
+			shared_ptr<EntropyInputPage> coinFlipsInputPage = make_shared<EntropyInputPage>("Enter Coin Flips", generateSeedMenu);
+			coinFlipsInputPage->setEntropyInputType(COIN);
 			coinFlipsInputPage->setDestination(static_pointer_cast<MenuTreeObject>(showSeedOptionsMenu));
 			generateSeedFromCoinOption->setDestination(static_pointer_cast<MenuTreeObject>(coinFlipsInputPage));
 			coinFlipsInputPage->setDescription("Enter a series of random (H)eads/(T)ails values from coin flips to generate a seed with.");

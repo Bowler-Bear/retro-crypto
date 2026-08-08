@@ -1,7 +1,7 @@
 #include <cstring>
 #include <math.h>
 
-#include "seed_gen_input_page.h"
+#include "entropy_input_page.h"
 #include "context_update_functions.h"
 
 #define DICE_INPUT_SIZE 100
@@ -16,7 +16,7 @@ static const char* coinCharSet = "HT";
 
 using namespace RetroCrypto;
 
-SeedGenInputPage::SeedGenInputPage()
+EntropyInputPage::EntropyInputPage()
 : InputPage()
 {
 	pageType = DICE;
@@ -24,7 +24,7 @@ SeedGenInputPage::SeedGenInputPage()
 	setUsedCharSet(dieCharSet);
 }
 
-SeedGenInputPage::SeedGenInputPage(string inTitle, std::shared_ptr<MenuTreeObject> inParent)
+EntropyInputPage::EntropyInputPage(string inTitle, std::shared_ptr<MenuTreeObject> inParent)
 : InputPage(inTitle, inParent)
 {
 	pageType = DICE;
@@ -32,7 +32,7 @@ SeedGenInputPage::SeedGenInputPage(string inTitle, std::shared_ptr<MenuTreeObjec
 	setUsedCharSet(dieCharSet);
 }
 
-void SeedGenInputPage::updateSelectedOption(InputType input)
+void EntropyInputPage::updateSelectedOption(InputType input)
 {
 	if (usedCharSet == nullptr)
 		return;
@@ -59,13 +59,13 @@ void SeedGenInputPage::updateSelectedOption(InputType input)
 		selectedOptionIndex = 0;
 }
 
-void SeedGenInputPage::draw(shared_ptr<IDisplay> display)
+void EntropyInputPage::draw(shared_ptr<IDisplay> display)
 {
 	InputPage::draw(display);
 	drawCollisionOdds(display);
 }
 
-shared_ptr<MenuTreeObject> SeedGenInputPage::getDestination()
+shared_ptr<MenuTreeObject> EntropyInputPage::getDestination()
 {
 	if (pageType != DIRECTIONAL)
 		return InputPage::getDestination();
@@ -74,7 +74,7 @@ shared_ptr<MenuTreeObject> SeedGenInputPage::getDestination()
 	return destination;
 }
 
-void SeedGenInputPage::onForward()
+void EntropyInputPage::onForward()
 {
 	MenuTreeObject::onForward();
 	uint8_t data[0xFF] = { 0 };
@@ -86,7 +86,7 @@ void SeedGenInputPage::onForward()
 	setSeedFromHashedData(data, stringSize);
 }
 
-void SeedGenInputPage::setSeedGenInputType(SeedGenPageType newPageType)
+void EntropyInputPage::setEntropyInputType(EntropyType newPageType)
 {
 	pageType = newPageType;
 	switch (pageType)
@@ -108,7 +108,7 @@ void SeedGenInputPage::setSeedGenInputType(SeedGenPageType newPageType)
 	}
 }
 
-void SeedGenInputPage::drawCollisionOdds(shared_ptr<IDisplay> display)
+void EntropyInputPage::drawCollisionOdds(shared_ptr<IDisplay> display)
 {
 	if (usedCharSet == nullptr)
 		return;
