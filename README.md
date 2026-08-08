@@ -68,6 +68,22 @@ By default, all monero mnemonic languages except for english are disabled for no
 -DINCLUDE\_FRENCH\_MONERO\_MNEMONIC=1 -DINCLUDE\_ITALIAN\_MONERO\_MNEMONIC=1 -DINCLUDE\_DUTCH\_MONERO\_MNEMONIC=1 -DINCLUDE\_PORTUGUESE\_MONERO\_MNEMONIC=1 -DINCLUDE\_GERMAN\_MONERO\_MNEMONIC=1 -DINCLUDE\_SPANISH\_MONERO\_MNEMONIC=1 -DINCLUDE\_RUSSIAN\_MONERO\_MNEMONIC=1 -DINCLUDE\_JAPANESE\_MONERO\_MNEMONIC=1 -DINCLUDE\_CHINESE\_MONERO\_MNEMONIC=1 -DINCLUDE\_ESPERANTO\_MONERO\_MNEMONIC=1 -DINCLUDE\_LOJBAN\_MONERO\_MNEMONIC=1
 
 
+## Changing the default BIP32 paths ##
+The default BIP32 path definitions can be modified by editing the following lines in the Makefile:
+
+`DEFAULT_PATH_OVERRIDES += #-DBITCOIN_DEFAULT_PATH="\"m/1'/2'/3'/4/5\""`
+
+`DEFAULT_PATH_OVERRIDES += #-DDOGE_DEFAULT_PATH="\"m/1'/2'/3'/4/5\""`
+
+`DEFAULT_PATH_OVERRIDES += #-DETHEREUM_CLASSIC_DEFAULT_PATH="\"m/1'/2'/3'/4/5\""`
+
+`DEFAULT_PATH_OVERRIDES += #-DETHEREUM_DEFAULT_PATH="\"m/1'/2'/3'/4/5\""`
+
+`DEFAULT_PATH_OVERRIDES += #-DNOSTR_DEFAULT_PATH="\"m/1'/2'/3'/4/5\""`
+
+The default for the chosen cryptocurrency should first be updated to the path desired, then the leading # must be deleted to uncomment the definition.
+
+
 ### Importing Private Keys into [Bitcoin Core Wallet](https://github.com/bitcoin/bitcoin) ###
 Under the Window menu, select 'Console'. Enter in the command:
 
@@ -108,9 +124,10 @@ The color scheme can be updated by modifying the existing DEFAULT_\*G_COLOR_\* d
 
 ## Screenshots ##
 <img width="910" height="625" alt="main_menu" src="https://github.com/user-attachments/assets/009e910a-05a5-4837-917b-5fbded42a0d5" />
-<img width="900" height="625" alt="generate_seed" src="https://github.com/user-attachments/assets/24940e0a-2c95-43b8-bee7-b813b0139bec" />
-<img width="903" height="627" alt="dir_inputs" src="https://github.com/user-attachments/assets/f347f840-cd52-412d-b85a-96eceb4e9a68" />
-<img width="900" height="625" alt="dice_input" src="https://github.com/user-attachments/assets/539c026a-4afc-4d7b-9e4f-41b0b28f5651" />
+<img width="911" height="624" alt="Generate Seed" src="https://github.com/user-attachments/assets/58d9d566-c13a-4f77-9cca-3595723ad442" />
+<img width="908" height="621" alt="DiceEntropy" src="https://github.com/user-attachments/assets/86fa4348-838a-4cf5-9567-e9bb6c8bd2fd" />
+<img width="910" height="623" alt="CoinEntropy" src="https://github.com/user-attachments/assets/ea27f191-c0ec-429f-8b69-387abf626b39" />
+<img width="908" height="621" alt="DirectionalEntropy" src="https://github.com/user-attachments/assets/00d9c053-d2a4-4ea4-adb9-1871671af7b2" />
 <img width="905" height="627" alt="seed_options_menu" src="https://github.com/user-attachments/assets/1bdf5a69-314e-434c-b950-3d5658263a35" />
 <img width="904" height="627" alt="addresses_menu" src="https://github.com/user-attachments/assets/3acfd05c-85eb-4a63-83e0-e45cd1fd1f6e" />
 <img width="900" height="625" alt="btc_address" src="https://github.com/user-attachments/assets/cfe74d31-5d9e-4310-846a-dff44620981f" />
