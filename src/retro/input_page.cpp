@@ -3,6 +3,8 @@
 #include "input_page.h"
 #include "core_system.h"
 
+#define MAX_CHARS_PER_LINE 50
+
 using namespace RetroCrypto;
 
 InputPage::InputPage()
@@ -165,35 +167,48 @@ void InputPage::drawInput(shared_ptr<IDisplay> display)
 {
 	if (usedCharSet == nullptr)
 		return;
-	std::string navSymbols = " ";
-	std::string currentInput = " ";
-	for (size_t i = 0; i < inputString.size(); i++)
+	uint8_t lineCount = (inputString.size()/MAX_CHARS_PER_LINE)+1;
+	uint8_t currentInputLine = selectedOptionIndex/MAX_CHARS_PER_LINE;
+	for (uint8_t k = 0; k < lineCount; k++)
 	{
-		uint8_t codePoints = getCodePointCount(usedCharSet[inputString[i]]);
-		if (inputString[i] == -1)
-			for (uint8_t j = 0; j < charWidth; j++)
-				currentInput += '-';
-		else
-			for (uint8_t j = 0; j < codePoints+1; j++)
-				currentInput += usedCharSet[inputString[i]+j];
-		if (i == selectedOptionIndex)
-			for (uint8_t j = 0; j < charWidth; j++)
-				navSymbols += "*";
-		else
-			for (uint8_t j = 0; j < charWidth; j++)
-				navSymbols += " ";
+		std::string navSymbols = " ";
+		std::string currentInput = " ";
+		uint8_t startIndex = k*MAX_CHARS_PER_LINE;
+		uint8_t endIndex = startIndex + ((k == lineCount-1) ? inputString.size() % MAX_CHARS_PER_LINE : MAX_CHARS_PER_LINE);
+		for (uint8_t i = startIndex; i < endIndex; i++)
+		{
+			uint8_t codePoints = getCodePointCount(usedCharSet[inputString[i]]);
+			if (inputString[i] == -1)
+				for (uint8_t j = 0; j < charWidth; j++)
+					currentInput += '-';
+			else
+				for (uint8_t j = 0; j < codePoints+1; j++)
+					currentInput += usedCharSet[inputString[i]+j];
+			if (k == currentInputLine)
+			{
+				if (i == selectedOptionIndex)
+					for (uint8_t j = 0; j < charWidth; j++)
+						navSymbols += "*";
+				else
+					for (uint8_t j = 0; j < charWidth; j++)
+						navSymbols += " ";
+			}
+		}
+		TextBox inputBox(currentInput);
+		inputBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+8+2*k;
+		inputBox.xPosition = 1;
+		inputBox.width = BASE_BORDER_BOX_WIDTH-3;
+		inputBox.height = 1;
+		display->drawTextBox(inputBox);
+		if (k == currentInputLine)
+		{
+			inputBox.text = navSymbols;
+			inputBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+8+2*k-1;
+			display->drawTextBox(inputBox);
+			inputBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+8+2*k+1;
+			display->drawTextBox(inputBox);
+		}
 	}
-	TextBox inputBox(currentInput);
-	inputBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+8;
-	inputBox.xPosition = 1;
-	inputBox.width = BASE_BORDER_BOX_WIDTH-3;
-	inputBox.height = 1;
-	display->drawTextBox(inputBox);
-	inputBox.text = navSymbols;
-	inputBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+8-1;
-	display->drawTextBox(inputBox);
-	inputBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+8+1;
-	display->drawTextBox(inputBox);
 }
 
 void InputPage::drawDescription(shared_ptr<IDisplay> display)
