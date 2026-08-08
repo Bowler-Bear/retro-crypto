@@ -114,7 +114,7 @@ void SeedGenInputPage::drawCollisionOdds(shared_ptr<IDisplay> display)
 		return;
 	if (selectedOptionIndex == 0 && inputString[selectedOptionIndex] == -1)
 		return;
-	std::string odds = "Current Collision Odds: 1 in ";
+	std::string odds = "Current Entropy: ";
 	uint8_t highestIndex = 1;
 	for (uint8_t i = stringSize-1; i > 0; i--)
 	{
@@ -124,7 +124,16 @@ void SeedGenInputPage::drawCollisionOdds(shared_ptr<IDisplay> display)
 			break;
 		}
 	}
-	odds += std::to_string(pow(std::strlen(usedCharSet), highestIndex));
+	int16_t entropy = -1;
+	try
+	{
+		entropy = static_cast<int16_t>(highestIndex*log(std::strlen(usedCharSet))/log(2));
+	}
+	catch(...)
+	{
+	}
+	odds += entropy > 0 ? std::to_string(min(entropy, (int16_t)256)) : "?";
+	odds += " bits";
 	TextBox oddsBox(odds);
 	oddsBox.yPosition = BASE_BORDER_BOX_HEIGHT-6-4;
 	oddsBox.xPosition = 2;
