@@ -4,7 +4,9 @@
 #include "seed_gen_input_page.h"
 #include "context_update_functions.h"
 
-#define DEFAULT_INPUT_SIZE 35
+#define DICE_INPUT_SIZE 100
+#define DIRECTIONAL_INPUT_SIZE 128
+#define COIN_INPUT_SIZE 255
 
 static const char* directionalCharSet = "UDLR";
 
@@ -18,7 +20,7 @@ SeedGenInputPage::SeedGenInputPage()
 : InputPage()
 {
 	pageType = DICE;
-	setStringSize(DEFAULT_INPUT_SIZE);
+	setStringSize(DICE_INPUT_SIZE);
 	setUsedCharSet(dieCharSet);
 }
 
@@ -26,7 +28,7 @@ SeedGenInputPage::SeedGenInputPage(string inTitle, std::shared_ptr<MenuTreeObjec
 : InputPage(inTitle, inParent)
 {
 	pageType = DICE;
-	setStringSize(DEFAULT_INPUT_SIZE);
+	setStringSize(DICE_INPUT_SIZE);
 	setUsedCharSet(dieCharSet);
 }
 
@@ -91,12 +93,15 @@ void SeedGenInputPage::setSeedGenInputType(SeedGenPageType newPageType)
 	{
 	case DICE:
 		setUsedCharSet(dieCharSet);
+		setStringSize(DICE_INPUT_SIZE);
 		break;
 	case DIRECTIONAL:
 		setUsedCharSet(directionalCharSet);
+		setStringSize(DIRECTIONAL_INPUT_SIZE);
 		break;
 	case COIN:
 		setUsedCharSet(coinCharSet);
+		setStringSize(COIN_INPUT_SIZE);
 		break;
 	default:
 		break;
