@@ -1,7 +1,7 @@
 #include <stdexcept>
 
 #include "core_system.h"
-#include "c_rng.h"
+#include "default_rng.h"
 
 using namespace RetroCrypto;
 
@@ -10,7 +10,7 @@ CoreSystem::CoreSystem()
 	initialized = false;
 	menuSystem = MenuSystem::getMenuSystem();
 	inputSystem = InputSystem::getInputSystem();
-	rng = static_pointer_cast<IRandomNumberGenerator>(make_shared<CRNG>());
+	rng = static_pointer_cast<IRandomNumberGenerator>(make_shared<DefaultRNG>());
 	unifontHandler = make_shared<UnifontHandler>();
 }
 

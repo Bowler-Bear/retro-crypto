@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include "vanity_input_page.h"
 #include "core_system.h"
 #include "crypto_definitions.h"
@@ -65,6 +67,11 @@ bool VanityInputPage::consumeInput(InputType input)
 			generationData.matchString += usedCharSet[inputString[i]];
 		}
 		currentState = GENERATING;
+		{
+			const ContextData contextData = CoreSystem::getCoreSystem().getContextData();
+			shared_ptr<IRandomNumberGenerator> generator = CoreSystem::getCoreSystem().getRandomNumberGenerator();
+			generator->seedGenerator((const uint8_t*)contextData.seed, contextData.seedSize);
+		}
 	}
 	return true;
 }
@@ -204,8 +211,22 @@ void VanityInputPage::tick()
 	case GENERATING:
 		{
 		shared_ptr<IRandomNumberGenerator> generator = CoreSystem::getCoreSystem().getRandomNumberGenerator();
-		for (uint8_t i = 0; i < DEFAULT_SEED_SIZE; i++)
-			generationData.seedData.seed[i] = generator->getRandom8();
+		try
+		{
+			generator->generateBytes(generationData.seedData.seed, DEFAULT_SEED_SIZE);
+		}
+		catch(const std::runtime_error& e)
+		{
+			setDescription(e.what());
+			currentState = INPUT;
+			break;
+		}
+		catch(...)
+		{
+			setDescription("Exception thrown while generating random numbers.");
+			currentState = INPUT;
+			break;
+		}
 		generationData.address = cryptoAddressFromContextData(generationData.seedData).address;
 		generationData.currentAttempt++;
 		if (generationData.seedData.crypto == CryptoType::ETC || generationData.seedData.crypto == CryptoType::ETH)
