@@ -44,7 +44,7 @@ bool VanityInputPage::consumeInput(InputType input)
 	case GENERATING:
 		if (input != BACK)
 			return false;
-		generationData.currentAttempt = 0;
+		generatedData.currentAttempt = 0;
 		currentState = INPUT;
 		return true;
 	case FOUND:
@@ -59,12 +59,12 @@ bool VanityInputPage::consumeInput(InputType input)
 		}
 		if (selectedOptionIndex == 0 && inputString[selectedOptionIndex] == -1)
 			break;
-		generationData.matchString = prefix;
+		generatedData.matchString = prefix;
 		for (size_t i = 0; i < inputString.size(); i++)
 		{
 			if (inputString[i] == -1)
 				break;
-			generationData.matchString += usedCharSet[inputString[i]];
+			generatedData.matchString += usedCharSet[inputString[i]];
 		}
 		currentState = GENERATING;
 		{
@@ -81,14 +81,14 @@ void VanityInputPage::reset()
 	InputPage::reset();
 	prefix = "";
 	currentState = INPUT;
-	generationData = GenerationData();
-	generationData.seedData.crypto = CoreSystem::getCoreSystem().getContextData().crypto;
+	generatedData = GeneratedData();
+	generatedData.seedData.crypto = CoreSystem::getCoreSystem().getContextData().crypto;
 }
 
 void VanityInputPage::onForward()
 {
 	MenuTreeObject::onForward();
-	CoreSystem::getCoreSystem().updateContextData(ContextUpdate::SEED | ContextUpdate::SEED_SIZE, generationData.seedData);
+	CoreSystem::getCoreSystem().updateContextData(ContextUpdate::SEED | ContextUpdate::SEED_SIZE, generatedData.seedData);
 }
 
 void VanityInputPage::onEnter()
@@ -213,7 +213,7 @@ void VanityInputPage::tick()
 		shared_ptr<IRandomNumberGenerator> generator = CoreSystem::getCoreSystem().getRandomNumberGenerator();
 		try
 		{
-			generator->generateBytes(generationData.seedData.seed, DEFAULT_SEED_SIZE);
+			generator->generateBytes(generatedData.seedData.seed, DEFAULT_SEED_SIZE);
 		}
 		catch(const std::runtime_error& e)
 		{
@@ -227,13 +227,13 @@ void VanityInputPage::tick()
 			currentState = INPUT;
 			break;
 		}
-		generationData.address = cryptoAddressFromContextData(generationData.seedData).address;
-		generationData.currentAttempt++;
-		if (generationData.seedData.crypto == CryptoType::ETC || generationData.seedData.crypto == CryptoType::ETH)
-			for (uint8_t i = 0; i < generationData.address.size(); i++)
-				if (generationData.address[i] >= 'A' && generationData.address[i] <= 'Z')
-					generationData.address[i] = generationData.address[i] - ('Z' - 'z');
-		if (generationData.address.find(generationData.matchString) == 0)
+		generatedData.address = cryptoAddressFromContextData(generatedData.seedData).address;
+		generatedData.currentAttempt++;
+		if (generatedData.seedData.crypto == CryptoType::ETC || generatedData.seedData.crypto == CryptoType::ETH)
+			for (uint8_t i = 0; i < generatedData.address.size(); i++)
+				if (generatedData.address[i] >= 'A' && generatedData.address[i] <= 'Z')
+					generatedData.address[i] = generatedData.address[i] - ('Z' - 'z');
+		if (generatedData.address.find(generatedData.matchString) == 0)
 		{
 			currentState = FOUND;
 		}
@@ -259,7 +259,7 @@ void VanityInputPage::drawGenerationPage(shared_ptr<IDisplay> display)
 	titleBox.setBordered();
 	display->drawTextBox(titleBox);
 
-	TextBox attemptBox(std::string("Attempt: ")+std::to_string(generationData.currentAttempt+1));
+	TextBox attemptBox(std::string("Attempt: ")+std::to_string(generatedData.currentAttempt+1));
 	attemptBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+PAGE_TITLE_BOX_HEIGHT;
 	attemptBox.xPosition = (BASE_BORDER_BOX_WIDTH-attemptBox.text.size())/2;
 	attemptBox.width = attemptBox.text.size()+1;
@@ -267,7 +267,7 @@ void VanityInputPage::drawGenerationPage(shared_ptr<IDisplay> display)
 	attemptBox.setBordered();
 	display->drawTextBox(attemptBox);
 
-	TextBox matchStringBox(std::string("Matching: ")+generationData.matchString);
+	TextBox matchStringBox(std::string("Matching: ")+generatedData.matchString);
 	matchStringBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+2*PAGE_TITLE_BOX_HEIGHT;
 	matchStringBox.xPosition = (BASE_BORDER_BOX_WIDTH-matchStringBox.text.size())/2;
 	matchStringBox.width = matchStringBox.text.size()+1;
@@ -276,7 +276,7 @@ void VanityInputPage::drawGenerationPage(shared_ptr<IDisplay> display)
 	display->drawTextBox(matchStringBox);
 
 	string addressTitle = currentState == FOUND ? "Found Address: " : "Current Address: ";
-	TextBox addressBox(addressTitle+generationData.address);
+	TextBox addressBox(addressTitle+generatedData.address);
 	addressBox.yPosition = PAGE_TITLE_BOX_Y_POSITION+3*PAGE_TITLE_BOX_HEIGHT;
 	addressBox.xPosition = (BASE_BORDER_BOX_WIDTH-addressBox.text.size())/2;
 	addressBox.width = addressBox.text.size()+1;

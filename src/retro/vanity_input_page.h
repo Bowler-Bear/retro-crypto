@@ -15,7 +15,7 @@ namespace RetroCrypto
 		FOUND
 	};
 
-	struct GenerationData
+	struct GeneratedData
 	{
 		uint32_t currentAttempt;
 		ContextData seedData;
@@ -28,7 +28,7 @@ namespace RetroCrypto
 	protected:
 		string prefix;
 		GenerationState currentState;
-		GenerationData generationData;
+		GeneratedData generatedData;
 	public:
 		VanityInputPage();
 		VanityInputPage(string inTitle, std::shared_ptr<MenuTreeObject> inParent = nullptr);
