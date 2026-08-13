@@ -18,14 +18,12 @@ MenuTree::MenuTree()
 	root = static_pointer_cast<MenuTreeObject>(mainMenu);
 
 	shared_ptr<MenuOption> generateSeedOption = make_shared<MenuOption>(mainMenu, "Generate Seed", "Generate a random seed.");
-	shared_ptr<MenuOption> generateAddressOption = make_shared<MenuOption>(mainMenu, "Generate Vanity Address", "Generate an address.");
 	shared_ptr<MenuOption> seedRestoreOption = make_shared<MenuOption>(mainMenu, "Restore Seed", "Restore a seed from a mnemonic.");
 	shared_ptr<MenuOption> encryptionOption = make_shared<MenuOption>(mainMenu, "Encryption", "(En/De)crypt data.");
 	shared_ptr<MenuOption> exitOption = make_shared<MenuOption>(mainMenu, "Exit", "Exit this program.");
 	exitOption->setDestination(static_pointer_cast<MenuTreeObject>(mainMenu));
 	exitOption->setOnSelectedFunction(&requestExit);
 	mainMenu->addOption(generateSeedOption);
-	mainMenu->addOption(generateAddressOption);
 	mainMenu->addOption(seedRestoreOption);
 	mainMenu->addOption(encryptionOption);
 	mainMenu->addOption(exitOption);
@@ -53,12 +51,14 @@ MenuTree::MenuTree()
 				shared_ptr<MenuOption> showAddressesOption = make_shared<MenuOption>(showSeedOptionsMenu, "Show Addresses", "Show addresses from this seed.");
 				shared_ptr<MenuOption> showSeedPhrasesOption = make_shared<MenuOption>(showSeedOptionsMenu, "Show Seed Phrases", "Show seed phrases for this seed.");
 				shared_ptr<MenuOption> showSeedQROption = make_shared<MenuOption>(showSeedOptionsMenu, "Show QR code", "Show QR code of this seed.");
+				shared_ptr<MenuOption> generateAddressOption = make_shared<MenuOption>(showSeedOptionsMenu, "Generate Vanity Address", "Generate an address.");
 				shared_ptr<MenuOption> mainMenuReturnOption = make_shared<MenuOption>(showSeedOptionsMenu, "Main Menu", "Return to main menu.");
 				mainMenuReturnOption->setDestination(static_pointer_cast<MenuTreeObject>(mainMenu));
 				mainMenuReturnOption->setOnSelectedFunction(&clearSeed);
 				showSeedOptionsMenu->addOption(showAddressesOption);
 				showSeedOptionsMenu->addOption(showSeedPhrasesOption);
 				showSeedOptionsMenu->addOption(showSeedQROption);
+				showSeedOptionsMenu->addOption(generateAddressOption);
 				showSeedOptionsMenu->addOption(mainMenuReturnOption);
 
 					shared_ptr<Menu> showAddressMenu = make_shared<Menu>("Show An Address", showSeedOptionsMenu);
@@ -242,7 +242,7 @@ MenuTree::MenuTree()
 			generateSeedFromCoinOption->setDestination(static_pointer_cast<MenuTreeObject>(coinFlipsInputPage));
 			coinFlipsInputPage->setDescription("Enter a series of random (H)eads/(T)ails values from coin flips to generate a seed with.");
 
-		shared_ptr<Menu> generateAddressMenu = make_shared<Menu>("Generate Vanity Address", mainMenu);
+		shared_ptr<Menu> generateAddressMenu = make_shared<Menu>("Generate Vanity Address", showSeedOptionsMenu);
 		generateAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(generateAddressMenu));
 		shared_ptr<MenuOption> generateXMRAddressOption = make_shared<MenuOption>(generateAddressMenu, "XMR", "Generate a monero public address.");
 		generateXMRAddressOption->setOnSelectedFunction(&setMoneroContext);
