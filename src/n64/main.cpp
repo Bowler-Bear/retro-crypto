@@ -19,7 +19,6 @@ int main()
 	coreSystem.setDisplay(display);
 	coreSystem.setInputCapturer(capturer);
 	coreSystem.init();
-	srand(get_ticks());
 	register_VI_handler((void(*)(void))rand);
 	while (!coreSystem.getQuitRequested())
 	{

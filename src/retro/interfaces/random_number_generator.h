@@ -8,7 +8,9 @@ namespace RetroCrypto
 	class IRandomNumberGenerator
 	{
 	public:
-		virtual void seedGenerator(unsigned seed) = 0;
+		virtual void seedGenerator(const uint8_t* seed, uint8_t seedSize) = 0;
+
+		virtual void generateBytes(uint8_t *output, size_t outputSize) = 0;
 
 		virtual uint8_t getRandom8() = 0;
 
