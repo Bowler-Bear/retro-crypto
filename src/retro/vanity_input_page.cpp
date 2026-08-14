@@ -228,6 +228,13 @@ void VanityInputPage::tick()
 			break;
 		}
 		generatedData.address = cryptoAddressFromContextData(generatedData.seedData).address;
+		if (generatedData.currentAttempt == 0xffffffff)
+		{
+			setDescription("Failed to find match and reached search upper limit.");
+			generatedData.currentAttempt = 0;
+			currentState = INPUT;
+			break;
+		}
 		generatedData.currentAttempt++;
 		if (generatedData.seedData.crypto == CryptoType::ETC || generatedData.seedData.crypto == CryptoType::ETH)
 			for (uint8_t i = 0; i < generatedData.address.size(); i++)
