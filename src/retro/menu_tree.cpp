@@ -30,24 +30,16 @@ MenuTree::MenuTree()
 
 		shared_ptr<Menu> generateSeedMenu = make_shared<Menu>("Generate Seed", mainMenu);
 		generateSeedOption->setDestination(static_pointer_cast<MenuTreeObject>(generateSeedMenu));
-		shared_ptr<MenuOption> generateSeedFromRngOption = make_shared<MenuOption>(generateSeedMenu, "From RNG", "Use random number generation.");
 		shared_ptr<MenuOption> generateSeedFromDiceOption = make_shared<MenuOption>(generateSeedMenu, "From Dice", "Use physical dice to generate a seed.");
 		shared_ptr<MenuOption> generateSeedFromCoinOption = make_shared<MenuOption>(generateSeedMenu, "From Coin", "Use a physical coin to generate a seed.");
 		shared_ptr<MenuOption> generateSeedFromInputOption = make_shared<MenuOption>(generateSeedMenu, "From Input", "Use user input.");
-		generateSeedMenu->addOption(generateSeedFromRngOption);
 		generateSeedMenu->addOption(generateSeedFromDiceOption);
 		generateSeedMenu->addOption(generateSeedFromCoinOption);
 		generateSeedMenu->addOption(generateSeedFromInputOption);
 
-			shared_ptr<Prompt> generateSeedFromRNGPrompt = make_shared<Prompt>("Generate Seed From RNG", generateSeedMenu);
-			generateSeedFromRngOption->setDestination(static_pointer_cast<MenuTreeObject>(generateSeedFromRNGPrompt));
-			generateSeedFromRNGPrompt->setDescription("You are about to generate a seed using random number generation(RNG).");
-			generateSeedFromRNGPrompt->setForwardAction(&setRandom256BitSeed);
-
 				shared_ptr<Menu> showSeedOptionsMenu = make_shared<Menu>("Seed Options", mainMenu);
 				showSeedOptionsMenu->setShouldReparent(false);
 				showSeedOptionsMenu->setBackwardAction(&clearSeed);
-				generateSeedFromRNGPrompt->setDestination(static_pointer_cast<MenuTreeObject>(showSeedOptionsMenu));
 				shared_ptr<MenuOption> showAddressesOption = make_shared<MenuOption>(showSeedOptionsMenu, "Show Addresses", "Show addresses from this seed.");
 				shared_ptr<MenuOption> showSeedPhrasesOption = make_shared<MenuOption>(showSeedOptionsMenu, "Show Seed Phrases", "Show seed phrases for this seed.");
 				shared_ptr<MenuOption> showSeedQROption = make_shared<MenuOption>(showSeedOptionsMenu, "Show QR code", "Show QR code of this seed.");
