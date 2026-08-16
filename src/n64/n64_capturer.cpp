@@ -4,7 +4,7 @@
 #include "n64_capturer.h"
 
 
-#define N64_ANALOG_MAX_VAUE 85
+#define N64_ANALOG_MAX_VALUE 85
 
 #ifndef N64_ANALOG_X_DEADZONE_PERCENTAGE
 #define N64_ANALOG_X_DEADZONE_PERCENTAGE 20
@@ -85,7 +85,7 @@ InputType N64Capturer::getInput()
 	{
 		int analogX = abs(data.c[i].x);
 		int analogY = abs(data.c[i].y);
-		if (display && (analogX > N64_ANALOG_MAX_VAUE*N64_ANALOG_X_DEADZONE_PERCENTAGE/100 || analogY > N64_ANALOG_MAX_VAUE*N64_ANALOG_Y_DEADZONE_PERCENTAGE/100))
+		if (display && (analogX > N64_ANALOG_MAX_VALUE*N64_ANALOG_X_DEADZONE_PERCENTAGE/100 || analogY > N64_ANALOG_MAX_VALUE*N64_ANALOG_Y_DEADZONE_PERCENTAGE/100))
 		{
 			lastViewportMovementMS = get_ticks_ms();
 			if (analogX >= analogY)
