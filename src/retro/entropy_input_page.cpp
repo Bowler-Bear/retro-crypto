@@ -133,7 +133,15 @@ void EntropyInputPage::drawCollisionOdds(shared_ptr<IDisplay> display)
 	{
 	}
 	odds += entropy > 0 ? std::to_string(min(entropy, (int16_t)256)) : "?";
-	odds += " bits";
+	//255 used instead of 256 because dice has a maximum of 255 bits
+	if (entropy < 255)
+	{
+		odds += " bits (256 bits recommended)";
+	}
+	else
+	{
+		odds += " bits";
+	}
 	TextBox oddsBox(odds);
 	oddsBox.yPosition = BASE_BORDER_BOX_HEIGHT-6-4;
 	oddsBox.xPosition = 2;
