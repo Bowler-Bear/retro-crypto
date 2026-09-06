@@ -84,6 +84,7 @@ namespace RetroCrypto
 		virtual void drawTitle(shared_ptr<IDisplay> display) override;
 		void drawDataInput(shared_ptr<IDisplay> display, uint8_t* data = nullptr, uint32_t dataSize = 0);
 		void drawSizeInput(shared_ptr<IDisplay> display, uint32_t* size = nullptr);
+		void drawByteAsBinary(shared_ptr<IDisplay> display, uint8_t byte);
 		void drawModeSelect(shared_ptr<IDisplay> display);
 		void drawCharacterList(shared_ptr<IDisplay> display);
 		void setCurrentState(EncryptionState newState);

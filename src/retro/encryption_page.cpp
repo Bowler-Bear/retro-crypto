@@ -730,20 +730,24 @@ void EncryptionPage::drawInput(shared_ptr<IDisplay> display)
 		break;
 	case INPUT_DATA:
 		drawDataInput(display, inputData, inputDataSize);
+		drawByteAsBinary(display, inputData[modifiedDataIndex/EP_CHARACTERS_PER_BYTE]);
 		break;
 	case INPUT_KEY_SIZE:
 		drawSizeInput(display, &inputKeySize);
 		break;
 	case INPUT_KEY:
 		drawDataInput(display, inputKey, inputKeySize);
+		drawByteAsBinary(display, inputKey[modifiedDataIndex/EP_CHARACTERS_PER_BYTE]);
 		break;
 	case INPUT_IV:
 		drawDataInput(display, initializationVector, EP_INITIALIZATION_VECTOR);
+		drawByteAsBinary(display, initializationVector[modifiedDataIndex/EP_CHARACTERS_PER_BYTE]);
 		break;
 	case PROCESSING:
 		break;
 	case OUTPUT_DATA:
 		drawDataInput(display, outputData, inputDataSize);
+		drawByteAsBinary(display, outputData[modifiedDataIndex/EP_CHARACTERS_PER_BYTE]);
 		break;
 	case SHOW_CHARACTERS:
 		drawCharacterList(display);
@@ -835,6 +839,22 @@ void EncryptionPage::drawSizeInput(shared_ptr<IDisplay> display, uint32_t* size)
 	inputBox.width = BASE_BORDER_BOX_WIDTH-3;
 	inputBox.height = 1;
 	display->drawTextBox(inputBox);
+}
+
+void EncryptionPage::drawByteAsBinary(shared_ptr<IDisplay> display, uint8_t byte)
+{
+	char stringBuffer[9] = { 0 };
+	for (uint8_t i; i < 8; i++)
+	{
+		stringBuffer[i] = (byte >> (7-i)) & 0x1 ? '1' : '0';
+	}
+	TextBox binaryBox(stringBuffer);
+	binaryBox.yPosition = BASE_BORDER_BOX_HEIGHT-9;
+	binaryBox.xPosition = BASE_BORDER_BOX_X_POSITION+1;
+	binaryBox.width = BASE_BORDER_BOX_WIDTH-2;
+	binaryBox.height = 3;
+	binaryBox.setBordered();
+	display->drawTextBox(binaryBox);
 }
 
 void EncryptionPage::drawModeSelect(shared_ptr<IDisplay> display)
