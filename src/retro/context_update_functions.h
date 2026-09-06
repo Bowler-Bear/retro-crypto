@@ -9,6 +9,8 @@ namespace RetroCrypto
 {
 	void requestExit();
 
+	void clearSeedAndMnemonicFromGlobalContext();
+
 	void clearSeed();
 
 	void setRandom256BitSeed();

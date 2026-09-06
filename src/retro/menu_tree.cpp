@@ -39,14 +39,14 @@ MenuTree::MenuTree()
 
 				shared_ptr<Menu> showSeedOptionsMenu = make_shared<Menu>("Seed Options", mainMenu);
 				showSeedOptionsMenu->setShouldReparent(false);
-				showSeedOptionsMenu->setBackwardAction(&clearSeed);
+				showSeedOptionsMenu->setBackwardAction(&clearSeedAndMnemonicFromGlobalContext);
 				shared_ptr<MenuOption> showAddressesOption = make_shared<MenuOption>(showSeedOptionsMenu, "Show Addresses", "Show addresses from this seed.");
 				shared_ptr<MenuOption> showSeedPhrasesOption = make_shared<MenuOption>(showSeedOptionsMenu, "Show Seed Phrases", "Show seed phrases for this seed.");
 				shared_ptr<MenuOption> showSeedQROption = make_shared<MenuOption>(showSeedOptionsMenu, "Show QR code", "Show QR code of this seed.");
 				shared_ptr<MenuOption> generateAddressOption = make_shared<MenuOption>(showSeedOptionsMenu, "Generate Vanity Address", "Generate an address.");
 				shared_ptr<MenuOption> mainMenuReturnOption = make_shared<MenuOption>(showSeedOptionsMenu, "Main Menu", "Return to main menu.");
 				mainMenuReturnOption->setDestination(static_pointer_cast<MenuTreeObject>(mainMenu));
-				mainMenuReturnOption->setOnSelectedFunction(&clearSeed);
+				mainMenuReturnOption->setOnSelectedFunction(&clearSeedAndMnemonicFromGlobalContext);
 				showSeedOptionsMenu->addOption(showAddressesOption);
 				showSeedOptionsMenu->addOption(showSeedPhrasesOption);
 				showSeedOptionsMenu->addOption(showSeedQROption);

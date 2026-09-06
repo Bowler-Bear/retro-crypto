@@ -13,6 +13,12 @@ namespace RetroCrypto
 		CoreSystem::getCoreSystem().setQuitRequested(true);
 	}
 
+	void clearSeedAndMnemonicFromGlobalContext()
+	{
+		clearSeed();
+		clearMnemonicContext();
+	}
+
 	void clearSeed()
 	{
 		ContextData newData;
