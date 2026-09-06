@@ -43,7 +43,7 @@ MenuTree::MenuTree()
 				shared_ptr<MenuOption> showAddressesOption = make_shared<MenuOption>(showSeedOptionsMenu, "Show Addresses", "Show addresses from this seed.");
 				shared_ptr<MenuOption> showSeedPhrasesOption = make_shared<MenuOption>(showSeedOptionsMenu, "Show Seed Phrases", "Show seed phrases for this seed.");
 				shared_ptr<MenuOption> showSeedQROption = make_shared<MenuOption>(showSeedOptionsMenu, "Show QR code", "Show QR code of this seed.");
-				shared_ptr<MenuOption> generateAddressOption = make_shared<MenuOption>(showSeedOptionsMenu, "Generate Vanity Address", "Generate an address.");
+				shared_ptr<MenuOption> generateAddressOption = make_shared<MenuOption>(showSeedOptionsMenu, "Generate Vanity Address", "Generate an address. (WILL OVERWRITE CURRENT SEED)");
 				shared_ptr<MenuOption> mainMenuReturnOption = make_shared<MenuOption>(showSeedOptionsMenu, "Main Menu", "Return to main menu.");
 				mainMenuReturnOption->setDestination(static_pointer_cast<MenuTreeObject>(mainMenu));
 				mainMenuReturnOption->setOnSelectedFunction(&clearSeedAndMnemonicFromGlobalContext);
