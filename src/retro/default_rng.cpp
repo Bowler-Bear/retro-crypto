@@ -4,6 +4,11 @@
 
 #include "default_rng.h"
 
+extern "C"
+{
+#include "memzero.h"
+}
+
 #define BYTES_PER_32_BIT_INT 4
 
 using namespace RetroCrypto;
@@ -11,6 +16,8 @@ using namespace RetroCrypto;
 DefaultRNG::DefaultRNG()
 {
 	seeded = false;
+	memzero(&chachaDrbgContext, sizeof(chachaDrbgContext));
+	chacha_drbg_init(&chachaDrbgContext, nullptr, 0, nullptr, 0);
 }
 
 void DefaultRNG::seedGenerator(const uint8_t* seed, uint8_t seedSize)
