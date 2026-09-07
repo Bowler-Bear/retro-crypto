@@ -13,7 +13,6 @@ namespace RetroCrypto
 		string description;
 		vector<int32_t> inputString;
 		uint8_t stringSize;
-		shared_ptr<MenuTreeObject> destination;
 		const char* usedCharSet;
 		uint8_t charWidth;
 	public:
@@ -25,7 +24,6 @@ namespace RetroCrypto
 		void setStringSize(uint8_t size);
 		void setUsedCharSet(const char* charSet);
 		void setDescription(string newDescription);
-		void setDestination(shared_ptr<MenuTreeObject> newDestination);
 		void setCharWidth(uint8_t newCharWidth);
 		virtual shared_ptr<MenuTreeObject> getDestination() override;
 		virtual void onEnter() override;

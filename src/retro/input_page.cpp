@@ -13,7 +13,6 @@ InputPage::InputPage()
 	description = "";
 	stringSize = 1;
 	charWidth = 1;
-	destination = nullptr;
 	usedCharSet = nullptr;
 }
 
@@ -23,7 +22,6 @@ InputPage::InputPage(string inTitle, std::shared_ptr<MenuTreeObject> inParent)
 	description = "";
 	stringSize = 1;
 	charWidth = 1;
-	destination = nullptr;
 	usedCharSet = nullptr;
 }
 
@@ -135,11 +133,6 @@ void InputPage::setUsedCharSet(const char* charSet)
 void InputPage::setDescription(string newDescription)
 {
 	description = newDescription;
-}
-
-void InputPage::setDestination(shared_ptr<MenuTreeObject> newDestination)
-{
-	destination = newDestination;
 }
 
 void InputPage::setCharWidth(uint8_t newCharWidth)

@@ -10,6 +10,7 @@ Page::Page()
 	forwardAction = nullptr;
 	backwardAction = nullptr;
 	shouldReparent = MENU_TREE_OBJECT_REPARENT_DEFAULT;
+	destination = nullptr;
 }
 
 Page::Page(string inTitle, std::shared_ptr<MenuTreeObject> inParent)
@@ -17,6 +18,7 @@ Page::Page(string inTitle, std::shared_ptr<MenuTreeObject> inParent)
 {
 	title = inTitle;
 	parent = inParent;
+	destination = nullptr;
 }
 
 void Page::addOption(std::shared_ptr<MenuOption> option)
@@ -36,6 +38,11 @@ void Page::draw(shared_ptr<IDisplay> display)
 shared_ptr<MenuTreeObject> Page::getDestination()
 {
 	return nullptr;
+}
+
+void Page::setDestination(shared_ptr<MenuTreeObject> newDestination)
+{
+	destination = newDestination;
 }
 
 void Page::onBackward()

@@ -14,6 +14,7 @@ namespace RetroCrypto
 	{
 	protected:
 		string title;
+		shared_ptr<MenuTreeObject> destination;
 
 	public:
 		Page();
@@ -22,6 +23,7 @@ namespace RetroCrypto
 		virtual void updateSelectedOption(InputType input) override;
 		virtual void draw(shared_ptr<IDisplay> display) override;
 		virtual shared_ptr<MenuTreeObject> getDestination() override;
+		virtual void setDestination(shared_ptr<MenuTreeObject> newDestination);
 		virtual void onBackward() override;
 		virtual void drawTitle(shared_ptr<IDisplay> display);
 	};
