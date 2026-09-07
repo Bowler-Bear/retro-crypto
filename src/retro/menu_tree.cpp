@@ -6,7 +6,7 @@
 #include "vanity_input_page.h"
 #include "entropy_input_page.h"
 #include "seed_phrase_input_page.h"
-#include "seed_qr_page.h"
+#include "qr_page.h"
 #include "context_update_functions.h"
 #include "encryption_page.h"
 
@@ -213,7 +213,8 @@ MenuTree::MenuTree()
 						showMoneroLojbanPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
 #endif
 
-					shared_ptr<SeedQRPage> seedQrPage = make_shared<SeedQRPage>("QR Code", showSeedOptionsMenu);
+					shared_ptr<QRPage> seedQrPage = make_shared<QRPage>("Seed QR Code", showSeedOptionsMenu);
+					seedQrPage->setEncodedData(QRPage::QREncodedData::SEED);
 					showSeedQROption->setDestination(static_pointer_cast<MenuTreeObject>(seedQrPage));
 
 			shared_ptr<EntropyInputPage> diceRollsInputPage = make_shared<EntropyInputPage>("Enter Dice Rolls", generateSeedMenu);
