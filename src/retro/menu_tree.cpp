@@ -83,6 +83,10 @@ MenuTree::MenuTree()
 						showNOSTRAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(addressPage));
 						showXMRAddressOption->setDestination(static_pointer_cast<MenuTreeObject>(addressPage));
 
+							shared_ptr<QRPage> addressQrPage = make_shared<QRPage>("Address QR Code", addressPage);
+							addressQrPage->setEncodedData(QRPage::QREncodedData::ADDRESS);
+							addressPage->setDestination(static_pointer_cast<MenuTreeObject>(addressQrPage));
+
 					shared_ptr<Menu> showPhrasesMenu = make_shared<Menu>("Show A Phrase", showSeedOptionsMenu);
 					showSeedPhrasesOption->setDestination(static_pointer_cast<MenuTreeObject>(showPhrasesMenu));
 					shared_ptr<MenuOption> showBIP39Option = make_shared<MenuOption>(showPhrasesMenu, "BIP-39", "Show Bitcoin Improvement Proposal 39 seed phrase for this seed(bits).");
@@ -212,6 +216,10 @@ MenuTree::MenuTree()
 #if INCLUDE_LOJBAN_MONERO_MNEMONIC
 						showMoneroLojbanPhraseOption->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicPage));
 #endif
+
+							shared_ptr<QRPage> mnemonicQrPage = make_shared<QRPage>("Mnemonic QR Code", mnemonicPage);
+							mnemonicQrPage->setEncodedData(QRPage::QREncodedData::MNEMONIC);
+							mnemonicPage->setDestination(static_pointer_cast<MenuTreeObject>(mnemonicQrPage));
 
 					shared_ptr<QRPage> seedQrPage = make_shared<QRPage>("Seed QR Code", showSeedOptionsMenu);
 					seedQrPage->setEncodedData(QRPage::QREncodedData::SEED);

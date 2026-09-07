@@ -21,6 +21,7 @@ namespace RetroCrypto
 	public:
 		AddressPage();
 		AddressPage(string inTitle, std::shared_ptr<MenuTreeObject> inParent = nullptr);
+		virtual shared_ptr<MenuTreeObject> getDestination() override;
 		virtual void draw(shared_ptr<IDisplay> display) override;
 		virtual void onEnter() override;
 		virtual void onBackward() override;

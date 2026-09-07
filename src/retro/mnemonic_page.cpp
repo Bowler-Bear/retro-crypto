@@ -23,6 +23,11 @@ MnemonicPage::MnemonicPage(string inTitle, std::shared_ptr<MenuTreeObject> inPar
 	parent = inParent;
 }
 
+shared_ptr<MenuTreeObject> MnemonicPage::getDestination()
+{
+	return destination;
+}
+
 void MnemonicPage::draw(shared_ptr<IDisplay> display)
 {
 	Page::draw(display);

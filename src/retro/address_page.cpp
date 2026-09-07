@@ -23,6 +23,11 @@ AddressPage::AddressPage(string inTitle, std::shared_ptr<MenuTreeObject> inParen
 	parent = inParent;
 }
 
+shared_ptr<MenuTreeObject> AddressPage::getDestination()
+{
+	return destination;
+}
+
 void AddressPage::draw(shared_ptr<IDisplay> display)
 {
 	Page::draw(display);
