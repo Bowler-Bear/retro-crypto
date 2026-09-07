@@ -844,7 +844,7 @@ void EncryptionPage::drawSizeInput(shared_ptr<IDisplay> display, uint32_t* size)
 void EncryptionPage::drawByteAsBinary(shared_ptr<IDisplay> display, uint8_t byte)
 {
 	char stringBuffer[9] = { 0 };
-	for (uint8_t i; i < 8; i++)
+	for (uint8_t i = 0; i < 8; i++)
 	{
 		stringBuffer[i] = (byte >> (7-i)) & 0x1 ? '1' : '0';
 	}
