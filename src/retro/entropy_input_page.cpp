@@ -78,12 +78,20 @@ void EntropyInputPage::onForward()
 {
 	MenuTreeObject::onForward();
 	uint8_t data[0xFF] = { 0 };
+	uint8_t endIndex = stringSize;
 	for (uint8_t i = 0; i < stringSize; i++)
+	{
 		if (inputString[i] == -1)
+		{
+			endIndex = i;
 			break;
+		}
 		else
+		{
 			data[i] = usedCharSet[inputString[i]];
-	setSeedFromHashedData(data, stringSize);
+		}
+	}
+	setSeedFromHashedData(data, endIndex);
 }
 
 void EntropyInputPage::setEntropyInputType(EntropyType newPageType)
